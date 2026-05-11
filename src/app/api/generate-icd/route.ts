@@ -8,6 +8,48 @@ import path from 'path';
 let icd10Cache: Map<string, string> | null = null;
 let icd9Cache: Map<string, string> | null = null;
 
+// Local Policies Cache
+let localPoliciesCache: any[] = [];
+let localPoliciesLastModified: number = 0;
+let cachedFormattedPolicies: string = "";
+
+function getActivePoliciesFormatted() {
+  try {
+    const policiesPath = path.join(process.cwd(), 'data', 'localPolicies.json');
+    if (!fs.existsSync(policiesPath)) {
+      cachedFormattedPolicies = "";
+      return "";
+    }
+
+    const stats = fs.statSync(policiesPath);
+    // Jika file berubah, kita re-read dan re-format
+    if (stats.mtimeMs > localPoliciesLastModified) {
+      console.log("Local policies changed on disk, updating cache...");
+      const content = fs.readFileSync(policiesPath, 'utf-8');
+      const policies = JSON.parse(content);
+      const activePolicies = policies.filter((p: any) => p.isActive);
+      
+      if (activePolicies.length === 0) {
+        cachedFormattedPolicies = "";
+      } else {
+        let formatted = "LOCAL HOSPITAL POLICIES (MANDATORY OVERRIDE):\n";
+        formatted += "You MUST prioritize these local hospital rules over any general medical knowledge or standard WHO guidelines.\n";
+        activePolicies.forEach((p: any) => {
+          formatted += `- IF keywords contain [${p.keywords.join(", ")}] THEN use ICD-10 Code: ${p.icdCode}\n`;
+        });
+        cachedFormattedPolicies = formatted + "\n";
+      }
+      
+      localPoliciesLastModified = stats.mtimeMs;
+    }
+
+    return cachedFormattedPolicies;
+  } catch (error) {
+    console.error("Failed to load local policies:", error);
+    return "";
+  }
+}
+
 // 2. INITIALIZATION FUNCTION
 // Fungsi ini hanya akan membaca file 1 kali saja saat server pertama kali memanggil route ini
 function initializeDictionaries() {
@@ -64,8 +106,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'medicalRecord data is required' }, { status: 400 });
     }
 
+    const localPoliciesText = getActivePoliciesFormatted();
+
     const model = genAI.getGenerativeModel({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-2.5-flash-lite',
       generationConfig: { responseMimeType: 'application/json' },
     });
 
@@ -85,6 +129,8 @@ FEW-SHOT CALIBRATION:
 - USG Abdomen -> 88.76
 - Pemasangan Infus / Injeksi IV -> 99.18
 - Pemasangan Kateter Urin (Foley Catheter) -> 57.94
+
+${localPoliciesText}
 
 Analyze the following patient medical record data and extract the appropriate codes.
 

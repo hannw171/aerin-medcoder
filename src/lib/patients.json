@@ -43,30 +43,30 @@
       "primaryDiagnosis": {
         "code": "I63.9",
         "description": "Cerebral infarction, unspecified",
-        "id": "5f155b46-c5eb-427d-b28a-0e57da6a80e4"
+        "id": "dfbf4c25-aa1e-47a1-a959-d7f51b03fb89"
       },
       "secondaryDiagnoses": [
         {
           "code": "I10",
           "description": "Essential (primary) hypertension",
-          "id": "73e88ff1-a031-4bde-9e80-d77932da328a"
+          "id": "dae3af5c-174c-4f83-9a0c-19655a4412f1"
         }
       ],
       "procedures": [
         {
           "code": "87.03",
           "description": "Computerized axial tomography of head",
-          "id": "bf21664f-ada9-41a0-b8f2-05313daa0674"
+          "id": "f90fdd23-1a89-452a-85cb-5af4b891d424"
         },
         {
           "code": "99.18",
           "description": "Injection or infusion of electrolytes",
-          "id": "dd50661d-591c-47eb-ac35-d7ec82795a0a"
+          "id": "348c73d3-cb42-44d1-9657-3dfae12072c7"
         },
         {
           "code": "57.94",
           "description": "Insertion of indwelling urinary catheter",
-          "id": "33b55cd3-740e-4304-ac82-fce7259f22b0"
+          "id": "24d9e317-d78f-4ebd-89cf-0baff6ca9853"
         }
       ]
     }
@@ -111,18 +111,29 @@
     },
     "codingResult": {
       "primaryDiagnosis": {
-        "id": "1",
-        "code": "A91",
-        "description": "Dengue haemorrhagic fever"
+        "code": "A99",
+        "description": "Unspecified viral haemorrhagic fever",
+        "id": "be90cd23-44cb-40a3-9f98-1b13123e78cf"
       },
       "secondaryDiagnoses": [
         {
-          "id": "2",
-          "code": "K75.9",
-          "description": "Inflammatory liver disease, unspecified"
+          "code": "B19.9",
+          "description": "Unspecified viral hepatitis without hepatic coma",
+          "id": "d668df28-ecb4-4155-9822-61a4af11fbc5"
         }
       ],
-      "procedures": []
+      "procedures": [
+        {
+          "code": "99.18",
+          "description": "Injection or infusion of electrolytes",
+          "id": "673ad17e-c48b-4fa2-b1a5-ab97624c4c91"
+        },
+        {
+          "code": "99.10",
+          "description": "Injection or infusion of thrombolytic agent",
+          "id": "70e4855b-083b-41a3-879c-41117d1a7d06"
+        }
+      ]
     }
   },
   {
@@ -230,7 +241,7 @@
     "bpjsClass": "Kelas 1",
     "dpjp": "Dr. Dewi, Sp.P",
     "dischargeDate": "2023-10-22",
-    "status": "Belum Coding",
+    "status": "Draft AI",
     "medicalRecord": {
       "anamnesa": "Sesak napas dan batuk berdahak sejak 3 hari SMRS. Dahak warna kekuningan. Demam (+) menggigil. Riwayat asma disangkal. Riwayat merokok (+).",
       "ttv": {
@@ -260,6 +271,47 @@
       ],
       "diagnosisKlinisUtama": "Bronchopneumonia",
       "diagnosisKlinisSekunder": "Respiratory Failure Type 1 (resolved)"
+    },
+    "codingResult": {
+      "primaryDiagnosis": {
+        "code": "J18.0",
+        "description": "Bronchopneumonia, unspecified",
+        "id": "ce6b2c84-eaa4-45b2-8ae5-dba96e6c9cac"
+      },
+      "secondaryDiagnoses": [
+        {
+          "code": "J96.0",
+          "description": "Acute respiratory failure",
+          "id": "42b095f7-351f-45ac-ab07-3be6d3cb0525"
+        },
+        {
+          "code": "Z87.891",
+          "description": "Personal history of nicotine dependence (Unverified)",
+          "id": "b2856feb-f896-4ed9-992a-7095e63c69e2"
+        }
+      ],
+      "procedures": [
+        {
+          "code": "87.49",
+          "description": "Other chest x-ray",
+          "id": "565274cd-5ebd-4921-a5d7-798117d33cdc"
+        },
+        {
+          "code": "93.96",
+          "description": "Other oxygen enrichment",
+          "id": "81f91db7-d7bf-4a23-a033-ffb6caa62907"
+        },
+        {
+          "code": "93.94",
+          "description": "Respiratory medication administered by nebulizer",
+          "id": "af501e60-d43f-405f-86b9-bf0c176f462d"
+        },
+        {
+          "code": "99.18",
+          "description": "Injection or infusion of electrolytes",
+          "id": "95e47f13-8bc3-4403-8e89-8ad0650b9053"
+        }
+      ]
     }
   },
   {

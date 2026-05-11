@@ -1,87 +1,153 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    const stored = localStorage.getItem("sidebar-expanded");
+    if (stored !== null) {
+      setIsExpanded(stored === "true");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isMounted) {
+      localStorage.setItem("sidebar-expanded", String(isExpanded));
+    }
+  }, [isExpanded, isMounted]);
+
   const isActive = (path: string) => pathname === path;
 
   return (
     <div className="flex h-screen overflow-hidden w-full antialiased bg-surface text-on-surface font-body-md">
       {/* SideNavBar */}
-      <nav className="flex-shrink-0 h-screen w-20 flex flex-col justify-between items-center py-panel-padding border-r border-outline-variant bg-inverse-surface z-50">
+      <nav className={`flex-shrink-0 h-screen flex flex-col justify-between items-center py-panel-padding border-r border-outline-variant bg-slate-900 z-50 transition-all duration-300 ease-in-out relative ${isExpanded ? 'w-64' : 'w-20'}`}>
+        
+        {/* Toggle Button */}
+        <button 
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="absolute -right-3 top-6 bg-primary text-on-primary rounded-full w-6 h-6 flex items-center justify-center shadow-md hover:bg-primary/90 transition-colors border border-slate-800 z-50"
+        >
+          <span className="material-symbols-outlined text-[16px]">
+            {isExpanded ? 'chevron_left' : 'chevron_right'}
+          </span>
+        </button>
+
         <div className="flex flex-col items-center w-full">
-          <div className="mb-8 font-display text-display font-bold text-surface text-center">
-            <span className="material-symbols-outlined text-[32px]">
+          <div className="mb-8 flex items-center justify-center text-primary-container gap-3 px-4 w-full h-10 overflow-hidden">
+            <span className="material-symbols-outlined text-[32px] flex-shrink-0">
               local_hospital
             </span>
+            <span className={`font-display text-xl font-bold whitespace-nowrap transition-all duration-300 ${isExpanded ? 'opacity-100 w-auto' : 'opacity-0 w-0 hidden'}`}>
+              Aerin Coder
+            </span>
           </div>
-          <div className="flex flex-col gap-4 w-full px-2">
+
+          <div className="flex flex-col gap-2 w-full px-3">
             <Link
               href="/patient-list"
-              className={`flex flex-col items-center p-3 transition-all duration-200 rounded-xl ${
+              className={`flex items-center px-3 py-3 transition-all duration-200 rounded-xl w-full ${
                 isActive("/patient-list")
-                  ? "bg-primary-container text-on-primary-container scale-95"
-                  : "text-surface-variant hover:text-surface hover:bg-surface-variant/10"
-              }`}
-              title="Patient Queue"
+                  ? "bg-primary text-on-primary"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
+              } ${isExpanded ? 'justify-start' : 'justify-center'}`}
+              title={!isExpanded ? "Daftar Pasien" : ""}
             >
               <span
-                className="material-symbols-outlined"
-                style={
-                  isActive("/patient-list")
-                    ? { fontVariationSettings: "'FILL' 1" }
-                    : {}
-                }
+                className="material-symbols-outlined flex-shrink-0"
+                style={isActive("/patient-list") ? { fontVariationSettings: "'FILL' 1" } : {}}
               >
                 clinical_notes
               </span>
+              <span className={`whitespace-nowrap font-medium transition-all duration-300 overflow-hidden ${isExpanded ? 'ml-3 opacity-100 w-full' : 'opacity-0 w-0'}`}>
+                Daftar Pasien
+              </span>
             </Link>
+
             <Link
               href="#"
-              className="flex flex-col items-center text-surface-variant hover:text-surface p-3 hover:bg-surface-variant/10 transition-colors duration-200 rounded-xl"
-              title="Search Records"
+              className={`flex items-center px-3 py-3 transition-all duration-200 rounded-xl w-full text-slate-400 hover:text-slate-200 hover:bg-slate-800 ${isExpanded ? 'justify-start' : 'justify-center'}`}
+              title={!isExpanded ? "Pencarian" : ""}
             >
-              <span className="material-symbols-outlined">search</span>
+              <span className="material-symbols-outlined flex-shrink-0">search</span>
+              <span className={`whitespace-nowrap font-medium transition-all duration-300 overflow-hidden ${isExpanded ? 'ml-3 opacity-100 w-full' : 'opacity-0 w-0'}`}>
+                Pencarian
+              </span>
             </Link>
+
             <Link
               href="#"
-              className="flex flex-col items-center text-surface-variant hover:text-surface p-3 hover:bg-surface-variant/10 transition-colors duration-200 rounded-xl"
-              title="Analytics"
+              className={`flex items-center px-3 py-3 transition-all duration-200 rounded-xl w-full text-slate-400 hover:text-slate-200 hover:bg-slate-800 ${isExpanded ? 'justify-start' : 'justify-center'}`}
+              title={!isExpanded ? "Analitik" : ""}
             >
-              <span className="material-symbols-outlined">analytics</span>
+              <span className="material-symbols-outlined flex-shrink-0">analytics</span>
+              <span className={`whitespace-nowrap font-medium transition-all duration-300 overflow-hidden ${isExpanded ? 'ml-3 opacity-100 w-full' : 'opacity-0 w-0'}`}>
+                Analitik
+              </span>
             </Link>
+
             <Link
-              href="#"
-              className="flex flex-col items-center text-surface-variant hover:text-surface p-3 hover:bg-surface-variant/10 transition-colors duration-200 rounded-xl"
-              title="System Settings"
+              href="/settings/policies"
+              className={`flex items-center px-3 py-3 transition-all duration-200 rounded-xl w-full ${
+                pathname.startsWith("/settings/policies")
+                  ? "bg-primary text-on-primary"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
+              } ${isExpanded ? 'justify-start' : 'justify-center'}`}
+              title={!isExpanded ? "Pengaturan Aturan" : ""}
             >
-              <span className="material-symbols-outlined">settings</span>
+              <span
+                className="material-symbols-outlined flex-shrink-0"
+                style={pathname.startsWith("/settings/policies") ? { fontVariationSettings: "'FILL' 1" } : {}}
+              >
+                settings
+              </span>
+              <span className={`whitespace-nowrap font-medium transition-all duration-300 overflow-hidden ${isExpanded ? 'ml-3 opacity-100 w-full' : 'opacity-0 w-0'}`}>
+                Pengaturan
+              </span>
             </Link>
           </div>
         </div>
-        <div className="flex flex-col items-center w-full px-2">
+
+        <div className="flex flex-col items-center w-full px-3">
           <button
-            className="bg-primary-container text-on-primary-container rounded-full w-12 h-12 flex items-center justify-center mb-4"
-            title="New Coding Task"
+            className={`bg-primary text-on-primary hover:bg-primary/90 transition-colors rounded-full h-12 flex items-center justify-center mb-4 ${isExpanded ? 'w-full px-4 justify-start gap-2 rounded-xl' : 'w-12'}`}
+            title={!isExpanded ? "Tugas Baru" : ""}
           >
-            <span className="material-symbols-outlined">add</span>
+            <span className="material-symbols-outlined flex-shrink-0">add</span>
+            <span className={`font-semibold whitespace-nowrap overflow-hidden transition-all duration-300 ${isExpanded ? 'opacity-100 w-auto' : 'opacity-0 w-0'}`}>
+              Tugas Baru
+            </span>
           </button>
           <Link
             href="#"
-            className="flex flex-col items-center text-surface-variant hover:text-surface p-3 hover:bg-surface-variant/10 transition-colors duration-200 rounded-xl"
-            title="Help Center"
+            className={`flex items-center px-3 py-3 transition-all duration-200 rounded-xl w-full text-slate-400 hover:text-slate-200 hover:bg-slate-800 ${isExpanded ? 'justify-start' : 'justify-center'}`}
+            title={!isExpanded ? "Bantuan" : ""}
           >
-            <span className="material-symbols-outlined">help</span>
+            <span className="material-symbols-outlined flex-shrink-0">help</span>
+            <span className={`whitespace-nowrap font-medium transition-all duration-300 overflow-hidden ${isExpanded ? 'ml-3 opacity-100 w-full' : 'opacity-0 w-0'}`}>
+              Bantuan
+            </span>
           </Link>
-          <img
-            alt="Medical Coder Profile"
-            className="w-10 h-10 rounded-full mt-4 border border-outline-variant object-cover"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2ms3aJCaZQ1W8QqZ1oRccglKOIqbFp9ynk5xMfXyB0JghoJn6gMgiMzQn8NwD89UKKyx6-1T0V1QjiKf8VV3_z2vjWBnbx-_WisUwZuOyTst-dE8hLDrAWXtybV4lJgq738dqoEl22yMumeIKKkL99AUs-38zrn6-1SsG3It8tAq21xqS_1LChI9isIw5KOgehHBFwLFnAI1m-7BUB3ROR8LLOnmaKZOR1ROOPlKwfmE_jlALQ8DjGLtaD-zVkMwiegDhBbkDyqI"
-          />
+
+          <div className={`flex items-center w-full mt-4 p-2 rounded-xl border border-slate-700 bg-slate-800/50 ${isExpanded ? 'justify-start gap-3' : 'justify-center border-transparent bg-transparent'}`}>
+            <img
+              alt="Medical Coder Profile"
+              className="w-10 h-10 rounded-full border border-slate-600 object-cover flex-shrink-0"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2ms3aJCaZQ1W8QqZ1oRccglKOIqbFp9ynk5xMfXyB0JghoJn6gMgiMzQn8NwD89UKKyx6-1T0V1QjiKf8VV3_z2vjWBnbx-_WisUwZuOyTst-dE8hLDrAWXtybV4lJgq738dqoEl22yMumeIKKkL99AUs-38zrn6-1SsG3It8tAq21xqS_1LChI9isIw5KOgehHBFwLFnAI1m-7BUB3ROR8LLOnmaKZOR1ROOPlKwfmE_jlALQ8DjGLtaD-zVkMwiegDhBbkDyqI"
+            />
+            <div className={`flex flex-col overflow-hidden transition-all duration-300 ${isExpanded ? 'opacity-100 w-auto' : 'opacity-0 w-0 hidden'}`}>
+              <span className="text-sm font-bold text-slate-200 whitespace-nowrap">Dr. Andi</span>
+              <span className="text-xs text-slate-400 whitespace-nowrap">Clinical Coder</span>
+            </div>
+          </div>
         </div>
       </nav>
 

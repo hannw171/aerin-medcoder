@@ -1,0 +1,13 @@
+[
+  {
+    "id": "1",
+    "name": "Stroke Non Hemoragik",
+    "keywords": [
+      "SNH",
+      "Stroke Infark",
+      "Stroke Non Hemoragik"
+    ],
+    "icdCode": "I63.9",
+    "isActive": false
+  }
+]

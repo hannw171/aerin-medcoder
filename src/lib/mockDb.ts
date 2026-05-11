@@ -234,33 +234,32 @@ const loadFromDisk = (): Patient[] | null => {
   return null;
 };
 
-// Initialize store from disk if on server
-if (typeof window === 'undefined') {
-  const diskData = loadFromDisk();
-  if (diskData) {
-    patientsStore = diskData;
-  } else {
+// Initialize store with fallback only. 
+// Do NOT overwrite this at the module level to ensure SSR and Client hydration match exactly.
+
+export function getPatients(): Patient[] {
+  if (typeof window === 'undefined') {
+    const diskData = loadFromDisk();
+    if (diskData) return diskData;
     // If no file exists, create one with initial data
     saveToDisk(initialPatients);
   }
-}
-
-export function getPatients(): Patient[] {
   return patientsStore;
 }
 
 export function updatePatient(id: string, updatedData: Partial<Patient>): Patient | null {
   console.log(`[mockDb] Updating patient ${id}`, updatedData);
-  const index = patientsStore.findIndex(p => p.id === id);
+  let currentData = getPatients();
+  const index = currentData.findIndex(p => p.id === id);
   if (index !== -1) {
-    patientsStore[index] = { ...patientsStore[index], ...updatedData };
+    currentData[index] = { ...currentData[index], ...updatedData };
     console.log(`[mockDb] Successfully updated ${id}`);
     
     // Persist to disk on server
-    saveToDisk(patientsStore);
+    saveToDisk(currentData);
     
-    return patientsStore[index];
+    return currentData[index];
   }
-  console.log(`[mockDb] Patient ${id} not found in store of size ${patientsStore.length}`);
+  console.log(`[mockDb] Patient ${id} not found in store of size ${currentData.length}`);
   return null;
 }

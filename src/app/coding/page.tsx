@@ -216,6 +216,7 @@ function CodingPageContent() {
   const [isEditingPrimary, setIsEditingPrimary] = useState(false);
   const [currentStatus, setCurrentStatus] = useState(patient.status);
   const [isManuallyEdited, setIsManuallyEdited] = useState(patient.status === 'Direvisi');
+  const [lastSavedTime, setLastSavedTime] = useState<Date | null>(null);
 
   // Fetch latest patient data on mount to ensure persistence
   useEffect(() => {
@@ -281,7 +282,9 @@ function CodingPageContent() {
           status: 'Draft AI'
         }),
         keepalive: true // Ensures request completes even if user navigates away
-      }).catch(err => console.error('Auto-save failed:', err));
+      })
+      .then(() => setLastSavedTime(new Date()))
+      .catch(err => console.error('Auto-save failed:', err));
     } catch (error) {
       console.error(error);
       setToastMessage("Gagal melakukan generate dengan AI. Silakan coba lagi.");
@@ -330,6 +333,7 @@ function CodingPageContent() {
       setIsEditingPrimary(false);
       setIsManuallyEdited(true);
       setCurrentStatus('Direvisi');
+      setLastSavedTime(new Date());
       setCodingResultSnapshot(null);
       setToastMessage("Berhasil diperbarui");
       setTimeout(() => setToastMessage(""), 3000);
@@ -352,6 +356,7 @@ function CodingPageContent() {
           status: 'Selesai'
         })
       });
+      setLastSavedTime(new Date());
       setCurrentStatus('Selesai');
       router.push('/patient-list');
     } catch (error) {
@@ -736,6 +741,12 @@ function CodingPageContent() {
               )
             )}
           </div>
+          {lastSavedTime && (
+            <div className="flex items-center gap-1 text-xs text-slate-400 mb-4">
+              <svg className="w-3 h-3 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+              Perubahan tersimpan pada {lastSavedTime.toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit', hour12: false})} WIB
+            </div>
+          )}
         </div>
 
         {isGenerating ? (
