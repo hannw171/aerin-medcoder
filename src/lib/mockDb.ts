@@ -1,0 +1,266 @@
+export interface Patient {
+  id: string;
+  registerNo: string;
+  rmNo: string;
+  name: string;
+  bpjsClass: string;
+  dpjp: string;
+  dischargeDate: string;
+  status: 'Belum Coding' | 'Draft AI' | 'Selesai' | 'Direvisi';
+  medicalRecord: {
+    anamnesa: string;
+    ttv: {
+      td: string;
+      nadi: string;
+      rr: string;
+      suhu: string;
+      spo2: string;
+      nyeri: string;
+    };
+    physicalExam: string;
+    labResult: string;
+    radiologyResult: string;
+    procedures: string[];
+    inpatientMeds: string[];
+    dischargeMeds: string[];
+    diagnosisKlinisUtama: string;
+    diagnosisKlinisSekunder: string;
+  };
+  codingResult?: {
+    primaryDiagnosis: { id: string; code: string; description: string } | null;
+    secondaryDiagnoses: { id: string; code: string; description: string }[];
+    procedures: { id: string; code: string; description: string }[];
+  };
+}
+
+// Initial hardcoded data as fallback
+const initialPatients: Patient[] = [
+  {
+    id: "p1",
+    registerNo: "2023001",
+    rmNo: "01-22-33",
+    name: "Budi Santoso",
+    bpjsClass: "Kelas 1",
+    dpjp: "Dr. Andi, Sp.PD",
+    dischargeDate: "2023-10-25",
+    status: "Belum Coding",
+    medicalRecord: {
+      anamnesa: "Pasien datang dengan keluhan kelemahan anggota gerak sebelah kanan sejak 2 jam SMRS. Pasien juga mengeluh bicara pelo dan sakit kepala. Riwayat hipertensi sejak 5 tahun lalu tidak terkontrol.",
+      ttv: { td: "180/100", nadi: "98", rr: "20", suhu: "36.8", spo2: "97", nyeri: "2" },
+      physicalExam: "Kesadaran compos mentis, GCS 15. Hemiparese dextra, kekuatan motorik ekstremitas atas 2/5, bawah 2/5. Parese N. VII, XII dextra sentral.",
+      labResult: "GDS: 145 mg/dL, Hb: 13.5 g/dL, Leukosit: 8.500/uL, Trombosit: 250.000/uL, Ureum: 30 mg/dL, Kreatinin: 1.0 mg/dL.",
+      radiologyResult: "CT Scan Kepala Non-Kontras: Tampak lesi hipodens di capsula interna sinistra, sesuai dengan gambaran infark serebri.",
+      procedures: ["CT Scan Kepala Non-Kontras", "Pemasangan IV line", "Pemasangan Kateter Urine"],
+      inpatientMeds: ["Citicolin 2x500mg IV", "Amlodipine 1x10mg PO", "Aspilets 1x80mg PO"],
+      dischargeMeds: ["Citicolin 2x500mg PO", "Amlodipine 1x10mg PO", "Aspilets 1x80mg PO"],
+      diagnosisKlinisUtama: "Stroke Non Hemoragik (SNH)",
+      diagnosisKlinisSekunder: "Hipertensi Grade II"
+    }
+  },
+  {
+    id: "p2",
+    registerNo: "2023002",
+    rmNo: "01-22-34",
+    name: "Siti Aminah",
+    bpjsClass: "Kelas 2",
+    dpjp: "Dr. Sarah, Sp.A",
+    dischargeDate: "2023-10-24",
+    status: "Draft AI",
+    medicalRecord: {
+      anamnesa: "Demam sejak 4 hari SMRS, demam naik turun. Disertai mual, muntah 2x, dan nyeri perut. Mimisan tidak ada, gusi berdarah tidak ada.",
+      ttv: { td: "100/70", nadi: "110", rr: "22", suhu: "38.5", spo2: "98", nyeri: "4" },
+      physicalExam: "Compos mentis, tampak sakit sedang. Rumple leede (+). Abdomen: nyeri tekan epigastrium (+), hepatomegali 1 jari bawah arcus costae. Akral hangat, CRT < 2 detik.",
+      labResult: "Hb: 14.2 g/dL, Ht: 45%, Leukosit: 2.500/uL, Trombosit: 85.000/uL. NS1 (+).",
+      radiologyResult: "Rontgen Thorax: tidak tampak efusi pleura. USG Abdomen: penebalan dinding vesica fellea, minimal ascites.",
+      procedures: ["Pemasangan IV line", "Pengambilan darah vena"],
+      inpatientMeds: ["IVFD RL 1500cc/24 jam", "Paracetamol infus 3x500mg", "Ondansetron 3x4mg IV"],
+      dischargeMeds: ["Paracetamol 3x500mg PO (k/p demam)", "Domperidone 3x10mg PO"],
+      diagnosisKlinisUtama: "Dengue Haemorrhagic Fever (DHF) Grade II",
+      diagnosisKlinisSekunder: "Hepatitis reaktif"
+    },
+    codingResult: {
+      primaryDiagnosis: { id: "1", code: "A91", description: "Dengue haemorrhagic fever" },
+      secondaryDiagnoses: [{ id: "2", code: "K75.9", description: "Inflammatory liver disease, unspecified" }],
+      procedures: []
+    }
+  },
+  {
+    id: "p3",
+    registerNo: "2023003",
+    rmNo: "01-22-35",
+    name: "Ahmad Hidayat",
+    bpjsClass: "Kelas 1",
+    dpjp: "Dr. Lukman, Sp.B",
+    dischargeDate: "2023-10-24",
+    status: "Selesai",
+    medicalRecord: {
+      anamnesa: "Nyeri perut kanan bawah sejak 1 hari SMRS. Awalnya nyeri di sekitar pusar lalu berpindah ke kanan bawah. Mual (+), muntah (+), demam (+).",
+      ttv: { td: "120/80", nadi: "100", rr: "20", suhu: "38.0", spo2: "99", nyeri: "7" },
+      physicalExam: "Abdomen: McBurney sign (+), Rovsing sign (+), Psoas sign (+). Bising usus normal.",
+      labResult: "Hb: 13.0 g/dL, Leukosit: 15.000/uL, Trombosit: 300.000/uL.",
+      radiologyResult: "USG Abdomen: Tampak gambaran appendicitis akut, diameter 8mm, cairan bebas (-) di periapendikular.",
+      procedures: ["Appendectomy (Open)", "Pemasangan IV line", "Pemasangan Kateter Urine"],
+      inpatientMeds: ["Ceftriaxone 1x2g IV", "Ketorolac 3x30mg IV", "Ranitidine 2x50mg IV"],
+      dischargeMeds: ["Cefixime 2x200mg PO", "Asam Mefenamat 3x500mg PO"],
+      diagnosisKlinisUtama: "Appendicitis Akut",
+      diagnosisKlinisSekunder: "Post Appendectomy"
+    },
+    codingResult: {
+      primaryDiagnosis: { id: "1", code: "K35.8", description: "Acute appendicitis, other and unspecified" },
+      secondaryDiagnoses: [],
+      procedures: [{ id: "2", code: "47.09", description: "Other appendectomy" }]
+    }
+  },
+  {
+    id: "p4",
+    registerNo: "2023004",
+    rmNo: "01-22-36",
+    name: "Sri Mulyani",
+    bpjsClass: "Kelas 3",
+    dpjp: "Dr. Budi, Sp.PD-KEMD",
+    dischargeDate: "2023-10-23",
+    status: "Draft AI",
+    medicalRecord: {
+      anamnesa: "Badan lemas sejak 1 minggu. Sering kencing malam hari, banyak makan dan minum. Luka di kaki kanan tidak sembuh-sembuh sejak 2 minggu lalu. Riwayat DM sejak 10 tahun.",
+      ttv: { td: "150/90", nadi: "88", rr: "20", suhu: "37.2", spo2: "98", nyeri: "3" },
+      physicalExam: "Ulkus diabetikum di pedis dextra digiti I-II, ukuran 3x4 cm, dasar pus (+), hiperemis (+). Edema pedis (+).",
+      labResult: "GDS: 350 mg/dL, HbA1c: 10.5%, Ureum: 80 mg/dL, Kreatinin: 2.5 mg/dL. Urinalisa: Proteinuria (+2).",
+      radiologyResult: "Rontgen Pedis Dextra: Tidak tampak osteomyelitis.",
+      procedures: ["Debridement luka", "Perawatan luka kronis", "Pemasangan IV line"],
+      inpatientMeds: ["Insulin Novorapid 3x10 IU", "Insulin Levemir 1x14 IU", "Ceftriaxone 1x2g IV", "Metronidazole 3x500mg IV"],
+      dischargeMeds: ["Insulin Novorapid 3x10 IU", "Insulin Levemir 1x14 IU", "Clindamycin 3x300mg PO"],
+      diagnosisKlinisUtama: "Diabetes Mellitus Tipe 2",
+      diagnosisKlinisSekunder: "Diabetic Foot Ulcer, Diabetic Nephropathy"
+    }
+  },
+  {
+    id: "p5",
+    registerNo: "2023005",
+    rmNo: "01-22-37",
+    name: "Rizky Pratama",
+    bpjsClass: "Kelas 1",
+    dpjp: "Dr. Dewi, Sp.P",
+    dischargeDate: "2023-10-22",
+    status: "Belum Coding",
+    medicalRecord: {
+      anamnesa: "Sesak napas dan batuk berdahak sejak 3 hari SMRS. Dahak warna kekuningan. Demam (+) menggigil. Riwayat asma disangkal. Riwayat merokok (+).",
+      ttv: { td: "110/70", nadi: "112", rr: "28", suhu: "39.1", spo2: "92", nyeri: "2" },
+      physicalExam: "Tampak sakit berat, sesak napas. Retraksi dinding dada (+). Auskultasi paru: ronkhi basah kasar di basal paru dextra dan sinistra. Wheezing (-).",
+      labResult: "Hb: 12.5 g/dL, Leukosit: 18.500/uL, Trombosit: 350.000/uL, CRP: 45 mg/L.",
+      radiologyResult: "Rontgen Thorax: Tampak infiltrat di paracardial kanan dan kiri, kesan bronchopneumonia.",
+      procedures: ["Oksigenasi Nasal Kanul 3 lpm", "Nebulisasi", "Pemasangan IV line"],
+      inpatientMeds: ["Levofloxacin 1x750mg IV", "Ambroxol 3x30mg PO", "Paracetamol 3x500mg IV"],
+      dischargeMeds: ["Levofloxacin 1x500mg PO", "Ambroxol 3x30mg PO"],
+      diagnosisKlinisUtama: "Bronchopneumonia",
+      diagnosisKlinisSekunder: "Respiratory Failure Type 1 (resolved)"
+    }
+  },
+  {
+    id: "p6", registerNo: "2023006", rmNo: "01-22-38", name: "Agus Salim", bpjsClass: "Kelas 2", dpjp: "Dr. Hendra, Sp.JP", dischargeDate: "2023-10-26", status: "Belum Coding",
+    medicalRecord: { anamnesa: "Nyeri dada", ttv: { td: "140/90", nadi: "90", rr: "20", suhu: "36.5", spo2: "98", nyeri: "4" }, physicalExam: "Normal", labResult: "Normal", radiologyResult: "Normal", procedures: ["EKG"], inpatientMeds: [], dischargeMeds: [], diagnosisKlinisUtama: "Angina Pectoris", diagnosisKlinisSekunder: "" }
+  },
+  {
+    id: "p7", registerNo: "2023007", rmNo: "01-22-39", name: "Lina Marlina", bpjsClass: "Kelas 3", dpjp: "Dr. Ratna, Sp.OG", dischargeDate: "2023-10-26", status: "Draft AI",
+    medicalRecord: { anamnesa: "Mulas", ttv: { td: "120/80", nadi: "80", rr: "20", suhu: "36.5", spo2: "99", nyeri: "6" }, physicalExam: "Normal", labResult: "Normal", radiologyResult: "Normal", procedures: ["Partus Spontan"], inpatientMeds: [], dischargeMeds: [], diagnosisKlinisUtama: "Partus Normal", diagnosisKlinisSekunder: "" }
+  },
+  {
+    id: "p8", registerNo: "2023008", rmNo: "01-22-40", name: "Hasanudin", bpjsClass: "Kelas 1", dpjp: "Dr. Budi, Sp.PD-KEMD", dischargeDate: "2023-10-26", status: "Selesai",
+    medicalRecord: { anamnesa: "Lemas", ttv: { td: "130/80", nadi: "85", rr: "20", suhu: "36.5", spo2: "98", nyeri: "0" }, physicalExam: "Normal", labResult: "Normal", radiologyResult: "Normal", procedures: [], inpatientMeds: [], dischargeMeds: [], diagnosisKlinisUtama: "Diabetes Mellitus Tipe 2", diagnosisKlinisSekunder: "" }
+  },
+  {
+    id: "p9", registerNo: "2023009", rmNo: "01-22-41", name: "Rina Wati", bpjsClass: "Kelas 2", dpjp: "Dr. Sarah, Sp.A", dischargeDate: "2023-10-25", status: "Belum Coding",
+    medicalRecord: { anamnesa: "Demam", ttv: { td: "110/70", nadi: "100", rr: "22", suhu: "38.5", spo2: "98", nyeri: "2" }, physicalExam: "Normal", labResult: "Normal", radiologyResult: "Normal", procedures: [], inpatientMeds: [], dischargeMeds: [], diagnosisKlinisUtama: "Demam Tifoid", diagnosisKlinisSekunder: "" }
+  },
+  {
+    id: "p10", registerNo: "2023010", rmNo: "01-22-42", name: "Wahyu Saputra", bpjsClass: "Kelas 3", dpjp: "Dr. Lukman, Sp.B", dischargeDate: "2023-10-25", status: "Draft AI",
+    medicalRecord: { anamnesa: "Luka", ttv: { td: "120/80", nadi: "80", rr: "20", suhu: "36.5", spo2: "99", nyeri: "3" }, physicalExam: "Normal", labResult: "Normal", radiologyResult: "Normal", procedures: ["Jahit Luka"], inpatientMeds: [], dischargeMeds: [], diagnosisKlinisUtama: "Vulnus Laceratum", diagnosisKlinisSekunder: "" }
+  },
+  {
+    id: "p11", registerNo: "2023011", rmNo: "01-22-43", name: "Dwi Astuti", bpjsClass: "Kelas 1", dpjp: "Dr. Ratna, Sp.OG", dischargeDate: "2023-10-24", status: "Selesai",
+    medicalRecord: { anamnesa: "Perdarahan", ttv: { td: "110/70", nadi: "90", rr: "20", suhu: "36.5", spo2: "98", nyeri: "4" }, physicalExam: "Normal", labResult: "Normal", radiologyResult: "Normal", procedures: ["Kuretase"], inpatientMeds: [], dischargeMeds: [], diagnosisKlinisUtama: "Abortus Inkomplit", diagnosisKlinisSekunder: "" }
+  },
+  {
+    id: "p12", registerNo: "2023012", rmNo: "01-22-44", name: "Eko Prasetyo", bpjsClass: "Kelas 2", dpjp: "Dr. Hendra, Sp.JP", dischargeDate: "2023-10-24", status: "Belum Coding",
+    medicalRecord: { anamnesa: "Sesak", ttv: { td: "150/90", nadi: "100", rr: "24", suhu: "36.5", spo2: "95", nyeri: "0" }, physicalExam: "Normal", labResult: "Normal", radiologyResult: "Normal", procedures: ["EKG"], inpatientMeds: [], dischargeMeds: [], diagnosisKlinisUtama: "Congestive Heart Failure", diagnosisKlinisSekunder: "" }
+  },
+  {
+    id: "p13", registerNo: "2023013", rmNo: "01-22-45", name: "Susi Susanti", bpjsClass: "Kelas 3", dpjp: "Dr. Dewi, Sp.P", dischargeDate: "2023-10-23", status: "Draft AI",
+    medicalRecord: { anamnesa: "Batuk", ttv: { td: "120/80", nadi: "80", rr: "20", suhu: "36.5", spo2: "98", nyeri: "0" }, physicalExam: "Normal", labResult: "Normal", radiologyResult: "Normal", procedures: ["Rontgen Thorax"], inpatientMeds: [], dischargeMeds: [], diagnosisKlinisUtama: "Tuberkulosis Paru", diagnosisKlinisSekunder: "" }
+  },
+  {
+    id: "p14", registerNo: "2023014", rmNo: "01-22-46", name: "Joko Widodo", bpjsClass: "Kelas 1", dpjp: "Dr. Andi, Sp.PD", dischargeDate: "2023-10-23", status: "Selesai",
+    medicalRecord: { anamnesa: "Mual muntah", ttv: { td: "120/80", nadi: "80", rr: "20", suhu: "36.5", spo2: "99", nyeri: "5" }, physicalExam: "Normal", labResult: "Normal", radiologyResult: "Normal", procedures: ["Endoskopi"], inpatientMeds: [], dischargeMeds: [], diagnosisKlinisUtama: "Dispepsia", diagnosisKlinisSekunder: "" }
+  },
+  {
+    id: "p15", registerNo: "2023015", rmNo: "01-22-47", name: "Nita Talia", bpjsClass: "Kelas 2", dpjp: "Dr. Sarah, Sp.A", dischargeDate: "2023-10-22", status: "Belum Coding",
+    medicalRecord: { anamnesa: "Diare", ttv: { td: "110/70", nadi: "90", rr: "20", suhu: "36.5", spo2: "98", nyeri: "2" }, physicalExam: "Normal", labResult: "Normal", radiologyResult: "Normal", procedures: [], inpatientMeds: [], dischargeMeds: [], diagnosisKlinisUtama: "Gastroenteritis Akut", diagnosisKlinisSekunder: "" }
+  }
+];
+
+// In-memory store initialized with fallback
+export let patientsStore: Patient[] = initialPatients;
+
+// Persistence helpers (Server-side only)
+const getDbPath = () => {
+  if (typeof window !== 'undefined') return null;
+  const path = require('path');
+  return path.join(process.cwd(), 'src/lib/patients.json');
+};
+
+const saveToDisk = (data: Patient[]) => {
+  if (typeof window !== 'undefined') return;
+  try {
+    const fs = require('fs');
+    const path = getDbPath();
+    if (path) {
+      fs.writeFileSync(path, JSON.stringify(data, null, 2));
+    }
+  } catch (err) {
+    console.error('Failed to save to disk:', err);
+  }
+};
+
+const loadFromDisk = (): Patient[] | null => {
+  if (typeof window !== 'undefined') return null;
+  try {
+    const fs = require('fs');
+    const path = getDbPath();
+    if (path && fs.existsSync(path)) {
+      return JSON.parse(fs.readFileSync(path, 'utf-8'));
+    }
+  } catch (err) {
+    console.error('Failed to load from disk:', err);
+  }
+  return null;
+};
+
+// Initialize store from disk if on server
+if (typeof window === 'undefined') {
+  const diskData = loadFromDisk();
+  if (diskData) {
+    patientsStore = diskData;
+  } else {
+    // If no file exists, create one with initial data
+    saveToDisk(initialPatients);
+  }
+}
+
+export function getPatients(): Patient[] {
+  return patientsStore;
+}
+
+export function updatePatient(id: string, updatedData: Partial<Patient>): Patient | null {
+  console.log(`[mockDb] Updating patient ${id}`, updatedData);
+  const index = patientsStore.findIndex(p => p.id === id);
+  if (index !== -1) {
+    patientsStore[index] = { ...patientsStore[index], ...updatedData };
+    console.log(`[mockDb] Successfully updated ${id}`);
+    
+    // Persist to disk on server
+    saveToDisk(patientsStore);
+    
+    return patientsStore[index];
+  }
+  console.log(`[mockDb] Patient ${id} not found in store of size ${patientsStore.length}`);
+  return null;
+}
