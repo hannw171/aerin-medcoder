@@ -24,7 +24,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     }
   }, [isExpanded, isMounted]);
 
-  const isActive = (path: string) => pathname === path;
+  const isActive = (path: string) => {
+    if (path === "#") return false;
+    if (path === "/") return pathname === "/";
+    return pathname === path || pathname.startsWith(path + "/");
+  };
 
   return (
     <div className="flex h-screen overflow-hidden w-full antialiased bg-surface text-on-surface font-body-md">
@@ -54,63 +58,83 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <div className="flex flex-col gap-2 w-full px-3">
             <Link
               href="/patient-list"
-              className={`flex items-center px-3 py-3 transition-all duration-200 rounded-xl w-full ${
+              className={`flex items-center px-3 py-3 transition-all duration-200 w-full group relative ${
                 isActive("/patient-list")
-                  ? "bg-primary text-on-primary"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
+                  ? "bg-primary text-on-primary border-l-4 border-primary-fixed rounded-r-xl shadow-sm"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-xl"
               } ${isExpanded ? 'justify-start' : 'justify-center'}`}
               title={!isExpanded ? "Daftar Pasien" : ""}
             >
               <span
-                className="material-symbols-outlined flex-shrink-0"
+                className={`material-symbols-outlined flex-shrink-0 transition-colors duration-200 ${isActive("/patient-list") ? "text-on-primary" : ""}`}
                 style={isActive("/patient-list") ? { fontVariationSettings: "'FILL' 1" } : {}}
               >
                 clinical_notes
               </span>
-              <span className={`whitespace-nowrap font-medium transition-all duration-300 overflow-hidden ${isExpanded ? 'ml-3 opacity-100 w-full' : 'opacity-0 w-0'}`}>
+              <span className={`whitespace-nowrap font-semibold transition-all duration-300 overflow-hidden ${isExpanded ? 'ml-3 opacity-100 w-full' : 'opacity-0 w-0'}`}>
                 Daftar Pasien
               </span>
             </Link>
 
             <Link
               href="#"
-              className={`flex items-center px-3 py-3 transition-all duration-200 rounded-xl w-full text-slate-400 hover:text-slate-200 hover:bg-slate-800 ${isExpanded ? 'justify-start' : 'justify-center'}`}
+              className={`flex items-center px-3 py-3 transition-all duration-200 w-full rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-800 ${isExpanded ? 'justify-start' : 'justify-center'}`}
               title={!isExpanded ? "Pencarian" : ""}
             >
               <span className="material-symbols-outlined flex-shrink-0">search</span>
-              <span className={`whitespace-nowrap font-medium transition-all duration-300 overflow-hidden ${isExpanded ? 'ml-3 opacity-100 w-full' : 'opacity-0 w-0'}`}>
+              <span className={`whitespace-nowrap font-semibold transition-all duration-300 overflow-hidden ${isExpanded ? 'ml-3 opacity-100 w-full' : 'opacity-0 w-0'}`}>
                 Pencarian
               </span>
             </Link>
 
             <Link
               href="#"
-              className={`flex items-center px-3 py-3 transition-all duration-200 rounded-xl w-full text-slate-400 hover:text-slate-200 hover:bg-slate-800 ${isExpanded ? 'justify-start' : 'justify-center'}`}
+              className={`flex items-center px-3 py-3 transition-all duration-200 w-full rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-800 ${isExpanded ? 'justify-start' : 'justify-center'}`}
               title={!isExpanded ? "Analitik" : ""}
             >
               <span className="material-symbols-outlined flex-shrink-0">analytics</span>
-              <span className={`whitespace-nowrap font-medium transition-all duration-300 overflow-hidden ${isExpanded ? 'ml-3 opacity-100 w-full' : 'opacity-0 w-0'}`}>
+              <span className={`whitespace-nowrap font-semibold transition-all duration-300 overflow-hidden ${isExpanded ? 'ml-3 opacity-100 w-full' : 'opacity-0 w-0'}`}>
                 Analitik
               </span>
             </Link>
 
             <Link
               href="/settings/policies"
-              className={`flex items-center px-3 py-3 transition-all duration-200 rounded-xl w-full ${
-                pathname.startsWith("/settings/policies")
-                  ? "bg-primary text-on-primary"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
+              className={`flex items-center px-3 py-3 transition-all duration-200 w-full group relative ${
+                pathname === "/settings/policies"
+                  ? "bg-primary text-on-primary border-l-4 border-primary-fixed rounded-r-xl shadow-sm"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-xl"
               } ${isExpanded ? 'justify-start' : 'justify-center'}`}
-              title={!isExpanded ? "Pengaturan Aturan" : ""}
+              title={!isExpanded ? "Pengaturan Kebijakan Internal" : ""}
             >
               <span
-                className="material-symbols-outlined flex-shrink-0"
-                style={pathname.startsWith("/settings/policies") ? { fontVariationSettings: "'FILL' 1" } : {}}
+                className={`material-symbols-outlined flex-shrink-0 transition-colors duration-200 ${pathname === "/settings/policies" ? "text-on-primary" : ""}`}
+                style={pathname === "/settings/policies" ? { fontVariationSettings: "'FILL' 1" } : {}}
               >
                 settings
               </span>
-              <span className={`whitespace-nowrap font-medium transition-all duration-300 overflow-hidden ${isExpanded ? 'ml-3 opacity-100 w-full' : 'opacity-0 w-0'}`}>
-                Pengaturan
+              <span className={`whitespace-wrap font-semibold transition-all duration-300 overflow-hidden ${isExpanded ? 'ml-3 opacity-100 w-full' : 'opacity-0 w-0'}`}>
+                Pengaturan Kebijakan Internal
+              </span>
+            </Link>
+
+            <Link
+              href="/settings/policies/simulator"
+              className={`flex items-center px-3 py-3 transition-all duration-200 w-full group relative ${
+                pathname.startsWith("/settings/policies/simulator")
+                  ? "bg-primary text-on-primary border-l-4 border-primary-fixed rounded-r-xl shadow-sm"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-xl"
+              } ${isExpanded ? 'justify-start' : 'justify-center'}`}
+              title={!isExpanded ? "Validasi Kebijakan Internal" : ""}
+            >
+              <span
+                className={`material-symbols-outlined flex-shrink-0 transition-colors duration-200 ${pathname.startsWith("/settings/policies/simulator") ? "text-on-primary" : ""}`}
+                style={pathname.startsWith("/settings/policies/simulator") ? { fontVariationSettings: "'FILL' 1" } : {}}
+              >
+                science
+              </span>
+              <span className={`whitespace-wrap font-semibold transition-all duration-300 overflow-hidden ${isExpanded ? 'ml-3 opacity-100 w-full' : 'opacity-0 w-0'}`}>
+                Validator Kebijakan Internal
               </span>
             </Link>
           </div>

@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { SearchableICDInput } from "@/components/SearchableICDInput";
+import Link from "next/link";
 
 type Policy = {
   id: string;
@@ -25,8 +27,19 @@ export default function LocalPoliciesPage() {
   const [formIsActive, setFormIsActive] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
+  // Test State
+  const [testText, setTestText] = useState("");
+
+  // Search state
+  const [searchQuery, setSearchQuery] = useState("");
+
   // Preview State
-  const [previewDesc, setPreviewDesc] = useState<string | null>(null);
+  const [previewData, setPreviewData] = useState<{
+    description: string;
+    chapter: string;
+    category: string;
+    type: string;
+  } | null>(null);
   const [previewError, setPreviewError] = useState(false);
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
 
@@ -56,7 +69,7 @@ export default function LocalPoliciesPage() {
   // Live Preview Logic with Debounce
   useEffect(() => {
     if (!formIcdCode) {
-      setPreviewDesc(null);
+      setPreviewData(null);
       setPreviewError(false);
       return;
     }
@@ -67,14 +80,19 @@ export default function LocalPoliciesPage() {
         const res = await fetch(`/api/icd/lookup?code=${encodeURIComponent(formIcdCode)}`);
         if (res.ok) {
           const data = await res.json();
-          setPreviewDesc(data.description);
+          setPreviewData({
+            description: data.description,
+            chapter: data.chapter,
+            category: data.category,
+            type: data.type
+          });
           setPreviewError(false);
         } else {
-          setPreviewDesc(null);
+          setPreviewData(null);
           setPreviewError(true);
         }
       } catch (err) {
-        setPreviewDesc(null);
+        setPreviewData(null);
         setPreviewError(true);
       } finally {
         setIsPreviewLoading(false);
@@ -127,8 +145,9 @@ export default function LocalPoliciesPage() {
     setFormKeywords("");
     setFormIcdCode("");
     setFormIsActive(true);
-    setPreviewDesc(null);
+    setPreviewData(null);
     setPreviewError(false);
+    setTestText("");
     setIsDrawerOpen(true);
   };
 
@@ -138,6 +157,7 @@ export default function LocalPoliciesPage() {
     setFormKeywords(policy.keywords.join(", "));
     setFormIcdCode(policy.icdCode);
     setFormIsActive(policy.isActive);
+    setTestText("");
     setIsDrawerOpen(true);
   };
 
@@ -179,6 +199,23 @@ export default function LocalPoliciesPage() {
     }
   };
 
+  const filteredPolicies = policies.filter((p) => {
+    const q = searchQuery.toLowerCase();
+    return (
+      p.name.toLowerCase().includes(q) ||
+      p.icdCode.toLowerCase().includes(q) ||
+      p.keywords.some((k) => k.toLowerCase().includes(q))
+    );
+  });
+
+  const isTestMatched = React.useMemo(() => {
+    if (!testText.trim() || !formKeywords.trim()) return false;
+    const keywords = formKeywords.split(",").map(k => k.trim().toLowerCase()).filter(k => k);
+    if (keywords.length === 0) return false;
+    const lowerTestText = testText.toLowerCase();
+    return keywords.some(kw => lowerTestText.includes(kw));
+  }, [testText, formKeywords]);
+
   const totalPolicies = policies.length;
   const activePolicies = policies.filter((p) => p.isActive).length;
 
@@ -188,17 +225,28 @@ export default function LocalPoliciesPage() {
       {/* Sticky Header & KPIs */}
       <div className="flex-shrink-0 space-y-6 pb-6 bg-background sticky top-0 z-20">
         <div className="flex justify-between items-center pt-4">
-          <div>
+          <div className="max-w-2xl pr-8">
             <h1 className="text-2xl font-bold text-on-background">Local Policies Configuration</h1>
-            <p className="text-on-surface-variant text-sm mt-1">Atur aturan logika bisnis koding spesifik untuk rumah sakit.</p>
+            <p className="text-on-surface-variant text-sm mt-1">
+              <span className="font-semibold text-primary">Modul sinkronisasi kebijakan lokal dengan AI Reasoning Engine.</span> Atur aturan logika bisnis koding spesifik internal rumah sakit.
+            </p>
           </div>
-          <button 
-            onClick={openDrawerForNew}
-            className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-lg flex items-center gap-2 font-medium transition-colors shadow-sm cursor-pointer"
-          >
-            <span className="material-symbols-outlined text-sm">add</span>
-            Tambah Aturan Baru
-          </button>
+          <div className="flex items-center gap-3">
+            <Link 
+              href="/settings/policies/simulator"
+              className="border border-primary text-primary hover:bg-primary-container/10 px-4 py-2 rounded-lg flex items-center gap-2 font-medium transition-colors shadow-sm"
+            >
+              <span className="material-symbols-outlined text-sm">science</span>
+              Local Policies Hub
+            </Link>
+            <button 
+              onClick={openDrawerForNew}
+              className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-lg flex items-center gap-2 font-medium transition-colors shadow-sm cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-sm">add</span>
+              Tambah Aturan Baru
+            </button>
+          </div>
         </div>
 
         {/* KPIs */}
@@ -234,7 +282,19 @@ export default function LocalPoliciesPage() {
 
       {/* Scrollable Policy List Section */}
       <div className="flex-1 flex flex-col min-h-0 px-1">
-        <h2 className="text-lg font-bold text-on-surface mb-4 flex-shrink-0">Daftar Aturan</h2>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4 flex-shrink-0">
+          <h2 className="text-lg font-bold text-on-surface">Daftar Aturan</h2>
+          <div className="relative w-full md:w-64">
+            <input
+              type="text"
+              placeholder="Cari aturan, keyword, atau ICD..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-outline-variant rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all"
+            />
+            <span className="material-symbols-outlined absolute left-3 top-2 text-on-surface-variant text-[20px]">search</span>
+          </div>
+        </div>
         
         <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar pb-10">
         {isLoading ? (
@@ -247,9 +307,13 @@ export default function LocalPoliciesPage() {
           <div className="text-center p-10 border border-dashed border-outline-variant rounded-xl bg-surface-container-low text-on-surface-variant">
             Belum ada aturan yang dikonfigurasi.
           </div>
+        ) : filteredPolicies.length === 0 ? (
+          <div className="text-center p-10 border border-dashed border-outline-variant rounded-xl bg-surface-container-low text-on-surface-variant">
+            Tidak ada aturan yang cocok dengan pencarian.
+          </div>
         ) : (
           <div className="flex flex-col gap-4">
-            {policies.map((policy) => (
+            {filteredPolicies.map((policy) => (
               <div
                 key={policy.id}
                 className={`flex flex-col md:flex-row items-center justify-between p-5 rounded-xl border transition-all ${
@@ -356,14 +420,14 @@ export default function LocalPoliciesPage() {
                 <p className="text-xs text-on-surface-variant mt-1">Pisahkan dengan koma ( , )</p>
               </div>
 
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 relative z-50">
                 <label className="text-sm font-semibold text-on-surface">Target ICD-10 Code</label>
-                <input
-                  type="text"
+                <SearchableICDInput
+                  type="icd10"
+                  placeholder="Cari atau ketik ICD-10 Code (Contoh: I63.9)"
                   value={formIcdCode}
-                  onChange={(e) => setFormIcdCode(e.target.value)}
-                  placeholder="Contoh: I63.9"
-                  className="w-full px-4 py-2 border border-outline-variant rounded-lg bg-background text-on-surface focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all uppercase"
+                  onChange={(val) => setFormIcdCode(val.toUpperCase())}
+                  onSelect={(item) => setFormIcdCode(item.code)}
                 />
                 
                 {/* Live Preview Box */}
@@ -373,10 +437,25 @@ export default function LocalPoliciesPage() {
                       <span className="material-symbols-outlined animate-spin text-[18px]">progress_activity</span>
                       Mencari kode...
                     </div>
-                  ) : previewDesc ? (
-                    <div className="flex items-start gap-2 text-sm text-emerald-800 px-3 py-2 bg-emerald-50 rounded-lg border border-emerald-200">
-                      <span className="material-symbols-outlined text-[18px] text-emerald-600 mt-0.5">check_circle</span>
-                      <span className="font-medium">Preview: {previewDesc}</span>
+                  ) : previewData ? (
+                    <div className="flex flex-col gap-2 p-3 bg-emerald-50/50 rounded-xl border border-emerald-100">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex items-start gap-2">
+                          <div className="bg-emerald-100 text-emerald-800 font-bold px-2 py-1 rounded text-sm shrink-0 border border-emerald-200">
+                            {formIcdCode}
+                          </div>
+                          <div className="font-semibold text-slate-800 text-sm mt-0.5">
+                            {previewData.description}
+                          </div>
+                        </div>
+                        <div className="bg-white border border-emerald-100 text-emerald-700 text-[11px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap shadow-sm">
+                          {previewData.type}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-slate-500 mt-1 pl-1">
+                        <span className="material-symbols-outlined text-[14px]">account_tree</span>
+                        <span>Chapter {previewData.chapter} • Category {previewData.category}</span>
+                      </div>
                     </div>
                   ) : previewError ? (
                     <div className="flex items-start gap-2 text-sm text-amber-800 px-3 py-2 bg-amber-50 rounded-lg border border-amber-200">
@@ -384,6 +463,39 @@ export default function LocalPoliciesPage() {
                       <span>Kode tidak ditemukan di kamus resmi ICD-10.</span>
                     </div>
                   ) : null}
+                </div>
+              </div>
+
+              {/* Uji Logika Aturan (Beta) */}
+              <div className="flex flex-col gap-2 mt-4 p-4 border-2 border-dashed border-outline-variant rounded-xl bg-surface-container-lowest">
+                <label className="text-sm font-semibold text-on-surface">Uji Logika Aturan (Beta)</label>
+                <textarea
+                  className="w-full px-4 py-2 border border-outline-variant rounded-lg bg-background text-on-surface focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all resize-y min-h-[80px] text-sm"
+                  placeholder="Masukkan contoh narasi diagnosa untuk tes... (contoh: Pasien didiagnosa stroke infark)"
+                  value={testText}
+                  onChange={(e) => setTestText(e.target.value)}
+                />
+                
+                {/* Feedback Indicator */}
+                <div className="mt-2">
+                  {!testText ? (
+                    <div className="flex items-center gap-2 text-sm text-slate-500 px-3 py-2 bg-slate-50 rounded-lg border border-slate-100">
+                      <span className="material-symbols-outlined text-[18px]">info</span>
+                      Ketik narasi di atas untuk menguji aturan ini.
+                    </div>
+                  ) : isTestMatched ? (
+                    <div className="flex items-center gap-2 text-sm text-emerald-800 px-3 py-2 bg-emerald-50 rounded-lg border border-emerald-200">
+                      <span className="material-symbols-outlined text-[18px] text-emerald-600">check_circle</span>
+                      <span className="font-medium">
+                        Aturan Terpicu: AI akan menyarankan kode <span className="bg-emerald-200 px-1 rounded">{formIcdCode || "[ICD_CODE]"}</span> jika menemukan teks ini.
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2 text-sm text-amber-800 px-3 py-2 bg-amber-50 rounded-lg border border-amber-200">
+                      <span className="material-symbols-outlined text-[18px] text-amber-600">error</span>
+                      <span>Aturan Tidak Terpicu: Kata kunci belum ditemukan dalam teks narasi.</span>
+                    </div>
+                  )}
                 </div>
               </div>
 

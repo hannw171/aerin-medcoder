@@ -8,6 +8,17 @@
       "Stroke Non Hemoragik"
     ],
     "icdCode": "I63.9",
-    "isActive": false
+    "isActive": true
+  },
+  {
+    "name": "HT",
+    "keywords": [
+      "Hipertensi",
+      "Hypertension",
+      "HT"
+    ],
+    "icdCode": "I10",
+    "isActive": false,
+    "id": "89c13c78-5518-4c72-839c-ccdd1fb65396"
   }
 ]
