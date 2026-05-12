@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 
 // Memory cache for the dictionary to avoid reading the file on every request
-let icd10Cache: Map<string, string> | null = null;
+let icd10Cache: Map<string, { description: string, category: string, chapter: string }> | null = null;
 
 function loadIcd10Dictionary() {
   if (icd10Cache) return;
@@ -21,9 +21,11 @@ function loadIcd10Dictionary() {
     content.split('\n').forEach(line => {
       const parts = line.split(';');
       if (parts.length >= 9) {
+        const chapter = parts[3];
+        const category = parts[4];
         const code = parts[5].replace(/\./g, '').toLowerCase();
         const desc = parts[8].trim();
-        icd10Cache!.set(code, desc);
+        icd10Cache!.set(code, { description: desc, category, chapter });
       }
     });
     console.log("ICD-10 Dictionary loaded for lookup API.");
@@ -31,6 +33,35 @@ function loadIcd10Dictionary() {
     console.error("Failed to load ICD-10 dictionary:", error);
     icd10Cache = new Map();
   }
+}
+
+function getDiagnosisType(code: string) {
+  const c = code.charAt(0).toUpperCase();
+  const num = parseInt(code.substring(1, 3), 10);
+  
+  if (c === 'A' || c === 'B') return 'Infectious';
+  if (c === 'C' || (c === 'D' && num <= 48)) return 'Neoplasms';
+  if (c === 'D' && num >= 50) return 'Blood';
+  if (c === 'E') return 'Endocrine';
+  if (c === 'F') return 'Psychiatry';
+  if (c === 'G') return 'Neurology';
+  if (c === 'H' && num <= 59) return 'Eye';
+  if (c === 'H' && num >= 60) return 'Ear';
+  if (c === 'I') return 'Circulatory';
+  if (c === 'J') return 'Respiratory';
+  if (c === 'K') return 'Digestive';
+  if (c === 'L') return 'Dermatology';
+  if (c === 'M') return 'Musculoskeletal';
+  if (c === 'N') return 'Genitourinary';
+  if (c === 'O') return 'Obstetrics';
+  if (c === 'P') return 'Perinatal';
+  if (c === 'Q') return 'Congenital';
+  if (c === 'R') return 'Symptoms';
+  if (c === 'S' || c === 'T') return 'Injury';
+  if (c === 'V' || c === 'W' || c === 'X' || c === 'Y') return 'External Causes';
+  if (c === 'Z') return 'Factors';
+  if (c === 'U') return 'Special';
+  return 'Other';
 }
 
 export async function GET(request: Request) {
@@ -46,10 +77,17 @@ export async function GET(request: Request) {
   // Normalize code: remove dots and make lowercase to match cache keys
   const normalizedCode = code.replace(/\./g, '').toLowerCase();
 
-  const description = icd10Cache!.get(normalizedCode);
+  const data = icd10Cache!.get(normalizedCode);
 
-  if (description) {
-    return NextResponse.json({ code: code.toUpperCase(), description });
+  if (data) {
+    const diagnosisType = getDiagnosisType(code);
+    return NextResponse.json({ 
+      code: code.toUpperCase(), 
+      description: data.description,
+      category: data.category,
+      chapter: data.chapter,
+      type: diagnosisType
+    });
   } else {
     return NextResponse.json({ error: "Code not found" }, { status: 404 });
   }
