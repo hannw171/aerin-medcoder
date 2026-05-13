@@ -115,31 +115,45 @@
     "codingResult": {
       "primaryDiagnosis": {
         "code": "A91",
+        "desc": "Dengue haemorrhagic fever",
+        "insight": "Demam berdarah dengue dengan manifestasi perdarahan dan peningkatan permeabilitas kapiler.",
         "description": "Dengue haemorrhagic fever (Unverified)",
-        "insight": "Berdasarkan diagnosis utama dokter Dengue Haemorrhagic Fever (DHF) Grade II, diperkuat oleh hasil NS1 positif, trombositopenia (85000/uL), leukopenia (2500/uL), peningkatan enzim hati (SGOT 120, SGPT 150), serta bukti kebocoran plasma seperti Rumple leede positif, asites minimal, dan penebalan dinding vesica fellea.",
-        "id": "489f1694-efdd-4413-9b1e-6ee74a8cfc76"
+        "id": "314375eb-f9a4-46c5-804b-96958fa5eadf"
       },
       "secondaryDiagnoses": [
         {
-          "code": "K77.0",
-          "description": "Liver disorders in infectious and parasitic diseases classified elsewhere (Unverified)",
-          "insight": "Berdasarkan diagnosis sekunder dokter \"Hepatitis Reaktif\" dan didukung oleh peningkatan enzim hati (SGOT 120 U/L, SGPT 150 U/L) yang sering terjadi pada infeksi virus Dengue. Kode ini spesifik menunjukkan gangguan hati yang terkait dengan penyakit infeksius.",
-          "id": "df371df6-317e-4e29-ae7c-05b470637ef2"
+          "code": "K76.8",
+          "desc": "Other specified diseases of liver",
+          "insight": "Inflamasi hepar sekunder akibat infeksi dengue, ditandai peningkatan transaminase.",
+          "description": "Other specified diseases of liver",
+          "id": "51fa113b-b748-4fc1-ae73-d09128024d52"
         }
       ],
       "procedures": [
         {
           "code": "99.18",
+          "desc": "Injection or infusion of therapeutic or prophylactic substance",
+          "insight": "Akses intravena untuk rehidrasi cairan dan pemberian medikasi.",
           "description": "Injection or infusion of electrolytes",
-          "id": "a8ce23ff-2ccc-4d22-bd6b-311912bbb753"
-        },
-        {
-          "code": "90.59",
-          "description": "Microscopic examination of blood, other microscopic examination",
-          "id": "28332a9a-f6a9-4453-9969-7d70b5dfd6cc"
+          "id": "67779980-9bec-4efc-bb80-e0a28b81e578"
         }
       ],
-      "potentialFindings": []
+      "potentialFindings": [
+        {
+          "code": "D69.6",
+          "desc": "Thrombocytopenia, unspecified",
+          "insight": "Penurunan jumlah trombosit, berisiko perdarahan, komplikasi umum DHF.",
+          "description": "Thrombocytopenia, unspecified",
+          "processed": false
+        },
+        {
+          "code": "R18",
+          "desc": "Ascites",
+          "insight": "Akumulasi cairan bebas intraabdomen, indikasi peningkatan permeabilitas kapiler.",
+          "description": "Ascites",
+          "processed": false
+        }
+      ]
     }
   },
   {
@@ -815,18 +829,20 @@
     },
     "codingResult": {
       "primaryDiagnosis": {
-        "id": "1",
         "code": "O80",
-        "description": "Single spontaneous delivery",
-        "insight": "Diagnosed spontaneous vaginal delivery."
+        "desc": "Single spontaneous delivery",
+        "insight": "Persalinan pervaginam tunggal spontan tanpa komplikasi.",
+        "description": "Single spontaneous delivery (Unverified)",
+        "id": "1a610059-8c0e-4117-95c6-e821f5facd52"
       },
       "secondaryDiagnoses": [],
       "procedures": [
         {
-          "id": "2",
           "code": "73.59",
+          "desc": "Other specified spontaneous vaginal delivery",
+          "insight": "Tindakan persalinan pervaginam spontan.",
           "description": "Other manually assisted delivery",
-          "insight": "Normal delivery performed."
+          "id": "4314eba9-8182-4a20-bd82-7d8f42580c33"
         }
       ],
       "potentialFindings": []

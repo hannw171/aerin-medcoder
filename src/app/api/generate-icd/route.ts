@@ -110,63 +110,44 @@ export async function POST(request: Request) {
 
     const model = genAI.getGenerativeModel({
       model: 'gemini-2.5-flash',
-      generationConfig: { responseMimeType: 'application/json' },
+      generationConfig: {
+        responseMimeType: 'application/json',
+        temperature: 0.1
+      },
     });
 
     const prompt = `
-You are an expert Clinical Coder operating in an Indonesian hospital setting for BPJS Kesehatan / INA-CBG casemix claims.
+ROLE: INA-CBG Clinical Coder, Indonesian BPJS Kesehatan hospital setting.
 
-CRITICAL INSTRUCTIONS & VERSIONING:
-1. DIAGNOSES: You MUST use the WHO ICD-10 (2019 Version) standard.
-2. PROCEDURES: You MUST use the ICD-9-CM (Clinical Modification, Volume 3, CMS 28) standard.
-3. PROHIBITION: DO NOT use CPT (Current Procedural Terminology) or ICD-10-PCS codes.
-4. SCOPING MANDATE: ONLY suggest ICD-10 codes for diagnoses explicitly listed by the physician in the "Clinical Primary Diagnosis" and "Clinical Secondary Diagnosis" sections. DO NOT generate new diagnoses from laboratory results or clinical notes unless they are explicitly confirmed as a diagnosis by the doctor.
-5. POTENTIAL FINDINGS (CC/MCC FOCUS): If you spot strong clinical evidence for significant unlisted conditions, prioritize those that categorize as CC (Comorbidity/Complication) or MCC (Major CC) in INA-CBG. Focus on identifying signs of organ failure, systemic infections, or acute complications that significantly impact resource intensity. Do not flag minor, insignificant symptoms.
+RULES:
+1. Diagnoses → ICD-10 (WHO 2019). Procedures → ICD-9-CM Vol.3 CMS28. NO CPT or ICD-10-PCS.
+2. Code ONLY diagnoses explicitly stated by physician in Primary/Secondary Diagnosis fields.
+3. Prefer 3-5 digit ICD-10 codes for E-Klaim compatibility (e.g., J18.9 or M47.26, not J18.900 or M47.261).
+4. insight field: max 15 words, in Indonesian, professional clinical language. No filler phrases.
+5. potentialFindings: ONLY list conditions that qualify as CC or MCC in INA-CBG (e.g., organ failure, sepsis, acute complications). SKIP stable/minor findings like controlled hypertension.
+6. If a Local Hospital Policy applies, note it in insight: "Kebijakan Lokal RS: [rule]".
 
-GEMINI INSIGHTS (EXPLAINABILITY):
-- For every diagnosis suggested (primary and secondary), provide a brief 'insight' (1-2 powerful sentences) in INDONESIAN language explaining why this code was chosen based on the clinical narrative.
-- EVIDENCE-BASED: Gather the insight from the entire medical record. If the doctor listed "Diabetes Mellitus", use the clinical notes (e.g., GDS 300 mg/dL, Polyuria) to justify the insight, but do not create a code for "Polyuria" as a separate diagnosis.
-- Focus on: Anatomical site + Clinical evidence + Link to the code.
-- Avoid generic phrases like "Saya memilih ini karena...". Use direct, professional clinical language like "Berdasarkan bukti klinis...".
-- LOCAL POLICY AWARENESS: If a code was forced or overridden by a Local Hospital Policy (listed below), you MUST explicitly mention it in the insight in Indonesian, e.g., "Sesuai dengan Kebijakan Lokal RS untuk kasus '...'."
+PROCEDURE REFERENCE (ICD-9-CM):
+CT Scan kepala→87.03 | EKG→89.52 | Echo→88.73 | Rontgen thorax→87.49 | USG abdomen→88.76 | Infus IV→99.18 | Kateter Foley→57.94
 
-FEW-SHOT CALIBRATION:
-- CT Scan Kepala / Otak / Cranium -> 87.03
-- EKG / Elektrokardiogram -> 89.52
-- Echocardiograph / Echocardiography -> 88.73
-- Rontgen Thorax / Dada -> 87.49
-- USG Abdomen -> 88.76
-- Pemasangan Infus / Injeksi IV -> 99.18
-- Pemasangan Kateter Urin (Foley Catheter) -> 57.94
-
-${localPoliciesText}
-
-Analyze the following patient medical record data and extract the appropriate codes.
-
-PATIENT MEDICAL RECORD:
+${localPoliciesText}PATIENT RECORD:
+Primary Dx: ${medicalRecord.diagnosisKlinisUtama || 'N/A'}
+Secondary Dx: ${medicalRecord.diagnosisKlinisSekunder || 'N/A'}
 Anamnesa: ${medicalRecord.anamnesa || 'N/A'}
 TTV: ${JSON.stringify(medicalRecord.ttv || {})}
 Physical Exam: ${medicalRecord.physicalExam || 'N/A'}
-Lab Results: ${medicalRecord.labResult || 'N/A'}
-Radiology Results: ${medicalRecord.radiologyResult || 'N/A'}
+Lab: ${medicalRecord.labResult || 'N/A'}
+Radiology: ${medicalRecord.radiologyResult || 'N/A'}
 Procedures: ${JSON.stringify(medicalRecord.procedures || [])}
-Inpatient Meds: ${JSON.stringify(medicalRecord.inpatientMeds || [])}
-Discharge Meds: ${JSON.stringify(medicalRecord.dischargeMeds || [])}
-Clinical Primary Diagnosis: ${medicalRecord.diagnosisKlinisUtama || 'N/A'}
-Clinical Secondary Diagnosis: ${medicalRecord.diagnosisKlinisSekunder || 'N/A'}
+Meds (Inpatient): ${JSON.stringify(medicalRecord.inpatientMeds || [])}
+Meds (Discharge): ${JSON.stringify(medicalRecord.dischargeMeds || [])}
 
-TASKS:
-1. Determine the Primary Diagnosis (Diagnosa Utama).
-2. Determine all relevant Secondary Diagnoses (Diagnosa Sekunder).
-3. Determine all relevant Procedures (Tindakan).
-4. If you find a potential diagnosis in the notes that was NOT explicitly listed by the doctor as a diagnosis, place it in 'potentialFindings'.
-5. Output ONLY a JSON object that strictly matches this exact structure:
-
+OUTPUT: Respond ONLY with a single valid JSON object:
 {
-  "primaryDiagnosis": { "code": "...", "description": "...", "insight": "..." },
-  "secondaryDiagnoses": [ { "code": "...", "description": "...", "insight": "..." } ],
-  "procedures": [ { "code": "...", "description": "..." } ],
-  "potentialFindings": [ { "code": "...", "description": "...", "insight": "..." } ]
+  "primaryDiagnosis": { "code": "STRING", "desc": "STRING", "insight": "STRING" },
+  "secondaryDiagnoses": [ { "code": "STRING", "desc": "STRING", "insight": "STRING" } ],
+  "procedures": [ { "code": "STRING", "desc": "STRING", "insight": "STRING" } ],
+  "potentialFindings": [ { "code": "STRING", "desc": "STRING", "insight": "STRING" } ]
 }
 `;
 
@@ -181,15 +162,18 @@ TASKS:
       return NextResponse.json({ error: 'Invalid JSON response from AI' }, { status: 500 });
     }
 
-    // 2. Post-processing Grounding Logic (Sekarang MENGGUNAKAN CACHE MEMORI)
+    // Post-processing Grounding Logic — verifies codes against in-memory ICD dictionaries
+    // The AI uses 'desc', grounding overwrites it with the official dictionary description
     const groundCode = (item: any, mapCache: Map<string, string> | null) => {
       if (!item || !item.code || !mapCache) return;
       const normalizedCode = item.code.replace(/\./g, '').toLowerCase();
       if (mapCache.has(normalizedCode)) {
         item.description = mapCache.get(normalizedCode);
       } else {
-        item.description = item.description + ' (Unverified)';
+        item.description = (item.desc || item.description || '') + ' (Unverified)';
       }
+      // Normalize field name: ensure 'description' is always present for frontend
+      if (!item.description && item.desc) item.description = item.desc;
     };
     
     if (parsedResponse.primaryDiagnosis) {
