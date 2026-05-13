@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { patients } from "@/lib/mockData";
 
 import { SearchableICDInput, type CodeItem } from "@/components/SearchableICDInput";
+import { FinancialImpactCard } from "@/components/FinancialImpactCard";
 type CodingResult = {
   primaryDiagnosis: CodeItem | null;
   secondaryDiagnoses: CodeItem[];
@@ -812,6 +813,18 @@ function CodingPageContent() {
                       </div>
                     ))}
                   </div>
+                </div>
+              )}
+
+              {/* Financial Impact */}
+              {codingResult?.primaryDiagnosis && (
+                <div className="mt-2">
+                  <FinancialImpactCard 
+                    primaryDiagnosis={codingResult.primaryDiagnosis}
+                    secondaryDiagnoses={codingResult.secondaryDiagnoses}
+                    procedures={codingResult.procedures}
+                    potentialFindings={codingResult.potentialFindings || []}
+                  />
                 </div>
               )}
             </div>

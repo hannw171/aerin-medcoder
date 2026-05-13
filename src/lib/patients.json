@@ -19,7 +19,7 @@
         "nyeri": "2"
       },
       "physicalExam": "Kesadaran compos mentis, GCS 15. Hemiparese dextra, kekuatan motorik ekstremitas atas 2/5, bawah 2/5. Parese N. VII, XII dextra sentral.",
-      "labResult": "GDS: 145 mg/dL, Hb: 13.5 g/dL, Leukosit: 8.500/uL, Trombosit: 250.000/uL, Ureum: 30 mg/dL, Kreatinin: 1.0 mg/dL.",
+      "labResult": "GDS: 145 mg/dL, Hb: 13.5 g/dL, Leukosit: 8500/uL, Trombosit: 250000/uL, Ureum: 30 mg/dL, Kreatinin: 1.0 mg/dL.",
       "radiologyResult": "CT Scan Kepala Non-Kontras: Tampak lesi hipodens di capsula interna sinistra, sesuai dengan gambaran infark serebri.",
       "procedures": [
         "CT Scan Kepala Non-Kontras",
@@ -43,32 +43,35 @@
       "primaryDiagnosis": {
         "code": "I63.9",
         "description": "Cerebral infarction, unspecified",
-        "id": "dfbf4c25-aa1e-47a1-a959-d7f51b03fb89"
+        "insight": "Based on the clinical diagnosis of 'Stroke Non Hemoragik (SNH)' and confirmed by CT Scan Kepala showing a 'lesi hipodens di capsula interna sinistra, sesuai dengan gambaran infark serebri' alongside symptoms like right-sided weakness and slurred speech, the code I63.9 is mandated by Local Hospital Policy for SNH cases.",
+        "id": "e536a15a-c375-4c14-a871-4b8e24beb8f2"
       },
       "secondaryDiagnoses": [
         {
           "code": "I10",
           "description": "Essential (primary) hypertension",
-          "id": "dae3af5c-174c-4f83-9a0c-19655a4412f1"
+          "insight": "The patient has an uncontrolled history of hypertension for 5 years and current blood pressure of 180/100 mmHg, which clinically classifies as Grade II hypertension, supporting the diagnosis of essential (primary) hypertension.",
+          "id": "5f518052-4ab8-4267-bb95-99620951c755"
         }
       ],
       "procedures": [
         {
           "code": "87.03",
           "description": "Computerized axial tomography of head",
-          "id": "f90fdd23-1a89-452a-85cb-5af4b891d424"
+          "id": "d7c79406-c6d2-44be-a974-de859f75e5af"
         },
         {
           "code": "99.18",
           "description": "Injection or infusion of electrolytes",
-          "id": "348c73d3-cb42-44d1-9657-3dfae12072c7"
+          "id": "a78d8ca8-51f0-4cf2-bae0-d754237bb1b0"
         },
         {
           "code": "57.94",
           "description": "Insertion of indwelling urinary catheter",
-          "id": "24d9e317-d78f-4ebd-89cf-0baff6ca9853"
+          "id": "2d2c8520-3ee4-4367-a86f-8d2c24a0e2bc"
         }
-      ]
+      ],
+      "potentialFindings": []
     }
   },
   {
@@ -91,7 +94,7 @@
         "nyeri": "4"
       },
       "physicalExam": "Compos mentis, tampak sakit sedang. Rumple leede (+). Abdomen: nyeri tekan epigastrium (+), hepatomegali 1 jari bawah arcus costae. Akral hangat, CRT < 2 detik.",
-      "labResult": "Hb: 14.2 g/dL, Ht: 45%, Leukosit: 2.500/uL, Trombosit: 85.000/uL. NS1 (+).",
+      "labResult": "Hb: 14.2 g/dL, Ht: 45%, Leukosit: 2500/uL, Trombosit: 85000/uL, SGOT: 120 U/L, SGPT: 150 U/L. NS1 (+).",
       "radiologyResult": "Rontgen Thorax: tidak tampak efusi pleura. USG Abdomen: penebalan dinding vesica fellea, minimal ascites.",
       "procedures": [
         "Pemasangan IV line",
@@ -107,33 +110,29 @@
         "Domperidone 3x10mg PO"
       ],
       "diagnosisKlinisUtama": "Dengue Haemorrhagic Fever (DHF) Grade II",
-      "diagnosisKlinisSekunder": "Hepatitis reaktif"
+      "diagnosisKlinisSekunder": "Hepatitis Reaktif"
     },
     "codingResult": {
       "primaryDiagnosis": {
+        "id": "1",
         "code": "A91",
-        "description": "Dengue haemorrhagic fever (Unverified)",
-        "insight": "Based on the physician's primary diagnosis of Dengue Haemorrhagic Fever Grade II, supported by clinical signs such as fever, nausea, vomiting, abdominal pain, positive Rumple leede test, hepatomegaly, and laboratory findings of low leukocytes and platelets along with a positive NS1 antigen test, the ICD-10 code A91 for Dengue Haemorrhagic Fever is assigned.",
-        "id": "b5d4b303-75a0-4117-b38d-63ca454c8eae"
+        "description": "Dengue haemorrhagic fever",
+        "insight": "Based on clinical evidence of fever, positive NS1, and thrombocytopenia."
       },
       "secondaryDiagnoses": [
         {
-          "code": "K72.90",
-          "description": "Hepatic failure, unspecified without coma (Unverified)",
-          "insight": "The physician's diagnosis of Hepatitis reaktif, coupled with the ultrasonographic finding of gallbladder wall thickening and minimal ascites, suggests hepatic involvement, leading to the selection of ICD-10 code K72.90 for unspecified hepatic failure.",
-          "id": "f4201da6-dbfc-482a-bf27-44715304df28"
+          "id": "2",
+          "code": "K75.9",
+          "description": "Inflammatory liver disease, unspecified",
+          "insight": "Indicated by elevated SGOT/SGPT and hepatomegaly."
         }
       ],
       "procedures": [
         {
+          "id": "3",
           "code": "99.18",
           "description": "Injection or infusion of electrolytes",
-          "id": "8da040e1-6f18-4c14-9b26-6a33124c765b"
-        },
-        {
-          "code": "99.29",
-          "description": "Injection or infusion of other therapeutic or prophylactic substance",
-          "id": "05134acc-3c24-47ba-ab87-3885e5d16e95"
+          "insight": "Based on IVFD RL 1500cc administration."
         }
       ],
       "potentialFindings": []
@@ -159,7 +158,7 @@
         "nyeri": "7"
       },
       "physicalExam": "Abdomen: McBurney sign (+), Rovsing sign (+), Psoas sign (+). Bising usus normal.",
-      "labResult": "Hb: 13.0 g/dL, Leukosit: 15.000/uL, Trombosit: 300.000/uL.",
+      "labResult": "Hb: 13.0 g/dL, Leukosit: 15000/uL, Trombosit: 300000/uL.",
       "radiologyResult": "USG Abdomen: Tampak gambaran appendicitis akut, diameter 8mm, cairan bebas (-) di periapendikular.",
       "procedures": [
         "Appendectomy (Open)",
@@ -176,22 +175,25 @@
         "Asam Mefenamat 3x500mg PO"
       ],
       "diagnosisKlinisUtama": "Appendicitis Akut",
-      "diagnosisKlinisSekunder": "Post Appendectomy"
+      "diagnosisKlinisSekunder": ""
     },
     "codingResult": {
       "primaryDiagnosis": {
         "id": "1",
         "code": "K35.8",
-        "description": "Acute appendicitis, other and unspecified"
+        "description": "Acute appendicitis, other and unspecified",
+        "insight": "Confirmed by RLQ pain, McBurney sign, leukocytosis, and USG findings."
       },
       "secondaryDiagnoses": [],
       "procedures": [
         {
           "id": "2",
           "code": "47.09",
-          "description": "Other appendectomy"
+          "description": "Other appendectomy",
+          "insight": "Open appendectomy procedure performed."
         }
-      ]
+      ],
+      "potentialFindings": []
     }
   },
   {
@@ -234,6 +236,36 @@
       ],
       "diagnosisKlinisUtama": "Diabetes Mellitus Tipe 2",
       "diagnosisKlinisSekunder": "Diabetic Foot Ulcer, Diabetic Nephropathy"
+    },
+    "codingResult": {
+      "primaryDiagnosis": {
+        "id": "1",
+        "code": "E11.5",
+        "description": "Type 2 diabetes mellitus with peripheral angiopathy",
+        "insight": "Based on T2DM history with current foot ulcer."
+      },
+      "secondaryDiagnoses": [
+        {
+          "id": "2",
+          "code": "E11.2",
+          "description": "Type 2 diabetes mellitus with renal complications",
+          "insight": "Indicated by elevated creatinine and proteinuria."
+        }
+      ],
+      "procedures": [
+        {
+          "id": "3",
+          "code": "86.22",
+          "description": "Excisional debridement of wound, infection, or burn",
+          "insight": "Debridement procedure explicitly listed."
+        }
+      ],
+      "potentialFindings": [
+        {
+          "description": "Uncontrolled Hypertension",
+          "insight": "BP is 150/90, not explicitly diagnosed."
+        }
+      ]
     }
   },
   {
@@ -244,9 +276,9 @@
     "bpjsClass": "Kelas 1",
     "dpjp": "Dr. Dewi, Sp.P",
     "dischargeDate": "2023-10-22",
-    "status": "Draft AI",
+    "status": "Belum Coding",
     "medicalRecord": {
-      "anamnesa": "Sesak napas dan batuk berdahak sejak 3 hari SMRS. Dahak warna kekuningan. Demam (+) menggigil. Riwayat asma disangkal. Riwayat merokok (+).",
+      "anamnesa": "Sesak napas dan batuk berdahak sejak 3 hari SMRS. Dahak warna kekuningan. Demam (+) menggigil. Riwayat merokok (+).",
       "ttv": {
         "td": "110/70",
         "nadi": "112",
@@ -255,13 +287,14 @@
         "spo2": "92",
         "nyeri": "2"
       },
-      "physicalExam": "Tampak sakit berat, sesak napas. Retraksi dinding dada (+). Auskultasi paru: ronkhi basah kasar di basal paru dextra dan sinistra. Wheezing (-).",
-      "labResult": "Hb: 12.5 g/dL, Leukosit: 18.500/uL, Trombosit: 350.000/uL, CRP: 45 mg/L.",
-      "radiologyResult": "Rontgen Thorax: Tampak infiltrat di paracardial kanan dan kiri, kesan bronchopneumonia.",
+      "physicalExam": "Tampak sakit berat, sesak napas. Retraksi dinding dada (+). Auskultasi paru: ronkhi basah kasar di basal paru dextra dan sinistra. Fremitus melemah di paru dextra bawah.",
+      "labResult": "Hb: 12.5 g/dL, Leukosit: 18500/uL, CRP: 45 mg/L.",
+      "radiologyResult": "Rontgen Thorax: Tampak infiltrat di paracardial kanan dan kiri, kesan bronchopneumonia. Ada gambaran efusi pleura dextra minimal.",
       "procedures": [
         "Oksigenasi Nasal Kanul 3 lpm",
         "Nebulisasi",
-        "Pemasangan IV line"
+        "Pemasangan IV line",
+        "Thoracentesis"
       ],
       "inpatientMeds": [
         "Levofloxacin 1x750mg IV",
@@ -273,48 +306,7 @@
         "Ambroxol 3x30mg PO"
       ],
       "diagnosisKlinisUtama": "Bronchopneumonia",
-      "diagnosisKlinisSekunder": "Respiratory Failure Type 1 (resolved)"
-    },
-    "codingResult": {
-      "primaryDiagnosis": {
-        "code": "J18.0",
-        "description": "Bronchopneumonia, unspecified",
-        "id": "ce6b2c84-eaa4-45b2-8ae5-dba96e6c9cac"
-      },
-      "secondaryDiagnoses": [
-        {
-          "code": "J96.0",
-          "description": "Acute respiratory failure",
-          "id": "42b095f7-351f-45ac-ab07-3be6d3cb0525"
-        },
-        {
-          "code": "Z87.891",
-          "description": "Personal history of nicotine dependence (Unverified)",
-          "id": "b2856feb-f896-4ed9-992a-7095e63c69e2"
-        }
-      ],
-      "procedures": [
-        {
-          "code": "87.49",
-          "description": "Other chest x-ray",
-          "id": "565274cd-5ebd-4921-a5d7-798117d33cdc"
-        },
-        {
-          "code": "93.96",
-          "description": "Other oxygen enrichment",
-          "id": "81f91db7-d7bf-4a23-a033-ffb6caa62907"
-        },
-        {
-          "code": "93.94",
-          "description": "Respiratory medication administered by nebulizer",
-          "id": "af501e60-d43f-405f-86b9-bf0c176f462d"
-        },
-        {
-          "code": "99.18",
-          "description": "Injection or infusion of electrolytes",
-          "id": "95e47f13-8bc3-4403-8e89-8ad0650b9053"
-        }
-      ]
+      "diagnosisKlinisSekunder": "Efusi Pleura Dextra"
     }
   },
   {
@@ -323,118 +315,224 @@
     "rmNo": "01-22-38",
     "name": "Agus Salim",
     "bpjsClass": "Kelas 2",
-    "dpjp": "Dr. Hendra, Sp.JP",
+    "dpjp": "Dr. Hendra, Sp.PD-KGH",
     "dischargeDate": "2023-10-26",
     "status": "Belum Coding",
     "medicalRecord": {
-      "anamnesa": "Nyeri dada",
+      "anamnesa": "Sesak napas, mual, dan bengkak di seluruh tubuh sejak 1 minggu. BAK sangat sedikit. Rutin hemodialisa namun terlewat 1 jadwal.",
       "ttv": {
-        "td": "140/90",
+        "td": "160/90",
         "nadi": "90",
-        "rr": "20",
+        "rr": "26",
         "suhu": "36.5",
-        "spo2": "98",
-        "nyeri": "4"
+        "spo2": "96",
+        "nyeri": "0"
       },
-      "physicalExam": "Normal",
-      "labResult": "Normal",
-      "radiologyResult": "Normal",
+      "physicalExam": "Edema anasarca (+). Konjungtiva anemis (+). JVP meningkat.",
+      "labResult": "Ureum: 210 mg/dL, Kreatinin: 9.5 mg/dL, Kalium: 6.8 mEq/L, Hb: 8.0 g/dL.",
+      "radiologyResult": "USG Ginjal: Tampak ginjal mengecil bilateral dengan ekostruktur meningkat, batas kortikomeduler mengabur. Kesan CKD bilateral.",
       "procedures": [
-        "EKG"
+        "Hemodialisa Cito",
+        "Pemasangan CDL"
       ],
-      "inpatientMeds": [],
-      "dischargeMeds": [],
-      "diagnosisKlinisUtama": "Angina Pectoris",
-      "diagnosisKlinisSekunder": ""
+      "inpatientMeds": [
+        "Dextrose 40% + Insulin 10 IU IV",
+        "Ca Gluconas 1 ampul IV",
+        "Furosemide 2x40mg IV",
+        "PRC Transfusion 1 kolf"
+      ],
+      "dischargeMeds": [
+        "Folic Acid 1x1 PO",
+        "CaCO3 3x500mg PO"
+      ],
+      "diagnosisKlinisUtama": "CKD Stage 5",
+      "diagnosisKlinisSekunder": "Hyperkalemia, Anemia Renal"
     }
   },
   {
     "id": "p7",
     "registerNo": "2023007",
     "rmNo": "01-22-39",
-    "name": "Lina Marlina",
+    "name": "Toni Supriadi",
     "bpjsClass": "Kelas 3",
-    "dpjp": "Dr. Ratna, Sp.OG",
+    "dpjp": "Dr. Ratna, Sp.PD-KGEH",
     "dischargeDate": "2023-10-26",
     "status": "Draft AI",
     "medicalRecord": {
-      "anamnesa": "Mulas",
+      "anamnesa": "Muntah darah hitam 2x sejak pagi, BAB hitam lengket (melena). Perut membesar sejak 1 bulan lalu. Mata menguning. Riwayat minum alkohol berat.",
       "ttv": {
-        "td": "120/80",
-        "nadi": "80",
-        "rr": "20",
+        "td": "90/60",
+        "nadi": "110",
+        "rr": "22",
         "suhu": "36.5",
-        "spo2": "99",
-        "nyeri": "6"
+        "spo2": "98",
+        "nyeri": "2"
       },
-      "physicalExam": "Normal",
-      "labResult": "Normal",
-      "radiologyResult": "Normal",
+      "physicalExam": "Sklera ikterik (+). Abdomen membuncit, shifting dullness (+), caput medusae (+). Palmar eritema (+).",
+      "labResult": "Hb: 6.5 g/dL, Trombosit: 60000/uL, Albumin: 2.1 g/dL, Bilirubin Total: 4.5 mg/dL, SGOT/SGPT: 180/120.",
+      "radiologyResult": "USG Abdomen: Sirosis hepatis, ascites permagna, splenomegali.",
       "procedures": [
-        "Partus Spontan"
+        "Transfusi PRC 2 kolf",
+        "Endoskopi: Ligasi varises esofagus"
       ],
-      "inpatientMeds": [],
-      "dischargeMeds": [],
-      "diagnosisKlinisUtama": "Partus Normal",
-      "diagnosisKlinisSekunder": ""
+      "inpatientMeds": [
+        "Somatostatin IV",
+        "Ceftriaxone 1x1g IV",
+        "Spironolactone 1x100mg PO",
+        "Lactulose 3x1C"
+      ],
+      "dischargeMeds": [
+        "Spironolactone 1x100mg PO",
+        "Propranolol 2x10mg PO"
+      ],
+      "diagnosisKlinisUtama": "Sirosis Hepatis dengan Ruptur Varises Esofagus",
+      "diagnosisKlinisSekunder": "Ascites Permagna"
+    },
+    "codingResult": {
+      "primaryDiagnosis": {
+        "id": "1",
+        "code": "K74.6",
+        "description": "Other and unspecified cirrhosis of liver",
+        "insight": "Sirosis hepatis explicitly diagnosed."
+      },
+      "secondaryDiagnoses": [
+        {
+          "id": "2",
+          "code": "I85.0",
+          "description": "Esophageal varices with bleeding",
+          "insight": "Hematemesis from ruptured esophageal varices."
+        },
+        {
+          "id": "3",
+          "code": "R18",
+          "description": "Ascites",
+          "insight": "Ascites explicitly noted."
+        }
+      ],
+      "procedures": [
+        {
+          "id": "4",
+          "code": "42.33",
+          "description": "Endoscopic excision or destruction of lesion or tissue of esophagus",
+          "insight": "Endoscopic ligation of varices performed."
+        },
+        {
+          "id": "5",
+          "code": "99.04",
+          "description": "Transfusion of packed cells",
+          "insight": "PRC transfusion administered."
+        }
+      ],
+      "potentialFindings": [
+        {
+          "description": "Thrombocytopenia",
+          "insight": "Platelet count 60k but not explicitly diagnosed."
+        }
+      ]
     }
   },
   {
     "id": "p8",
     "registerNo": "2023008",
     "rmNo": "01-22-40",
-    "name": "Hasanudin",
+    "name": "Sari Wulandari",
     "bpjsClass": "Kelas 1",
-    "dpjp": "Dr. Budi, Sp.PD-KEMD",
+    "dpjp": "Dr. Lina, Sp.OG",
     "dischargeDate": "2023-10-26",
     "status": "Selesai",
     "medicalRecord": {
-      "anamnesa": "Lemas",
+      "anamnesa": "Hamil 34 minggu, datang rujukan dari bidan dengan tekanan darah tinggi dan sakit kepala hebat. Pandangan kabur (+), mual muntah (+).",
       "ttv": {
-        "td": "130/80",
-        "nadi": "85",
-        "rr": "20",
-        "suhu": "36.5",
-        "spo2": "98",
-        "nyeri": "0"
+        "td": "180/110",
+        "nadi": "90",
+        "rr": "24",
+        "suhu": "36.8",
+        "spo2": "97",
+        "nyeri": "6"
       },
-      "physicalExam": "Normal",
-      "labResult": "Normal",
-      "radiologyResult": "Normal",
-      "procedures": [],
-      "inpatientMeds": [],
-      "dischargeMeds": [],
-      "diagnosisKlinisUtama": "Diabetes Mellitus Tipe 2",
-      "diagnosisKlinisSekunder": ""
+      "physicalExam": "Edema tungkai (+/+) berat. DJJ 140x/menit reguler.",
+      "labResult": "Protein urin +3. Trombosit: 90000/uL, SGOT: 150, SGPT: 130, LDH: 650.",
+      "radiologyResult": "USG Obgyn: Janin tunggal hidup presentasi kepala, TBJ 2100g.",
+      "procedures": [
+        "Sectio Caesarea Cito",
+        "Pemberian MgSO4"
+      ],
+      "inpatientMeds": [
+        "MgSO4 40% dosis awal",
+        "Nifedipine 3x10mg PO",
+        "Dexamethasone 2x6mg IV"
+      ],
+      "dischargeMeds": [
+        "Nifedipine 1x10mg PO",
+        "Cefadroxil 2x500mg PO"
+      ],
+      "diagnosisKlinisUtama": "Preeklamsia Berat (PEB) dengan HELLP Syndrome",
+      "diagnosisKlinisSekunder": "G1P0A0 Hamil 34 Minggu"
+    },
+    "codingResult": {
+      "primaryDiagnosis": {
+        "id": "1",
+        "code": "O14.1",
+        "description": "Severe pre-eclampsia",
+        "insight": "BP 180/110 with +3 proteinuria and severe symptoms."
+      },
+      "secondaryDiagnoses": [
+        {
+          "id": "2",
+          "code": "O14.2",
+          "description": "HELLP syndrome",
+          "insight": "Diagnosed by MD, supported by low platelets and high LFT/LDH."
+        }
+      ],
+      "procedures": [
+        {
+          "id": "3",
+          "code": "74.1",
+          "description": "Low cervical cesarean section",
+          "insight": "Cito SC performed."
+        }
+      ],
+      "potentialFindings": []
     }
   },
   {
     "id": "p9",
     "registerNo": "2023009",
     "rmNo": "01-22-41",
-    "name": "Rina Wati",
+    "name": "Fitri Ramadhani",
     "bpjsClass": "Kelas 2",
-    "dpjp": "Dr. Sarah, Sp.A",
+    "dpjp": "Dr. Rudi, Sp.OG",
     "dischargeDate": "2023-10-25",
     "status": "Belum Coding",
     "medicalRecord": {
-      "anamnesa": "Demam",
+      "anamnesa": "Perdarahan merembes dari jalan lahir setelah melahirkan spontan di dukun beranak 2 jam lalu. Plasenta dikatakan sudah lahir namun tidak lengkap. Pasien tampak lemas.",
       "ttv": {
-        "td": "110/70",
-        "nadi": "100",
-        "rr": "22",
-        "suhu": "38.5",
-        "spo2": "98",
-        "nyeri": "2"
+        "td": "80/50",
+        "nadi": "120",
+        "rr": "24",
+        "suhu": "36.5",
+        "spo2": "95",
+        "nyeri": "4"
       },
-      "physicalExam": "Normal",
-      "labResult": "Normal",
-      "radiologyResult": "Normal",
-      "procedures": [],
-      "inpatientMeds": [],
-      "dischargeMeds": [],
-      "diagnosisKlinisUtama": "Demam Tifoid",
-      "diagnosisKlinisSekunder": ""
+      "physicalExam": "Konjungtiva sangat pucat. Kontraksi uterus lembek. Perdarahan aktif dari ostium uteri internum (+).",
+      "labResult": "Hb: 5.5 g/dL.",
+      "radiologyResult": "",
+      "procedures": [
+        "Manual Plasenta",
+        "Kuretase Sisa Plasenta",
+        "Transfusi Darah"
+      ],
+      "inpatientMeds": [
+        "Oksitosin drip 20 IU dalam 500cc RL",
+        "Misoprostol 800mcg per rektal",
+        "Transfusi PRC 3 kolf"
+      ],
+      "dischargeMeds": [
+        "Sulfas Ferosus 2x1 tablet",
+        "Amoxicillin 3x500mg PO"
+      ],
+      "diagnosisKlinisUtama": "Post Partum Hemorrhage e.c. Retensio Sisa Plasenta",
+      "diagnosisKlinisSekunder": "Syok Hemoragik, Anemia Berat"
     }
   },
   {
@@ -443,29 +541,60 @@
     "rmNo": "01-22-42",
     "name": "Wahyu Saputra",
     "bpjsClass": "Kelas 3",
-    "dpjp": "Dr. Lukman, Sp.B",
+    "dpjp": "Dr. Tari, Sp.PD-KPTI",
     "dischargeDate": "2023-10-25",
     "status": "Draft AI",
     "medicalRecord": {
-      "anamnesa": "Luka",
+      "anamnesa": "Batuk darah sejak 2 hari SMRS. Batuk lama berdahak sudah 1 bulan. Berkeringat malam hari dan berat badan turun drastis. Pasien adalah ODHA dengan ARV tidak rutin.",
       "ttv": {
-        "td": "120/80",
-        "nadi": "80",
-        "rr": "20",
-        "suhu": "36.5",
-        "spo2": "99",
-        "nyeri": "3"
+        "td": "110/70",
+        "nadi": "98",
+        "rr": "24",
+        "suhu": "38.2",
+        "spo2": "94",
+        "nyeri": "2"
       },
-      "physicalExam": "Normal",
-      "labResult": "Normal",
-      "radiologyResult": "Normal",
+      "physicalExam": "Tampak cachexia. Suara napas bronkial di apex paru kanan.",
+      "labResult": "BTA Sputum: +/+/+, Anti-HIV: (+), CD4: 80 sel/mm3.",
+      "radiologyResult": "Rontgen Thorax: Kavitas di apex paru kanan dengan infiltrat luas.",
       "procedures": [
-        "Jahit Luka"
+        "Pemberian O2 Nasal Kanul"
       ],
-      "inpatientMeds": [],
-      "dischargeMeds": [],
-      "diagnosisKlinisUtama": "Vulnus Laceratum",
-      "diagnosisKlinisSekunder": ""
+      "inpatientMeds": [
+        "OAT Kategori 1",
+        "ARV (TDF/3TC/EFV)",
+        "Asam Traneksamat 3x500mg IV"
+      ],
+      "dischargeMeds": [
+        "OAT Kategori 1",
+        "ARV (TDF/3TC/EFV)"
+      ],
+      "diagnosisKlinisUtama": "TB Paru BTA Positif dengan Hemoptisis",
+      "diagnosisKlinisSekunder": "HIV/AIDS, Wasting Syndrome"
+    },
+    "codingResult": {
+      "primaryDiagnosis": {
+        "id": "1",
+        "code": "A15.0",
+        "description": "Tuberculosis of lung, confirmed by sputum microscopy with or without culture",
+        "insight": "Based on AFB positive sputum and apical cavity."
+      },
+      "secondaryDiagnoses": [
+        {
+          "id": "2",
+          "code": "B20",
+          "description": "Human immunodeficiency virus [HIV] disease",
+          "insight": "Confirmed HIV+ with CD4 80."
+        },
+        {
+          "id": "3",
+          "code": "R04.2",
+          "description": "Hemoptysis",
+          "insight": "Diagnosed secondary to TB."
+        }
+      ],
+      "procedures": [],
+      "potentialFindings": []
     }
   },
   {
@@ -474,122 +603,230 @@
     "rmNo": "01-22-43",
     "name": "Dwi Astuti",
     "bpjsClass": "Kelas 1",
-    "dpjp": "Dr. Ratna, Sp.OG",
+    "dpjp": "Dr. Anton, Sp.PD",
     "dischargeDate": "2023-10-24",
     "status": "Selesai",
     "medicalRecord": {
-      "anamnesa": "Perdarahan",
+      "anamnesa": "BAB cair >10x/hari sejak 2 hari lalu. Muntah 5x. Lemas, haus, kencing berkurang.",
       "ttv": {
-        "td": "110/70",
-        "nadi": "90",
-        "rr": "20",
-        "suhu": "36.5",
+        "td": "90/60",
+        "nadi": "115",
+        "rr": "22",
+        "suhu": "37.5",
         "spo2": "98",
-        "nyeri": "4"
+        "nyeri": "3"
       },
-      "physicalExam": "Normal",
-      "labResult": "Normal",
-      "radiologyResult": "Normal",
+      "physicalExam": "Mata cekung, turgor kulit lambat, mukosa bibir kering.",
+      "labResult": "Ureum: 120, Kreatinin: 2.8, Natrium: 130, Kalium: 3.2.",
+      "radiologyResult": "",
       "procedures": [
-        "Kuretase"
+        "Rehidrasi IV Cepat"
       ],
-      "inpatientMeds": [],
-      "dischargeMeds": [],
-      "diagnosisKlinisUtama": "Abortus Inkomplit",
-      "diagnosisKlinisSekunder": ""
+      "inpatientMeds": [
+        "IVFD NaCl 0.9% loading 1 liter",
+        "Loperamide 2mg k/p",
+        "Zinc 1x20mg"
+      ],
+      "dischargeMeds": [
+        "Oralit k/p BAB cair",
+        "Zinc 1x20mg"
+      ],
+      "diagnosisKlinisUtama": "Gastroenteritis Akut dengan Dehidrasi Berat",
+      "diagnosisKlinisSekunder": "Acute Kidney Injury (AKI) Prerenal"
+    },
+    "codingResult": {
+      "primaryDiagnosis": {
+        "id": "1",
+        "code": "A09.9",
+        "description": "Gastroenteritis and colitis of unspecified origin",
+        "insight": "Acute diarrhea and vomiting with severe dehydration."
+      },
+      "secondaryDiagnoses": [
+        {
+          "id": "2",
+          "code": "E86",
+          "description": "Volume depletion",
+          "insight": "Diagnosed due to dehydration signs and hypotension."
+        },
+        {
+          "id": "3",
+          "code": "N17.9",
+          "description": "Acute renal failure, unspecified",
+          "insight": "Diagnosed AKI prerenal with elevated Cr 2.8."
+        }
+      ],
+      "procedures": [
+        {
+          "id": "4",
+          "code": "99.18",
+          "description": "Injection or infusion of electrolytes",
+          "insight": "IV rapid rehydration."
+        }
+      ],
+      "potentialFindings": []
     }
   },
   {
     "id": "p12",
     "registerNo": "2023012",
     "rmNo": "01-22-44",
-    "name": "Eko Prasetyo",
+    "name": "Joko Supriyanto",
     "bpjsClass": "Kelas 2",
-    "dpjp": "Dr. Hendra, Sp.JP",
+    "dpjp": "Dr. Budi, Sp.PD",
     "dischargeDate": "2023-10-24",
-    "status": "Belum Coding",
+    "status": "Draft AI",
     "medicalRecord": {
-      "anamnesa": "Sesak",
+      "anamnesa": "Nyeri ulu hati terasa perih dan panas sejak 1 bulan, memberat 2 hari ini. Mual (+), perut kembung (+). Pola makan tidak teratur.",
       "ttv": {
-        "td": "150/90",
-        "nadi": "100",
-        "rr": "24",
+        "td": "120/80",
+        "nadi": "85",
+        "rr": "18",
         "suhu": "36.5",
-        "spo2": "95",
-        "nyeri": "0"
+        "spo2": "99",
+        "nyeri": "5"
       },
-      "physicalExam": "Normal",
-      "labResult": "Normal",
-      "radiologyResult": "Normal",
-      "procedures": [
-        "EKG"
+      "physicalExam": "Nyeri tekan epigastrium (+). Bising usus normal.",
+      "labResult": "DbN.",
+      "radiologyResult": "",
+      "procedures": [],
+      "inpatientMeds": [
+        "Pantoprazole 1x40mg IV",
+        "Sucralfate syr 3xC1 PO"
       ],
-      "inpatientMeds": [],
-      "dischargeMeds": [],
-      "diagnosisKlinisUtama": "Congestive Heart Failure",
+      "dischargeMeds": [
+        "Omeprazole 1x20mg PO",
+        "Sucralfate syr 3xC1 PO"
+      ],
+      "diagnosisKlinisUtama": "Dyspepsia Syndrome",
       "diagnosisKlinisSekunder": ""
+    },
+    "codingResult": {
+      "primaryDiagnosis": {
+        "id": "1",
+        "code": "K30",
+        "description": "Functional dyspepsia",
+        "insight": "Epigastric pain, nausea, and bloating diagnosed as dyspepsia."
+      },
+      "secondaryDiagnoses": [],
+      "procedures": [],
+      "potentialFindings": []
     }
   },
   {
     "id": "p13",
     "registerNo": "2023013",
     "rmNo": "01-22-45",
-    "name": "Susi Susanti",
+    "name": "Rina Kumala",
     "bpjsClass": "Kelas 3",
-    "dpjp": "Dr. Dewi, Sp.P",
+    "dpjp": "Dr. Ratna, Sp.OG",
     "dischargeDate": "2023-10-23",
     "status": "Draft AI",
     "medicalRecord": {
-      "anamnesa": "Batuk",
+      "anamnesa": "Hamil 39 minggu, mules-mules sejak malam. Keluar lendir darah. Air ketuban belum pecah.",
       "ttv": {
-        "td": "120/80",
+        "td": "110/70",
         "nadi": "80",
         "rr": "20",
-        "suhu": "36.5",
-        "spo2": "98",
-        "nyeri": "0"
+        "suhu": "36.6",
+        "spo2": "99",
+        "nyeri": "7"
       },
-      "physicalExam": "Normal",
-      "labResult": "Normal",
-      "radiologyResult": "Normal",
+      "physicalExam": "His 3x/10'/40\". VT: Pembukaan 5cm, ketuban utuh, presentasi kepala.",
+      "labResult": "Hb 11.5, Leukosit 10000.",
+      "radiologyResult": "",
       "procedures": [
-        "Rontgen Thorax"
+        "Persalinan Normal per Vaginam"
       ],
-      "inpatientMeds": [],
-      "dischargeMeds": [],
-      "diagnosisKlinisUtama": "Tuberkulosis Paru",
+      "inpatientMeds": [
+        "Oksitosin 10 IU IM"
+      ],
+      "dischargeMeds": [
+        "Asam Mefenamat 3x500mg PO",
+        "SF 1x1 PO"
+      ],
+      "diagnosisKlinisUtama": "Partus Normal, G1P0A0",
       "diagnosisKlinisSekunder": ""
+    },
+    "codingResult": {
+      "primaryDiagnosis": {
+        "id": "1",
+        "code": "O80",
+        "description": "Single spontaneous delivery",
+        "insight": "Diagnosed spontaneous vaginal delivery."
+      },
+      "secondaryDiagnoses": [],
+      "procedures": [
+        {
+          "id": "2",
+          "code": "73.59",
+          "description": "Other manually assisted delivery",
+          "insight": "Normal delivery performed."
+        }
+      ],
+      "potentialFindings": []
     }
   },
   {
     "id": "p14",
     "registerNo": "2023014",
     "rmNo": "01-22-46",
-    "name": "Joko Widodo",
+    "name": "Junaedi",
     "bpjsClass": "Kelas 1",
-    "dpjp": "Dr. Andi, Sp.PD",
+    "dpjp": "Dr. Hendra, Sp.JP",
     "dischargeDate": "2023-10-23",
     "status": "Selesai",
     "medicalRecord": {
-      "anamnesa": "Mual muntah",
+      "anamnesa": "Sesak napas saat beraktivitas dan tidur telentang. Bengkak pada kedua kaki sejak 2 minggu. Sering terbangun malam karena sesak.",
       "ttv": {
-        "td": "120/80",
-        "nadi": "80",
-        "rr": "20",
+        "td": "150/90",
+        "nadi": "105",
+        "rr": "26",
         "suhu": "36.5",
-        "spo2": "99",
-        "nyeri": "5"
+        "spo2": "94",
+        "nyeri": "0"
       },
-      "physicalExam": "Normal",
-      "labResult": "Normal",
-      "radiologyResult": "Normal",
+      "physicalExam": "JVP meningkat. Kardiomegali (+). Ronkhi basah halus di basal paru. Edema pitting kedua tungkai bawah.",
+      "labResult": "NT-proBNP: 4500 pg/mL.",
+      "radiologyResult": "Rontgen Thorax: Kardiomegali (CTR 65%), kongesti paru.",
       "procedures": [
-        "Endoskopi"
+        "Ekokardiografi"
       ],
-      "inpatientMeds": [],
-      "dischargeMeds": [],
-      "diagnosisKlinisUtama": "Dispepsia",
-      "diagnosisKlinisSekunder": ""
+      "inpatientMeds": [
+        "Furosemide 2x40mg IV",
+        "Spironolactone 1x25mg PO",
+        "Bisoprolol 1x2.5mg PO"
+      ],
+      "dischargeMeds": [
+        "Furosemide 1x40mg PO",
+        "Bisoprolol 1x2.5mg PO"
+      ],
+      "diagnosisKlinisUtama": "Congestive Heart Failure (CHF)",
+      "diagnosisKlinisSekunder": "Hypertension"
+    },
+    "codingResult": {
+      "primaryDiagnosis": {
+        "id": "1",
+        "code": "I50.0",
+        "description": "Congestive heart failure",
+        "insight": "Diagnosed based on orthopnea, edema, and high NT-proBNP."
+      },
+      "secondaryDiagnoses": [
+        {
+          "id": "2",
+          "code": "I10",
+          "description": "Essential (primary) hypertension",
+          "insight": "Underlying hypertension history."
+        }
+      ],
+      "procedures": [
+        {
+          "id": "3",
+          "code": "88.72",
+          "description": "Diagnostic ultrasound of heart",
+          "insight": "Echocardiography performed."
+        }
+      ],
+      "potentialFindings": []
     }
   },
   {
@@ -602,23 +839,68 @@
     "dischargeDate": "2023-10-22",
     "status": "Belum Coding",
     "medicalRecord": {
-      "anamnesa": "Diare",
+      "anamnesa": "Anak usia 2 tahun demam mendadak sejak 2 hari lalu. Anak gelisah, sering menangis sambil memegang telinga kanan. Keluar cairan warna kekuningan dari telinga.",
       "ttv": {
-        "td": "110/70",
-        "nadi": "90",
-        "rr": "20",
-        "suhu": "36.5",
+        "td": "100/60",
+        "nadi": "120",
+        "rr": "28",
+        "suhu": "38.9",
         "spo2": "98",
-        "nyeri": "2"
+        "nyeri": "5"
       },
-      "physicalExam": "Normal",
-      "labResult": "Normal",
-      "radiologyResult": "Normal",
-      "procedures": [],
-      "inpatientMeds": [],
-      "dischargeMeds": [],
-      "diagnosisKlinisUtama": "Gastroenteritis Akut",
+      "physicalExam": "Otoskopi: Membran timpani telinga kanan perforasi, tampak sekret purulen.",
+      "labResult": "Leukosit 16000/uL.",
+      "radiologyResult": "",
+      "procedures": [
+        "Pembersihan telinga"
+      ],
+      "inpatientMeds": [
+        "Amoxicillin-Clavulanate syr",
+        "Paracetamol syr"
+      ],
+      "dischargeMeds": [
+        "Amoxicillin-Clavulanate syr",
+        "Paracetamol syr"
+      ],
+      "diagnosisKlinisUtama": "Otitis Media Supuratif Akut (OMSA)",
       "diagnosisKlinisSekunder": ""
+    }
+  },
+  {
+    "id": "p16",
+    "registerNo": "2023016",
+    "rmNo": "01-22-48",
+    "name": "Hendrik Wijaya",
+    "bpjsClass": "Kelas 1",
+    "dpjp": "Dr. Rahman, Sp.An-KIC",
+    "dischargeDate": "2023-10-21",
+    "status": "Belum Coding",
+    "medicalRecord": {
+      "anamnesa": "Pasien rujukan dari bangsal dengan penurunan kesadaran. Sebelumnya dirawat dengan ISK berulang. Kini napas cepat, demam tinggi, dan akral dingin.",
+      "ttv": {
+        "td": "80/40",
+        "nadi": "130",
+        "rr": "32",
+        "suhu": "39.5",
+        "spo2": "90",
+        "nyeri": "0"
+      },
+      "physicalExam": "Somnolen, GCS 10. Akral dingin, pucat, mottling (+). Terdengar ronkhi kasar.",
+      "labResult": "Leukosit: 32000/uL, Laktat: 4.5 mmol/L, Procalcitonin: 25 ng/mL. Urinalisa: Leukosit penuh, nitrit (+).",
+      "radiologyResult": "Rontgen Thorax: Normal.",
+      "procedures": [
+        "Pemasangan CVC",
+        "Intubasi & Ventilasi Mekanik",
+        "Resusitasi Cairan"
+      ],
+      "inpatientMeds": [
+        "Norepinephrine drip",
+        "Meropenem 3x1g IV",
+        "Paracetamol 3x1g IV"
+      ],
+      "dischargeMeds": [],
+      "diagnosisKlinisUtama": "Sepsis",
+      "diagnosisKlinisSekunder": "Urinary Tract Infection (UTI), Syok Septik"
     }
   }
 ]

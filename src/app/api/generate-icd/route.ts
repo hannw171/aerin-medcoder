@@ -109,7 +109,7 @@ export async function POST(request: Request) {
     const localPoliciesText = getActivePoliciesFormatted();
 
     const model = genAI.getGenerativeModel({
-      model: 'gemini-2.5-flash-lite',
+      model: 'gemini-2.5-flash',
       generationConfig: { responseMimeType: 'application/json' },
     });
 
@@ -123,11 +123,11 @@ CRITICAL INSTRUCTIONS & VERSIONING:
 4. SCOPING MANDATE: ONLY suggest ICD-10 codes for diagnoses explicitly listed by the physician in the "Clinical Primary Diagnosis" and "Clinical Secondary Diagnosis" sections. DO NOT generate new diagnoses from laboratory results or clinical notes unless they are explicitly confirmed as a diagnosis by the doctor.
 
 GEMINI INSIGHTS (EXPLAINABILITY):
-- For every diagnosis suggested (primary and secondary), provide a brief 'insight' (1-2 powerful sentences) explaining why this code was chosen based on the clinical narrative.
+- For every diagnosis suggested (primary and secondary), provide a brief 'insight' (1-2 powerful sentences) in INDONESIAN language explaining why this code was chosen based on the clinical narrative.
 - EVIDENCE-BASED: Gather the insight from the entire medical record. If the doctor listed "Diabetes Mellitus", use the clinical notes (e.g., GDS 300 mg/dL, Polyuria) to justify the insight, but do not create a code for "Polyuria" as a separate diagnosis.
 - Focus on: Anatomical site + Clinical evidence + Link to the code.
-- Avoid generic phrases like "I chose this because...". Use direct, professional clinical language like "Based on clinical evidence of...".
-- LOCAL POLICY AWARENESS: If a code was forced or overridden by a Local Hospital Policy (listed below), you MUST explicitly mention it in the insight, e.g., "Mandated by Local Hospital Policy for '...' cases."
+- Avoid generic phrases like "Saya memilih ini karena...". Use direct, professional clinical language like "Berdasarkan bukti klinis...".
+- LOCAL POLICY AWARENESS: If a code was forced or overridden by a Local Hospital Policy (listed below), you MUST explicitly mention it in the insight in Indonesian, e.g., "Sesuai dengan Kebijakan Lokal RS untuk kasus '...'."
 
 FEW-SHOT CALIBRATION:
 - CT Scan Kepala / Otak / Cranium -> 87.03
