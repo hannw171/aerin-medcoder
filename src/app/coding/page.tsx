@@ -11,7 +11,7 @@ type CodingResult = {
   primaryDiagnosis: CodeItem | null;
   secondaryDiagnoses: CodeItem[];
   procedures: CodeItem[];
-  potentialFindings?: { description: string; insight: string }[];
+  potentialFindings?: { code: string; description: string; insight: string; processed?: boolean }[];
 };
 
 function RightPanelSkeleton() {
@@ -19,7 +19,7 @@ function RightPanelSkeleton() {
     <div className="flex-1 p-panel-padding overflow-y-auto flex flex-col gap-element-gap animate-pulse">
       {/* Diagnosa Utama Skeleton */}
       <div className="bg-slate-200 h-28 rounded-xl w-full mb-2"></div>
-      
+
       {/* Diagnosa Sekunder Skeleton */}
       <div className="flex flex-col gap-3 mt-4">
         <div className="h-4 bg-slate-200 rounded w-1/4 mb-1"></div>
@@ -53,17 +53,17 @@ function CodingPageContent() {
   const [isGenerated, setIsGenerated] = useState(patient.status === 'Draft AI' || patient.status === 'Selesai');
   const [activeTab, setActiveTab] = useState(1);
   const [codingResult, setCodingResult] = useState<CodingResult | null>(
-    patient.status === 'Draft AI' || patient.status === 'Selesai' 
+    patient.status === 'Draft AI' || patient.status === 'Selesai'
       ? {
-          primaryDiagnosis: { id: "1", code: "E11.9", description: "Type 2 diabetes mellitus without complications" },
-          secondaryDiagnoses: [
-            { id: "2", code: "I10", description: "Essential (primary) hypertension" },
-            { id: "3", code: "E78.5", description: "Hyperlipidemia, unspecified" },
-          ],
-          procedures: [
-            { id: "4", code: "99.21", description: "Injection of antibiotic" },
-          ]
-        }
+        primaryDiagnosis: { id: "1", code: "E11.9", description: "Type 2 diabetes mellitus without complications" },
+        secondaryDiagnoses: [
+          { id: "2", code: "I10", description: "Essential (primary) hypertension" },
+          { id: "3", code: "E78.5", description: "Hyperlipidemia, unspecified" },
+        ],
+        procedures: [
+          { id: "4", code: "99.21", description: "Injection of antibiotic" },
+        ]
+      }
       : null
   );
   const [isGenerating, setIsGenerating] = useState(false);
@@ -71,9 +71,18 @@ function CodingPageContent() {
   const [codingResultSnapshot, setCodingResultSnapshot] = useState<CodingResult | null>(null);
   const [toastMessage, setToastMessage] = useState("");
   const [isEditingPrimary, setIsEditingPrimary] = useState(false);
+  const [editingSecondaryId, setEditingSecondaryId] = useState<string | null>(null);
   const [currentStatus, setCurrentStatus] = useState(patient.status);
   const [isManuallyEdited, setIsManuallyEdited] = useState(patient.status === 'Direvisi');
   const [lastSavedTime, setLastSavedTime] = useState<Date | null>(null);
+  const [hasError, setHasError] = useState(false);
+  const [smartAdjustFinding, setSmartAdjustFinding] = useState<{
+    index: number;
+    code: string;
+    description: string;
+    insight: string;
+    parentSuggestion: string | null;
+  } | null>(null);
 
   // Fetch latest patient data on mount to ensure persistence
   useEffect(() => {
@@ -97,6 +106,7 @@ function CodingPageContent() {
 
   const handleGenerate = async () => {
     setIsGenerating(true);
+    setHasError(false);
     try {
       const res = await fetch('/api/generate-icd', {
         method: 'POST',
@@ -109,7 +119,7 @@ function CodingPageContent() {
       }
 
       const data = await res.json();
-      
+
       const formattedResult: CodingResult = {
         primaryDiagnosis: data.primaryDiagnosis ? {
           ...data.primaryDiagnosis,
@@ -123,7 +133,10 @@ function CodingPageContent() {
           ...p,
           id: crypto.randomUUID()
         })),
-        potentialFindings: data.potentialFindings || []
+        potentialFindings: (data.potentialFindings || []).map((f: any) => ({
+          ...f,
+          processed: false
+        }))
       };
 
       setCodingResult(formattedResult);
@@ -131,7 +144,7 @@ function CodingPageContent() {
       setIsManuallyEdited(false);
       setCurrentStatus('Draft AI');
 
-      // Background auto-save (fire-and-forget)
+      // Background auto-save
       fetch(`/api/patients/${patient.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -139,13 +152,14 @@ function CodingPageContent() {
           codingResult: formattedResult,
           status: 'Draft AI'
         }),
-        keepalive: true // Ensures request completes even if user navigates away
+        keepalive: true
       })
-      .then(() => setLastSavedTime(new Date()))
-      .catch(err => console.error('Auto-save failed:', err));
+        .then(() => setLastSavedTime(new Date()))
+        .catch(err => console.error('Auto-save failed:', err));
     } catch (error) {
       console.error(error);
-      setToastMessage("Gagal melakukan generate dengan AI. Silakan coba lagi.");
+      setHasError(true);
+      setToastMessage("Gagal melakukan generate dengan AI.");
       setTimeout(() => setToastMessage(""), 3000);
     } finally {
       setIsGenerating(false);
@@ -206,7 +220,7 @@ function CodingPageContent() {
   const handleSaveAndValidate = async () => {
     setIsGenerating(true);
     try {
-      await fetch(`/api/patients/${patient.id}`, {
+      const res = await fetch(`/api/patients/${patient.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -214,15 +228,98 @@ function CodingPageContent() {
           status: 'Selesai'
         })
       });
+
+      if (!res.ok) throw new Error("Failed to save");
+
       setLastSavedTime(new Date());
       setCurrentStatus('Selesai');
-      router.push('/patient-list');
+      setToastMessage("Data Pasien Berhasil Diverifikasi dan Disimpan");
+      
+      // Delay redirect to allow user to see the success toast
+      setTimeout(() => {
+        router.push('/patient-list');
+      }, 2000);
     } catch (error) {
       console.error(error);
       setIsGenerating(false);
-      setToastMessage("Gagal menyimpan.");
+      setToastMessage("Gagal menyimpan data.");
       setTimeout(() => setToastMessage(""), 3000);
     }
+  };
+
+  // Task 3: Parent code suggestion utility
+  const getParentCodeSuggestion = (code: string): string | null => {
+    if (!code || code.length <= 3) return null;
+    // Try 4-char parent first (e.g. L03.1 from L03.116)
+    const fourChar = code.substring(0, code.indexOf('.') + 2).replace(/\.$/, '');
+    if (fourChar.length >= 4 && fourChar !== code) return fourChar;
+    // Fallback to 3-char parent (e.g. L03)
+    const threeChar = code.substring(0, code.indexOf('.') > 0 ? code.indexOf('.') : 3);
+    return threeChar !== code ? threeChar : null;
+  };
+
+  // Task 2: Smart Promote — validates code, shows modal if adjustment needed
+  const promoteFinding = async (findingIndex: number) => {
+    if (!codingResult || !codingResult.potentialFindings) return;
+    const finding = codingResult.potentialFindings[findingIndex];
+    if (finding.processed) return;
+
+    // Validate code against local library
+    try {
+      const res = await fetch(`/api/search-icd?q=${encodeURIComponent(finding.code)}&type=icd10`);
+      const results = await res.json();
+      const exactMatch = results.find((r: any) =>
+        r.code.toLowerCase() === finding.code.toLowerCase()
+      );
+
+      if (exactMatch) {
+        // Direct promote — code is valid
+        doPromoteFinding(findingIndex, { code: exactMatch.code, description: exactMatch.description });
+      } else {
+        // Open Smart Adjust modal with parent suggestion
+        setSmartAdjustFinding({
+          index: findingIndex,
+          code: finding.code,
+          description: finding.description,
+          insight: finding.insight,
+          parentSuggestion: getParentCodeSuggestion(finding.code),
+        });
+      }
+    } catch {
+      // On error, open modal anyway
+      setSmartAdjustFinding({
+        index: findingIndex,
+        code: finding.code,
+        description: finding.description,
+        insight: finding.insight,
+        parentSuggestion: getParentCodeSuggestion(finding.code),
+      });
+    }
+  };
+
+  const doPromoteFinding = (findingIndex: number, overrideCode?: { code: string; description: string }) => {
+    if (!codingResult || !codingResult.potentialFindings) return;
+    const finding = codingResult.potentialFindings[findingIndex];
+
+    const newSecondary: CodeItem = {
+      id: crypto.randomUUID(),
+      code: overrideCode?.code ?? finding.code,
+      description: overrideCode?.description ?? finding.description,
+      insight: finding.insight,
+    };
+
+    const updatedPotential = [...codingResult.potentialFindings];
+    updatedPotential[findingIndex] = { ...finding, processed: true };
+
+    setCodingResult({
+      ...codingResult,
+      secondaryDiagnoses: [...codingResult.secondaryDiagnoses, newSecondary],
+      potentialFindings: updatedPotential,
+    });
+
+    setSmartAdjustFinding(null);
+    setToastMessage(`Diagnosa ${newSecondary.code} berhasil ditambahkan ke sekunder`);
+    setTimeout(() => setToastMessage(""), 2500);
   };
 
   const removeSecondaryCode = (id: string) => {
@@ -267,7 +364,7 @@ function CodingPageContent() {
     if (!codingResult) return;
     setCodingResult({
       ...codingResult,
-      secondaryDiagnoses: codingResult.secondaryDiagnoses.map(d => 
+      secondaryDiagnoses: codingResult.secondaryDiagnoses.map(d =>
         d.id === id ? { ...d, code: newCode.code, description: newCode.description } : d
       )
     });
@@ -277,7 +374,7 @@ function CodingPageContent() {
     if (!codingResult) return;
     setCodingResult({
       ...codingResult,
-      procedures: codingResult.procedures.map(p => 
+      procedures: codingResult.procedures.map(p =>
         p.id === id ? { ...p, code: newCode.code, description: newCode.description } : p
       )
     });
@@ -311,12 +408,12 @@ function CodingPageContent() {
               DOA: {patient.dischargeDate}
             </span>
           </div>
-          <div className="flex gap-4 border-b border-outline-variant w-full">
+          <div id="tour-coding-narrative" className="flex gap-4 border-b border-outline-variant w-full">
             <button
               onClick={() => setActiveTab(1)}
               className={`font-body-md text-body-md pb-2 ${activeTab === 1
-                  ? "text-primary border-b-2 border-primary font-semibold"
-                  : "text-on-surface-variant hover:text-on-surface"
+                ? "text-primary border-b-2 border-primary font-semibold"
+                : "text-on-surface-variant hover:text-on-surface"
                 }`}
             >
               Anamnesa & Klinis
@@ -324,8 +421,8 @@ function CodingPageContent() {
             <button
               onClick={() => setActiveTab(2)}
               className={`font-body-md text-body-md pb-2 ${activeTab === 2
-                  ? "text-primary border-b-2 border-primary font-semibold"
-                  : "text-on-surface-variant hover:text-on-surface"
+                ? "text-primary border-b-2 border-primary font-semibold"
+                : "text-on-surface-variant hover:text-on-surface"
                 }`}
             >
               Penunjang Klinis
@@ -333,8 +430,8 @@ function CodingPageContent() {
             <button
               onClick={() => setActiveTab(3)}
               className={`font-body-md text-body-md pb-2 ${activeTab === 3
-                  ? "text-primary border-b-2 border-primary font-semibold"
-                  : "text-on-surface-variant hover:text-on-surface"
+                ? "text-primary border-b-2 border-primary font-semibold"
+                : "text-on-surface-variant hover:text-on-surface"
                 }`}
             >
               Tindakan & Terapi
@@ -557,6 +654,7 @@ function CodingPageContent() {
         </div>
         <div className="p-panel-padding bg-surface-container-lowest border-t border-outline-variant flex-shrink-0 z-10 sticky bottom-0">
           <button
+            id="tour-coding-generate"
             onClick={handleGenerate}
             disabled={isGenerating || currentStatus === 'Selesai'}
             className="w-full bg-primary text-on-primary font-label-sm text-label-sm py-3 rounded-lg flex items-center justify-center gap-tight-gap hover:bg-surface-tint transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
@@ -576,7 +674,7 @@ function CodingPageContent() {
         </div>
       </section>
       {/* RIGHT PANEL: Coding Action Area */}
-      <section className="w-2/5 bg-surface-container flex flex-col h-full relative">
+      <section id="tour-coding-results" className="w-2/5 bg-surface-container flex flex-col h-full relative">
         <div className="p-panel-padding pb-0 flex-shrink-0 bg-surface-container z-10 border-b border-surface-variant">
           <div className="flex justify-between items-center mb-4">
             <h2 className="font-headline-md text-headline-md text-on-background">
@@ -602,7 +700,7 @@ function CodingPageContent() {
           {lastSavedTime && (
             <div className="flex items-center gap-1 text-xs text-slate-400 mb-4">
               <svg className="w-3 h-3 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-              Perubahan tersimpan pada {lastSavedTime.toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit', hour12: false})} WIB
+              Perubahan tersimpan pada {lastSavedTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', hour12: false })} WIB
             </div>
           )}
         </div>
@@ -669,7 +767,7 @@ function CodingPageContent() {
                         )}
                       </div>
                       {isRevisionMode && (
-                        <button 
+                        <button
                           onClick={() => setIsEditingPrimary(true)}
                           className="text-primary hover:text-primary-variant transition-all mt-2"
                         >
@@ -688,56 +786,82 @@ function CodingPageContent() {
                   Diagnosa Sekunder
                 </h3>
                 <div className="flex flex-col gap-tight-gap">
-                  {codingResult?.secondaryDiagnoses.map((diag, idx) => (
-                    <div key={diag.id}>
-                      <div className="flex items-start gap-element-gap p-2 hover:bg-surface-container-low rounded border border-transparent hover:border-outline-variant transition-colors group">
-                        {diag.code === "" ? (
-                          <SearchableICDInput
-                            type="icd10"
-                            placeholder="Cari kode atau deskripsi ICD-10..."
-                            onSelect={(selected) => updateSecondaryCode(diag.id, selected)}
-                          />
-                        ) : (
-                          <>
-                            <div className="bg-surface-variant text-on-surface font-mono-data text-mono-data px-3 py-1 rounded-full border border-outline-variant w-20 text-center shrink-0">
-                              {diag.code}
+                  {codingResult?.secondaryDiagnoses && codingResult.secondaryDiagnoses.length > 0 ? (
+                    codingResult.secondaryDiagnoses.map((diag, idx) => (
+                      <div key={diag.id}>
+                        <div className="flex items-start gap-element-gap p-2 hover:bg-surface-container-low rounded border border-transparent hover:border-outline-variant transition-colors group">
+                          {diag.code === "" || editingSecondaryId === diag.id ? (
+                            <div className="flex-1">
+                              {editingSecondaryId === diag.id && (
+                                <p className="text-xs text-slate-500 mb-2">
+                                  Kode saat ini: <span className="font-semibold font-mono text-slate-700">{diag.code}</span> — Cari kode pengganti:
+                                </p>
+                              )}
+                              <SearchableICDInput
+                                type="icd10"
+                                placeholder="Cari kode atau deskripsi ICD-10..."
+                                onSelect={(selected) => {
+                                  updateSecondaryCode(diag.id, selected);
+                                  setEditingSecondaryId(null);
+                                }}
+                                onCancel={editingSecondaryId === diag.id ? () => setEditingSecondaryId(null) : undefined}
+                              />
                             </div>
-                            <div className="font-body-md text-body-md text-on-surface flex-1 flex flex-col">
-                              <div className="flex items-center gap-2 mt-1">
-                                <span>{diag.description}</span>
+                          ) : (
+                            <>
+                              <div className="bg-surface-variant text-on-surface font-mono-data text-mono-data px-3 py-1 rounded-full border border-outline-variant w-20 text-center shrink-0">
+                                {diag.code}
+                              </div>
+                              <div className="font-body-md text-body-md text-on-surface flex-1 flex flex-col">
+                                <div className="flex items-center gap-2 mt-1">
+                                  <span>{diag.description}</span>
+                                  {diag.insight && (
+                                    <span className="material-symbols-outlined text-[16px] text-emerald-500 cursor-help" title="Gemini Insight">
+                                      lightbulb
+                                    </span>
+                                  )}
+                                </div>
                                 {diag.insight && (
-                                  <span className="material-symbols-outlined text-[16px] text-emerald-500 cursor-help" title="Gemini Insight">
-                                    lightbulb
-                                  </span>
+                                  <div className="mt-2.5 mb-1 bg-emerald-50 border-l-2 border-dashed border-emerald-400 p-2.5 rounded-r-md hidden group-hover:block transition-all mr-2">
+                                    <p className="text-[13px] italic text-emerald-800 leading-snug">{diag.insight}</p>
+                                  </div>
                                 )}
                               </div>
-                              {diag.insight && (
-                                <div className="mt-2.5 mb-1 bg-emerald-50 border-l-2 border-dashed border-emerald-400 p-2.5 rounded-r-md hidden group-hover:block transition-all mr-2">
-                                  <p className="text-[13px] italic text-emerald-800 leading-snug">{diag.insight}</p>
-                                </div>
-                              )}
+                            </>
+                          )}
+                          {isRevisionMode && editingSecondaryId !== diag.id && diag.code !== "" && (
+                            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all mt-1">
+                              <button
+                                onClick={() => setEditingSecondaryId(diag.id)}
+                                className="text-slate-400 hover:text-primary transition-colors"
+                                title="Edit kode"
+                              >
+                                <span className="material-symbols-outlined text-sm">edit</span>
+                              </button>
+                              <button
+                                onClick={() => removeSecondaryCode(diag.id)}
+                                className="text-slate-400 hover:text-red-500 transition-colors"
+                                title="Hapus"
+                              >
+                                <span className="material-symbols-outlined text-sm">delete</span>
+                              </button>
                             </div>
-                          </>
-                        )}
-                        {isRevisionMode && (
-                          <button 
-                            onClick={() => removeSecondaryCode(diag.id)}
-                            className="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all mt-1"
-                          >
-                            <span className="material-symbols-outlined text-sm">
-                              delete
-                            </span>
-                          </button>
+                          )}
+                        </div>
+                        {idx < (codingResult?.secondaryDiagnoses?.length || 0) - 1 && (
+                          <div className="w-full h-px bg-outline-variant/30"></div>
                         )}
                       </div>
-                      {idx < codingResult.secondaryDiagnoses.length - 1 && (
-                        <div className="w-full h-px bg-outline-variant/30"></div>
-                      )}
+                    ))
+                  ) : (
+                    <div className="py-6 flex flex-col items-center justify-center gap-2 bg-slate-50/50 border border-dashed border-slate-200 rounded-xl">
+                      <span className="material-symbols-outlined text-slate-300 text-[24px]">assignment_late</span>
+                      <p className="text-xs font-medium text-slate-400 italic">Tidak ada diagnosa sekunder yang terdeteksi</p>
                     </div>
-                  ))}
+                  )}
                 </div>
                 {isRevisionMode && (
-                  <button 
+                  <button
                     onClick={addSecondaryCode}
                     className="mt-3 text-primary font-label-sm text-label-sm flex items-center gap-tight-gap hover:underline"
                   >
@@ -752,44 +876,51 @@ function CodingPageContent() {
                   Prosedur
                 </h3>
                 <div className="flex flex-col gap-tight-gap">
-                  {codingResult?.procedures.map((proc, idx) => (
-                    <div key={proc.id}>
-                      <div className="flex items-center gap-element-gap p-2 hover:bg-surface-container-low rounded border border-transparent hover:border-outline-variant transition-colors group">
-                        {proc.code === "" ? (
-                          <SearchableICDInput
-                            type="icd9"
-                            placeholder="Cari kode atau deskripsi prosedur..."
-                            onSelect={(selected) => updateProcedure(proc.id, selected)}
-                          />
-                        ) : (
-                          <>
-                            <div className="bg-surface-variant text-on-surface font-mono-data text-mono-data px-3 py-1 rounded-full border border-outline-variant w-20 text-center">
-                              {proc.code}
-                            </div>
-                            <div className="font-body-md text-body-md text-on-surface flex-1">
-                              {proc.description}
-                            </div>
-                          </>
-                        )}
-                        {isRevisionMode && (
-                          <button 
-                            onClick={() => removeProcedure(proc.id)}
-                            className="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
-                          >
-                            <span className="material-symbols-outlined text-sm">
-                              delete
-                            </span>
-                          </button>
+                  {codingResult?.procedures && codingResult.procedures.length > 0 ? (
+                    codingResult.procedures.map((proc, idx) => (
+                      <div key={proc.id}>
+                        <div className="flex items-center gap-element-gap p-2 hover:bg-surface-container-low rounded border border-transparent hover:border-outline-variant transition-colors group">
+                          {proc.code === "" ? (
+                            <SearchableICDInput
+                              type="icd9"
+                              placeholder="Cari kode atau deskripsi prosedur..."
+                              onSelect={(selected) => updateProcedure(proc.id, selected)}
+                            />
+                          ) : (
+                            <>
+                              <div className="bg-surface-variant text-on-surface font-mono-data text-mono-data px-3 py-1 rounded-full border border-outline-variant w-20 text-center">
+                                {proc.code}
+                              </div>
+                              <div className="font-body-md text-body-md text-on-surface flex-1">
+                                {proc.description}
+                              </div>
+                            </>
+                          )}
+                          {isRevisionMode && (
+                            <button
+                              onClick={() => removeProcedure(proc.id)}
+                              className="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
+                            >
+                              <span className="material-symbols-outlined text-sm">
+                                delete
+                              </span>
+                            </button>
+                          )}
+                        </div>
+                        {idx < (codingResult?.procedures?.length || 0) - 1 && (
+                          <div className="w-full h-px bg-outline-variant/30"></div>
                         )}
                       </div>
-                      {idx < codingResult.procedures.length - 1 && (
-                        <div className="w-full h-px bg-outline-variant/30"></div>
-                      )}
+                    ))
+                  ) : (
+                    <div className="py-6 flex flex-col items-center justify-center gap-2 bg-slate-50/50 border border-dashed border-slate-200 rounded-xl">
+                      <span className="material-symbols-outlined text-slate-300 text-[24px]">medical_services</span>
+                      <p className="text-xs font-medium text-slate-400 italic">Tidak ada tindakan atau prosedur yang terdeteksi</p>
                     </div>
-                  ))}
+                  )}
                 </div>
                 {isRevisionMode && (
-                  <button 
+                  <button
                     onClick={addProcedure}
                     className="mt-3 text-primary font-label-sm text-label-sm flex items-center gap-tight-gap hover:underline"
                   >
@@ -798,52 +929,127 @@ function CodingPageContent() {
                   </button>
                 )}
               </div>
-              
+
               {/* Potensi Temuan Tambahan */}
-              {codingResult?.potentialFindings && codingResult.potentialFindings.length > 0 && (() => {
-                const pCode = codingResult.primaryDiagnosis?.code || '';
-                const currentSeverity = determineSeverityLevel(codingResult.secondaryDiagnoses, codingResult.potentialFindings);
-                const currentTariff = getEstimatedTariff(pCode, currentSeverity, codingResult.procedures);
-                const severityWithoutPotential = determineSeverityLevel(codingResult.secondaryDiagnoses, []);
-                const tariffWithoutPotential = getEstimatedTariff(pCode, severityWithoutPotential, codingResult.procedures);
-                
-                const potentialGap = currentTariff - tariffWithoutPotential;
-                const isRevenueOptimization = potentialGap > 0;
-                
-                return (
-                  <div className={`bg-${isRevenueOptimization ? 'amber' : 'blue'}-50/50 rounded-lg border border-${isRevenueOptimization ? 'amber' : 'blue'}-200 p-4 shadow-sm`}>
-                    <h3 className={`font-label-sm text-label-sm text-${isRevenueOptimization ? 'amber' : 'blue'}-800 mb-3 uppercase tracking-wider flex items-center justify-between`}>
-                      <span className="flex items-center gap-2">
-                        <span className="material-symbols-outlined text-[18px]">
-                          {isRevenueOptimization ? 'payments' : 'fact_check'}
-                        </span>
-                        Potensi Temuan Tambahan
-                      </span>
-                      <span className={`px-2 py-0.5 rounded text-xs font-bold ${isRevenueOptimization ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800'}`}>
-                        {isRevenueOptimization ? 'Revenue Optimization' : 'Clinical Accuracy Improvement'}
-                      </span>
-                    </h3>
-                    <div className="flex flex-col gap-3">
-                      {codingResult.potentialFindings.map((finding, idx) => (
-                        <div key={idx} className={`bg-white/80 p-3 rounded border border-${isRevenueOptimization ? 'amber' : 'blue'}-100`}>
-                          <div className={`font-semibold text-${isRevenueOptimization ? 'amber' : 'blue'}-900 text-sm mb-1`}>{finding.description}</div>
-                          <div className={`text-[13px] text-${isRevenueOptimization ? 'amber' : 'blue'}-700/80 italic leading-snug`}>{finding.insight}</div>
+              <div id="tour-coding-potential" className="flex flex-col gap-3">
+                {codingResult?.potentialFindings && codingResult.potentialFindings.length > 0 ? (
+                  (() => {
+                    const pCode = codingResult.primaryDiagnosis?.code || '';
+                    const currentSeverity = determineSeverityLevel(codingResult.secondaryDiagnoses, codingResult.potentialFindings);
+                    const currentTariff = getEstimatedTariff(pCode, currentSeverity, codingResult.procedures);
+                    const severityWithoutPotential = determineSeverityLevel(codingResult.secondaryDiagnoses, []);
+                    const tariffWithoutPotential = getEstimatedTariff(pCode, severityWithoutPotential, codingResult.procedures);
+
+                    const potentialGap = currentTariff - tariffWithoutPotential;
+                    const isRevenueOptimization = potentialGap > 0;
+
+                    return (
+                      <div className={`rounded-lg border p-4 shadow-sm transition-all duration-500 ${
+                        isRevenueOptimization 
+                          ? 'bg-amber-100/50 border-amber-200' 
+                          : 'bg-blue-100/50 border-blue-200'
+                      }`}>
+                        <h3 className={`font-label-sm text-label-sm mb-3 uppercase tracking-wider flex items-center justify-between ${
+                          isRevenueOptimization ? 'text-amber-800' : 'text-blue-800'
+                        }`}>
+                          <span className="flex items-center gap-2">
+                            <span className="material-symbols-outlined text-[18px]">
+                              {isRevenueOptimization ? 'payments' : 'fact_check'}
+                            </span>
+                            Potensi Temuan Tambahan
+                          </span>
+                          <span className={`px-2 py-0.5 rounded text-xs font-bold ${
+                            isRevenueOptimization ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800'
+                          }`}>
+                            {isRevenueOptimization ? 'Revenue Optimization' : 'Clinical Accuracy Improvement'}
+                          </span>
+                        </h3>
+                        <div className="flex flex-col gap-3">
+                          {codingResult.potentialFindings.map((finding, idx) => (
+                            <div key={idx} className={`bg-white/80 p-3 rounded border flex items-start justify-between gap-3 group transition-all ${
+                              isRevenueOptimization ? 'border-amber-100 hover:border-amber-300' : 'border-blue-100 hover:border-blue-300'
+                            }`}>
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <div className="bg-slate-100 text-slate-700 font-mono text-[11px] px-1.5 py-0.5 rounded border border-slate-200">
+                                    {finding.code}
+                                  </div>
+                                  <div className={`font-semibold text-sm ${
+                                    isRevenueOptimization ? 'text-amber-900' : 'text-blue-900'
+                                  }`}>{finding.description}</div>
+                                </div>
+                                <div className={`text-[13px] italic leading-snug ${
+                                  isRevenueOptimization ? 'text-amber-700/80' : 'text-blue-700/80'
+                                }`}>{finding.insight}</div>
+                              </div>
+                              
+                              <div className="shrink-0 pt-1">
+                                {finding.processed ? (
+                                  <div className="bg-emerald-500 text-white p-1 rounded-full shadow-sm">
+                                    <span className="material-symbols-outlined text-[16px] block">check</span>
+                                  </div>
+                                ) : (
+                                  <button 
+                                    onClick={() => promoteFinding(idx)}
+                                    className="flex items-center gap-1 px-2.5 py-1 rounded-full border border-emerald-500 text-emerald-600 text-[11px] font-bold hover:bg-emerald-500 hover:text-white transition-all shadow-sm bg-white"
+                                  >
+                                    <span className="material-symbols-outlined text-[14px]">add</span>
+                                    Tambahkan
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                          ))}
                         </div>
-                      ))}
-                    </div>
-                    {isRevenueOptimization && (
-                      <div className="mt-3 text-sm font-semibold text-emerald-600 bg-emerald-50 px-3 py-2 rounded border border-emerald-200 inline-block">
-                        Estimasi Peningkatan: +{formatIDR(potentialGap)}
+                        {isRevenueOptimization && (
+                          <div className="mt-4 flex items-center justify-between">
+                            <div className="text-[13px] font-semibold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-200 inline-flex items-center gap-2">
+                              <span className="material-symbols-outlined text-sm">trending_up</span>
+                              Estimasi Peningkatan: +{formatIDR(potentialGap)}
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    )}
+                    );
+                  })()
+                ) : (
+                  <div className="rounded-lg border border-emerald-100 bg-emerald-50/30 p-6 flex flex-col items-center justify-center text-center gap-3">
+                    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm border border-emerald-100">
+                      <span className="material-symbols-outlined text-emerald-500 text-[24px]">verified</span>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-emerald-900">Dokumentasi Optimal</h4>
+                      <p className="text-[12px] text-emerald-700/70 leading-relaxed mt-1">
+                        AI tidak menemukan potensi klaim tambahan.<br/>Resume medis saat ini sudah sangat akurat.
+                      </p>
+                    </div>
                   </div>
-                );
-              })()}
+                )}
+
+                {hasError && (
+                  <div className="rounded-lg border border-red-200 bg-red-50 p-6 flex flex-col items-center justify-center text-center gap-4">
+                    <span className="material-symbols-outlined text-red-400 text-[32px]">error</span>
+                    <div>
+                      <h4 className="text-sm font-bold text-red-900">Gagal Menganalisis</h4>
+                      <p className="text-[12px] text-red-700/70 mt-1">
+                        Terjadi kendala saat menghubungi AI Gemini.
+                      </p>
+                    </div>
+                    <button 
+                      onClick={handleGenerate}
+                      className="px-4 py-2 bg-white border border-red-200 text-red-600 rounded-lg text-xs font-bold hover:bg-red-50 transition-colors flex items-center gap-2 shadow-sm"
+                    >
+                      <span className="material-symbols-outlined text-sm">refresh</span>
+                      Coba Lagi
+                    </button>
+                  </div>
+                )}
+              </div>
 
               {/* Financial Impact */}
               {codingResult?.primaryDiagnosis && (
-                <div className="mt-2">
-                  <FinancialImpactCard 
+                <div id="tour-coding-financial" className="mt-2">
+                  <FinancialImpactCard
                     primaryDiagnosis={codingResult.primaryDiagnosis}
                     secondaryDiagnoses={codingResult.secondaryDiagnoses}
                     procedures={codingResult.procedures}
@@ -856,7 +1062,7 @@ function CodingPageContent() {
               {!isRevisionMode ? (
                 <>
                   {currentStatus === 'Selesai' ? (
-                    <button 
+                    <button
                       onClick={() => router.push('/patient-list')}
                       className="flex-1 bg-surface-container-lowest border border-outline text-on-surface font-label-sm text-label-sm py-3 rounded-lg hover:bg-surface-variant transition-colors flex items-center justify-center gap-2"
                     >
@@ -865,7 +1071,7 @@ function CodingPageContent() {
                     </button>
                   ) : (
                     <>
-                      <button 
+                      <button
                         onClick={enterRevisionMode}
                         className="flex-1 bg-surface-container-lowest border border-outline text-on-surface font-label-sm text-label-sm py-3 rounded-lg hover:bg-surface-variant transition-colors"
                       >
@@ -882,13 +1088,13 @@ function CodingPageContent() {
                 </>
               ) : (
                 <>
-                  <button 
+                  <button
                     onClick={handleCancelRevision}
                     className="flex-1 bg-surface-container-lowest border border-outline text-on-surface font-label-sm text-label-sm py-3 rounded-lg hover:bg-surface-variant transition-colors"
                   >
                     Batal
                   </button>
-                  <button 
+                  <button
                     onClick={handleUpdate}
                     disabled={isGenerating}
                     className="flex-1 bg-emerald-600 text-white font-label-sm text-label-sm py-3 rounded-lg flex items-center justify-center gap-tight-gap hover:bg-emerald-700 transition-colors shadow-sm disabled:opacity-70"
@@ -906,8 +1112,90 @@ function CodingPageContent() {
           </>
         )}
       </section>
+      {/* Smart Adjust Modal */}
+      {smartAdjustFinding && (
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-6">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+            {/* Modal Header */}
+            <div className="bg-gradient-to-r from-amber-500 to-orange-500 p-5 text-white">
+              <div className="flex items-center gap-3 mb-1">
+                <span className="material-symbols-outlined text-[20px]">tune</span>
+                <h3 className="font-bold text-base">Smart Adjust Diperlukan</h3>
+              </div>
+              <p className="text-amber-100 text-[12px] leading-relaxed">
+                Kode <span className="font-mono bg-amber-600/50 px-1.5 py-0.5 rounded font-bold">{smartAdjustFinding.code}</span> tidak ditemukan secara tepat di kamus ICD-10. Silakan sesuaikan atau cari kode yang paling mendekati.
+              </p>
+            </div>
+
+            <div className="p-5 flex flex-col gap-4">
+              {/* AI Context */}
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+                <p className="text-[11px] uppercase tracking-wide font-bold text-amber-700 mb-1">Konteks AI</p>
+                <p className="text-sm font-semibold text-amber-900">{smartAdjustFinding.description}</p>
+                <p className="text-[12px] text-amber-700/80 italic mt-1 leading-relaxed">{smartAdjustFinding.insight}</p>
+              </div>
+
+              {/* Parent Code Suggestion */}
+              {smartAdjustFinding.parentSuggestion && (
+                <div>
+                  <p className="text-[11px] uppercase tracking-wide font-bold text-slate-500 mb-2">Saran Kode Induk (Otomatis)</p>
+                  <button
+                    onClick={async () => {
+                      const res = await fetch(`/api/search-icd?q=${encodeURIComponent(smartAdjustFinding.parentSuggestion!)}&type=icd10`);
+                      const results = await res.json();
+                      const match = results.find((r: any) => r.code.toLowerCase().startsWith(smartAdjustFinding.parentSuggestion!.toLowerCase().replace('.', '')));
+                      if (match) {
+                        doPromoteFinding(smartAdjustFinding.index, { code: match.code, description: match.description });
+                      } else if (results[0]) {
+                        doPromoteFinding(smartAdjustFinding.index, { code: results[0].code, description: results[0].description });
+                      }
+                    }}
+                    className="w-full flex items-center gap-3 p-3 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-xl transition-all text-left group"
+                  >
+                    <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                      <span className="material-symbols-outlined text-white text-[16px]">auto_fix_high</span>
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-mono font-bold text-emerald-800 text-sm">{smartAdjustFinding.parentSuggestion}</div>
+                      <div className="text-[11px] text-emerald-600">Gunakan kode induk ini</div>
+                    </div>
+                    <span className="material-symbols-outlined text-emerald-400 text-sm">arrow_forward</span>
+                  </button>
+                </div>
+              )}
+
+              {/* Manual Search */}
+              <div>
+                <p className="text-[11px] uppercase tracking-wide font-bold text-slate-500 mb-2">Atau Cari Kode Manual</p>
+                <SearchableICDInput
+                  type="icd10"
+                  placeholder="Cari kode ICD-10..."
+                  onSelect={(selected) => doPromoteFinding(smartAdjustFinding.index, { code: selected.code, description: selected.description })}
+                />
+              </div>
+
+              {/* Cancel */}
+              <button
+                onClick={() => setSmartAdjustFinding(null)}
+                className="w-full py-2.5 border border-slate-200 rounded-xl text-slate-500 text-sm font-medium hover:bg-slate-50 transition-colors"
+              >
+                Batal
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Toast Notification */}
       {toastMessage && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-inverse-surface text-inverse-on-surface px-6 py-3 rounded-md shadow-lg font-body-md z-50">
+        <div className={`absolute bottom-6 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl shadow-xl font-medium text-sm z-50 flex items-center gap-2 transition-all ${
+          toastMessage.includes('Berhasil') || toastMessage.includes('berhasil')
+            ? 'bg-emerald-600 text-white'
+            : 'bg-slate-800 text-white'
+        }`}>
+          <span className="material-symbols-outlined text-sm">
+            {toastMessage.includes('Berhasil') || toastMessage.includes('berhasil') ? 'check_circle' : 'info'}
+          </span>
           {toastMessage}
         </div>
       )}

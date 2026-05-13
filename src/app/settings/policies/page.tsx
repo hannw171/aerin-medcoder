@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { SearchableICDInput } from "@/components/SearchableICDInput";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 
 type Policy = {
   id: string;
@@ -50,6 +51,13 @@ export default function LocalPoliciesPage() {
 
   useEffect(() => {
     fetchPolicies();
+    
+    // Add Esc key listener
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsDrawerOpen(false);
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
   }, []);
 
   const fetchPolicies = async () => {
@@ -223,7 +231,7 @@ export default function LocalPoliciesPage() {
     <>
     <div className="flex flex-col h-[calc(100vh-160px)] max-w-6xl mx-auto overflow-hidden px-1">
       {/* Sticky Header & KPIs */}
-      <div className="flex-shrink-0 space-y-6 pb-6 bg-background sticky top-0 z-20">
+      <div id="tour-policies-header" className="flex-shrink-0 space-y-6 pb-6 bg-background sticky top-0 z-20">
         <div className="flex justify-between items-center pt-4">
           <div className="max-w-2xl pr-8">
             <h1 className="text-2xl font-bold text-on-background">Local Policies Configuration</h1>
@@ -240,6 +248,7 @@ export default function LocalPoliciesPage() {
               Local Policies Hub
             </Link>
             <button 
+              id="tour-policies-add"
               onClick={openDrawerForNew}
               className="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-lg flex items-center gap-2 font-medium transition-colors shadow-sm cursor-pointer"
             >
@@ -379,208 +388,256 @@ export default function LocalPoliciesPage() {
     </div>
 
       {/* Side Drawer Overlay */}
-      {isDrawerOpen && (
-        <div className="fixed inset-0 z-50 flex justify-end">
-          {/* Backdrop */}
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity" onClick={() => setIsDrawerOpen(false)}></div>
-          
-          {/* Drawer Panel */}
-          <div className="relative w-full max-w-md bg-surface h-full shadow-2xl flex flex-col animate-in slide-in-from-right duration-300">
-            <div className="p-6 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
-              <h2 className="text-xl font-bold text-on-surface">
-                {editingPolicyId ? "Edit Aturan" : "Tambah Aturan Baru"}
-              </h2>
-              <button onClick={() => setIsDrawerOpen(false)} className="text-surface-variant hover:text-on-surface transition-colors p-1 rounded-full hover:bg-surface-variant/10">
-                <span className="material-symbols-outlined">close</span>
-              </button>
-            </div>
-
-            <div className="p-6 flex-1 overflow-y-auto flex flex-col gap-6">
-              {/* Form Fields */}
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold text-on-surface">Nama Aturan</label>
-                <input
-                  type="text"
-                  value={formName}
-                  onChange={(e) => setFormName(e.target.value)}
-                  placeholder="Contoh: Stroke Non Hemoragik"
-                  className="w-full px-4 py-2 border border-outline-variant rounded-lg bg-background text-on-surface focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
-                />
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold text-on-surface">Keywords</label>
-                <input
-                  type="text"
-                  value={formKeywords}
-                  onChange={(e) => setFormKeywords(e.target.value)}
-                  placeholder="Contoh: SNH, Stroke Infark, Stroke"
-                  className="w-full px-4 py-2 border border-outline-variant rounded-lg bg-background text-on-surface focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
-                />
-                <p className="text-xs text-on-surface-variant mt-1">Pisahkan dengan koma ( , )</p>
-              </div>
-
-              <div className="flex flex-col gap-2 relative z-50">
-                <label className="text-sm font-semibold text-on-surface">Target ICD-10 Code</label>
-                <SearchableICDInput
-                  type="icd10"
-                  placeholder="Cari atau ketik ICD-10 Code (Contoh: I63.9)"
-                  value={formIcdCode}
-                  onChange={(val) => setFormIcdCode(val.toUpperCase())}
-                  onSelect={(item) => setFormIcdCode(item.code)}
-                />
-                
-                {/* Live Preview Box */}
-                <div className="mt-2 min-h-[44px]">
-                  {isPreviewLoading ? (
-                    <div className="flex items-center gap-2 text-sm text-slate-500 px-3 py-2 bg-slate-50 rounded-lg border border-slate-100">
-                      <span className="material-symbols-outlined animate-spin text-[18px]">progress_activity</span>
-                      Mencari kode...
-                    </div>
-                  ) : previewData ? (
-                    <div className="flex flex-col gap-2 p-3 bg-emerald-50/50 rounded-xl border border-emerald-100">
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex items-start gap-2">
-                          <div className="bg-emerald-100 text-emerald-800 font-bold px-2 py-1 rounded text-sm shrink-0 border border-emerald-200">
-                            {formIcdCode}
-                          </div>
-                          <div className="font-semibold text-slate-800 text-sm mt-0.5">
-                            {previewData.description}
-                          </div>
-                        </div>
-                        <div className="bg-white border border-emerald-100 text-emerald-700 text-[11px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap shadow-sm">
-                          {previewData.type}
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2 text-xs text-slate-500 mt-1 pl-1">
-                        <span className="material-symbols-outlined text-[14px]">account_tree</span>
-                        <span>Chapter {previewData.chapter} • Category {previewData.category}</span>
-                      </div>
-                    </div>
-                  ) : previewError ? (
-                    <div className="flex items-start gap-2 text-sm text-amber-800 px-3 py-2 bg-amber-50 rounded-lg border border-amber-200">
-                      <span className="material-symbols-outlined text-[18px] text-amber-600 mt-0.5">warning</span>
-                      <span>Kode tidak ditemukan di kamus resmi ICD-10.</span>
-                    </div>
-                  ) : null}
-                </div>
-              </div>
-
-              {/* Uji Logika Aturan (Beta) */}
-              <div className="flex flex-col gap-2 mt-4 p-4 border-2 border-dashed border-outline-variant rounded-xl bg-surface-container-lowest">
-                <label className="text-sm font-semibold text-on-surface">Uji Logika Aturan (Beta)</label>
-                <textarea
-                  className="w-full px-4 py-2 border border-outline-variant rounded-lg bg-background text-on-surface focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all resize-y min-h-[80px] text-sm"
-                  placeholder="Masukkan contoh narasi diagnosa untuk tes... (contoh: Pasien didiagnosa stroke infark)"
-                  value={testText}
-                  onChange={(e) => setTestText(e.target.value)}
-                />
-                
-                {/* Feedback Indicator */}
-                <div className="mt-2">
-                  {!testText ? (
-                    <div className="flex items-center gap-2 text-sm text-slate-500 px-3 py-2 bg-slate-50 rounded-lg border border-slate-100">
-                      <span className="material-symbols-outlined text-[18px]">info</span>
-                      Ketik narasi di atas untuk menguji aturan ini.
-                    </div>
-                  ) : isTestMatched ? (
-                    <div className="flex items-center gap-2 text-sm text-emerald-800 px-3 py-2 bg-emerald-50 rounded-lg border border-emerald-200">
-                      <span className="material-symbols-outlined text-[18px] text-emerald-600">check_circle</span>
-                      <span className="font-medium">
-                        Aturan Terpicu: AI akan menyarankan kode <span className="bg-emerald-200 px-1 rounded">{formIcdCode || "[ICD_CODE]"}</span> jika menemukan teks ini.
-                      </span>
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-2 text-sm text-amber-800 px-3 py-2 bg-amber-50 rounded-lg border border-amber-200">
-                      <span className="material-symbols-outlined text-[18px] text-amber-600">error</span>
-                      <span>Aturan Tidak Terpicu: Kata kunci belum ditemukan dalam teks narasi.</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between mt-2 pt-6 border-t border-outline-variant">
+      <AnimatePresence>
+        {isDrawerOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex justify-end bg-slate-900/40 backdrop-blur-sm"
+            onClick={() => setIsDrawerOpen(false)}
+          >
+            {/* Drawer Panel */}
+            <motion.div 
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              className="relative w-full max-w-xl bg-surface h-full shadow-2xl flex flex-col"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-6 border-b border-outline-variant flex justify-between items-center bg-slate-50">
                 <div>
-                  <h3 className="text-sm font-semibold text-on-surface">Status Aktif</h3>
-                  <p className="text-xs text-on-surface-variant mt-1">Terapkan aturan ini saat AI melakukan koding</p>
+                  <h2 className="text-xl font-bold text-on-surface">
+                    {editingPolicyId ? "Edit Aturan" : "Tambah Aturan Baru"}
+                  </h2>
+                  <p className="text-xs text-on-surface-variant mt-1">Konfigurasi logika AI untuk koding otomatis.</p>
                 </div>
-                <label className="flex items-center cursor-pointer">
-                  <div className="relative">
-                    <input type="checkbox" className="sr-only" checked={formIsActive} onChange={(e) => setFormIsActive(e.target.checked)} />
-                    <div className={`block w-12 h-7 rounded-full transition-colors ${formIsActive ? "bg-emerald-500" : "bg-slate-300"}`}></div>
-                    <div className={`dot absolute left-1 top-1 bg-white w-5 h-5 rounded-full transition-transform ${formIsActive ? "transform translate-x-5" : ""}`}></div>
-                  </div>
-                </label>
-              </div>
-            </div>
-
-            <div className="p-6 border-t border-outline-variant bg-surface-container-low flex justify-end gap-3">
-              <button 
-                onClick={() => setIsDrawerOpen(false)}
-                className="px-4 py-2 rounded-lg font-medium text-slate-600 hover:bg-slate-100 transition-colors"
-                disabled={isSaving}
-              >
-                Batal
-              </button>
-              <button 
-                onClick={handleSave}
-                disabled={!formName || !formKeywords || !formIcdCode || isSaving}
-                className="bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-300 text-white px-6 py-2 rounded-lg font-medium transition-colors shadow-sm flex items-center gap-2"
-              >
-                {isSaving ? (
-                  <>
-                    <span className="material-symbols-outlined animate-spin text-[18px]">progress_activity</span>
-                    Menyimpan...
-                  </>
-                ) : (
-                  "Simpan Aturan"
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Delete Confirmation Modal */}
-      {isDeleteDialogOpen && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onClick={() => !isDeleting && setIsDeleteDialogOpen(false)}></div>
-          
-          <div className="relative bg-surface w-full max-w-sm rounded-2xl shadow-2xl p-6 animate-in zoom-in-95 duration-200">
-            <div className="flex flex-col items-center text-center">
-              <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-4 text-red-600">
-                <span className="material-symbols-outlined text-[32px]">warning</span>
-              </div>
-              
-              <h3 className="text-xl font-bold text-on-surface mb-2">Hapus Aturan?</h3>
-              <p className="text-on-surface-variant text-sm mb-6">
-                Apakah Anda yakin ingin menghapus aturan <span className="font-semibold text-on-surface">"{policyToDelete?.name}"</span>? Tindakan ini tidak dapat dibatalkan.
-              </p>
-              
-              <div className="flex w-full gap-3">
                 <button 
-                  onClick={() => setIsDeleteDialogOpen(false)}
-                  disabled={isDeleting}
-                  className="flex-1 px-4 py-2 rounded-lg font-medium text-slate-600 hover:bg-slate-100 transition-colors"
+                  onClick={() => setIsDrawerOpen(false)} 
+                  className="w-10 h-10 rounded-full hover:bg-slate-200 flex items-center justify-center transition-colors"
+                >
+                  <span className="material-symbols-outlined">close</span>
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
+                <div className="flex flex-col gap-8 pb-20">
+                  {/* Form Sections */}
+                  <div className="space-y-6">
+                    <div className="flex flex-col gap-2">
+                      <label className="text-sm font-bold text-slate-700">Nama Aturan</label>
+                      <input
+                        type="text"
+                        value={formName}
+                        onChange={(e) => setFormName(e.target.value)}
+                        placeholder="Contoh: Sepsis with Organ Failure"
+                        className="w-full px-4 py-3 border border-outline-variant rounded-xl bg-background text-on-surface focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm font-medium"
+                      />
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                      <label className="text-sm font-bold text-slate-700">Keywords (Triggers)</label>
+                      <textarea
+                        value={formKeywords}
+                        onChange={(e) => setFormKeywords(e.target.value)}
+                        placeholder="Contoh: sepsis, syok septik, kegagalan organ"
+                        className="w-full px-4 py-3 border border-outline-variant rounded-xl bg-background text-on-surface focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm min-h-[80px]"
+                      />
+                      <p className="text-[11px] text-slate-500 font-medium bg-slate-100 px-2 py-1 rounded inline-block self-start">💡 Pisahkan dengan koma ( , )</p>
+                    </div>
+
+                    <div className="flex flex-col gap-2 relative">
+                      <label className="text-sm font-bold text-slate-700">Target ICD-10 Code</label>
+                      <SearchableICDInput
+                        type="icd10"
+                        placeholder="Cari ICD-10 (Contoh: A41.9)"
+                        value={formIcdCode}
+                        onChange={(val) => setFormIcdCode(val.toUpperCase())}
+                        onSelect={(item) => setFormIcdCode(item.code)}
+                      />
+                      
+                      {/* Live Preview Box */}
+                      <div className="mt-3">
+                        {isPreviewLoading ? (
+                          <div className="flex items-center gap-2 text-sm text-slate-500 px-4 py-3 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                            <span className="material-symbols-outlined animate-spin text-[18px]">progress_activity</span>
+                            Validasi kode...
+                          </div>
+                        ) : previewData ? (
+                          <div className="flex flex-col gap-3 p-4 bg-emerald-50/40 rounded-xl border border-emerald-100 shadow-sm">
+                            <div className="flex items-start justify-between gap-4">
+                              <div className="flex items-start gap-3">
+                                <div className="bg-emerald-600 text-white font-bold px-2.5 py-1 rounded-lg text-sm shrink-0 shadow-sm">
+                                  {formIcdCode}
+                                </div>
+                                <div className="font-bold text-slate-800 text-sm leading-tight mt-0.5">
+                                  {previewData.description}
+                                </div>
+                              </div>
+                              <div className="bg-white border border-emerald-200 text-emerald-700 text-[10px] font-bold px-2 py-1 rounded-full whitespace-nowrap shadow-xs uppercase tracking-wider">
+                                {previewData.type}
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-3 text-xs text-slate-500 border-t border-emerald-100/50 pt-3">
+                              <div className="flex items-center gap-1">
+                                <span className="material-symbols-outlined text-[14px]">account_tree</span>
+                                <span>Chapter {previewData.chapter}</span>
+                              </div>
+                              <div className="w-1 h-1 rounded-full bg-slate-300"></div>
+                              <span>Category {previewData.category}</span>
+                            </div>
+                          </div>
+                        ) : previewError ? (
+                          <div className="flex items-start gap-3 text-sm text-amber-800 px-4 py-3 bg-amber-50 rounded-xl border border-amber-200">
+                            <span className="material-symbols-outlined text-[20px] text-amber-600">warning</span>
+                            <span className="font-medium">Kode tidak ditemukan di kamus resmi ICD-10. Pastikan kode valid sesuai standar INA-CBG.</span>
+                          </div>
+                        ) : null}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Uji Logika Aturan */}
+                  <div className="p-5 border border-slate-200 rounded-2xl bg-slate-50/50 space-y-4">
+                    <div className="flex items-center gap-2">
+                      <span className="material-symbols-outlined text-emerald-600 text-[20px]">biotech</span>
+                      <label className="text-sm font-bold text-slate-700">Uji Logika Aturan (Simulator)</label>
+                    </div>
+                    <textarea
+                      className="w-full px-4 py-3 border border-outline-variant rounded-xl bg-white text-on-surface focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm min-h-[100px]"
+                      placeholder="Masukkan contoh teks resume medis di sini untuk melihat apakah aturan ini akan terpicu..."
+                      value={testText}
+                      onChange={(e) => setTestText(e.target.value)}
+                    />
+                    
+                    <div className="animate-in fade-in duration-300">
+                      {!testText ? (
+                        <div className="text-xs text-slate-500 flex items-center gap-1.5 px-1 font-medium">
+                          <span className="material-symbols-outlined text-sm">info</span>
+                          Simulasikan narasi koding untuk memverifikasi akurasi kata kunci.
+                        </div>
+                      ) : isTestMatched ? (
+                        <div className="flex items-center gap-3 p-3 bg-emerald-600 text-white rounded-xl shadow-md">
+                          <span className="material-symbols-outlined text-[24px]">verified</span>
+                          <span className="text-xs font-bold leading-tight">
+                            ATURAN TERPICU: AI akan menyarankan kode {formIcdCode || "???"} berdasarkan teks ini.
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-3 p-3 bg-slate-200 text-slate-700 rounded-xl">
+                          <span className="material-symbols-outlined text-[24px]">cancel</span>
+                          <span className="text-xs font-bold leading-tight">
+                            BELUM COCOK: Periksa kembali kata kunci atau narasi uji coba.
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between p-4 bg-white border border-slate-200 rounded-xl">
+                    <div>
+                      <h3 className="text-sm font-bold text-slate-800">Status Aturan</h3>
+                      <p className="text-[11px] text-slate-500 font-medium">Aktifkan untuk sinkronisasi dengan AI.</p>
+                    </div>
+                    <label className="flex items-center cursor-pointer">
+                      <div className="relative">
+                        <input type="checkbox" className="sr-only" checked={formIsActive} onChange={(e) => setFormIsActive(e.target.checked)} />
+                        <div className={`block w-12 h-7 rounded-full transition-colors ${formIsActive ? "bg-emerald-600" : "bg-slate-300"}`}></div>
+                        <div className={`dot absolute left-1 top-1 bg-white w-5 h-5 rounded-full transition-transform ${formIsActive ? "transform translate-x-5" : ""}`}></div>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              {/* Sticky Footer */}
+              <div className="p-6 border-t border-outline-variant bg-white flex justify-between items-center shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.1)]">
+                <button 
+                  onClick={() => setIsDrawerOpen(false)}
+                  className="px-5 py-2.5 rounded-xl font-bold text-slate-600 hover:bg-slate-100 transition-colors text-sm"
+                  disabled={isSaving}
                 >
                   Batal
                 </button>
                 <button 
-                  onClick={handleDeleteConfirm}
-                  disabled={isDeleting}
-                  className="flex-1 bg-red-600 hover:bg-red-700 disabled:bg-red-300 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm flex items-center justify-center gap-2"
+                  onClick={handleSave}
+                  disabled={!formName || !formKeywords || !formIcdCode || isSaving}
+                  className="bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-200 text-white px-8 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-emerald-200 flex items-center gap-2 text-sm"
                 >
-                  {isDeleting ? (
-                    <span className="material-symbols-outlined animate-spin text-[18px]">progress_activity</span>
+                  {isSaving ? (
+                    <>
+                      <span className="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>
+                      Menyimpan...
+                    </>
                   ) : (
-                    "Hapus"
+                    <>
+                      <span className="material-symbols-outlined text-[20px]">save</span>
+                      Simpan Kebijakan
+                    </>
                   )}
                 </button>
               </div>
-            </div>
-          </div>
-        </div>
-      )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Delete Confirmation Modal */}
+      <AnimatePresence>
+        {isDeleteDialogOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
+            onClick={() => !isDeleting && setIsDeleteDialogOpen(false)}
+          >
+            {/* Modal Panel */}
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 400 }}
+              className="relative bg-surface w-full max-w-sm rounded-3xl shadow-2xl p-8"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex flex-col items-center text-center">
+                <div className="w-20 h-20 bg-rose-50 rounded-full flex items-center justify-center mb-6 text-rose-600 ring-4 ring-rose-100">
+                  <span className="material-symbols-outlined" style={{ fontSize: '40px' }}>delete_forever</span>
+                </div>
+                
+                <h3 className="text-2xl font-black text-on-surface mb-3 tracking-tight">Hapus Aturan?</h3>
+                <p className="text-on-surface-variant text-sm mb-8 leading-relaxed">
+                  Apakah Anda yakin ingin menghapus aturan <span className="font-bold text-slate-900 italic">"{policyToDelete?.name}"</span>? 
+                  <br /><span className="text-rose-600 font-medium">Tindakan ini tidak dapat dibatalkan.</span>
+                </p>
+                
+                <div className="flex w-full gap-4">
+                  <button 
+                    onClick={() => setIsDeleteDialogOpen(false)}
+                    disabled={isDeleting}
+                    className="flex-1 px-6 py-3 rounded-2xl font-bold text-slate-500 hover:bg-slate-100 transition-colors border border-slate-200"
+                  >
+                    Batal
+                  </button>
+                  <button 
+                    onClick={handleDeleteConfirm}
+                    disabled={isDeleting}
+                    className="flex-1 bg-rose-600 hover:bg-rose-700 disabled:bg-rose-200 text-white px-6 py-3 rounded-2xl font-bold transition-all shadow-lg shadow-rose-200 flex items-center justify-center gap-2"
+                  >
+                    {isDeleting ? (
+                      <span className="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>
+                    ) : (
+                      "Ya, Hapus"
+                    )}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

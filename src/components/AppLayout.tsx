@@ -3,12 +3,16 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import { useTour } from "@/components/TourProvider";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  
+  const { startTour } = useTour();
 
   useEffect(() => {
     setIsMounted(true);
@@ -76,29 +80,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               </span>
             </Link>
 
-            <Link
-              href="#"
-              className={`flex items-center px-3 py-3 transition-all duration-200 w-full rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-800 ${isExpanded ? 'justify-start' : 'justify-center'}`}
-              title={!isExpanded ? "Pencarian" : ""}
-            >
-              <span className="material-symbols-outlined flex-shrink-0">search</span>
-              <span className={`whitespace-nowrap font-semibold transition-all duration-300 overflow-hidden ${isExpanded ? 'ml-3 opacity-100 w-full' : 'opacity-0 w-0'}`}>
-                Pencarian
-              </span>
-            </Link>
+
 
             <Link
-              href="#"
-              className={`flex items-center px-3 py-3 transition-all duration-200 w-full rounded-xl text-slate-400 hover:text-slate-200 hover:bg-slate-800 ${isExpanded ? 'justify-start' : 'justify-center'}`}
-              title={!isExpanded ? "Analitik" : ""}
-            >
-              <span className="material-symbols-outlined flex-shrink-0">analytics</span>
-              <span className={`whitespace-nowrap font-semibold transition-all duration-300 overflow-hidden ${isExpanded ? 'ml-3 opacity-100 w-full' : 'opacity-0 w-0'}`}>
-                Analitik
-              </span>
-            </Link>
-
-            <Link
+              id="tour-sidebar-policies"
               href="/settings/policies"
               className={`flex items-center px-3 py-3 transition-all duration-200 w-full group relative ${
                 pathname === "/settings/policies"
@@ -150,16 +135,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               Tugas Baru
             </span>
           </button>
-          <Link
-            href="#"
+          <button
+            onClick={() => startTour()}
             className={`flex items-center px-3 py-3 transition-all duration-200 rounded-xl w-full text-slate-400 hover:text-slate-200 hover:bg-slate-800 ${isExpanded ? 'justify-start' : 'justify-center'}`}
-            title={!isExpanded ? "Bantuan" : ""}
+            title={!isExpanded ? "Bantuan Tur AI" : ""}
           >
             <span className="material-symbols-outlined flex-shrink-0">help</span>
-            <span className={`whitespace-nowrap font-medium transition-all duration-300 overflow-hidden ${isExpanded ? 'ml-3 opacity-100 w-full' : 'opacity-0 w-0'}`}>
-              Bantuan
+            <span className={`whitespace-nowrap font-medium transition-all duration-300 overflow-hidden ${isExpanded ? 'ml-3 opacity-100 w-full text-left' : 'opacity-0 w-0'}`}>
+              Bantuan Tur AI
             </span>
-          </Link>
+          </button>
 
           <div className={`flex items-center w-full mt-4 p-2 rounded-xl border border-slate-700 bg-slate-800/50 ${isExpanded ? 'justify-start gap-3' : 'justify-center border-transparent bg-transparent'}`}>
             <img
@@ -195,6 +180,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 Dashboard
               </Link>
               <Link
+                id="tour-sidebar-patients"
                 href="/patient-list"
                 className={`${
                   isActive("/patient-list")
@@ -211,32 +197,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 Reports
               </Link>
             </nav>
-          </div>
-          <div className="flex items-center gap-element-gap">
-            <div className="relative hidden lg:block">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">
-                search
-              </span>
-              <input
-                className="pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-lg text-body-md focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary w-64 transition-colors"
-                placeholder="Search patient or code..."
-                type="text"
-              />
-            </div>
-            <button className="bg-primary text-on-primary px-4 py-2 rounded-lg font-body-md font-medium hover:bg-primary/90 transition-colors hidden sm:block">
-              Save Progress
-            </button>
-            <div className="flex items-center gap-2 text-on-surface-variant">
-              <button className="p-2 hover:bg-surface-container-low rounded-full transition-colors relative">
-                <span className="material-symbols-outlined">notifications</span>
-                <span className="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
-              </button>
-              <button className="p-2 hover:bg-surface-container-low rounded-full transition-colors">
-                <span className="material-symbols-outlined">
-                  account_circle
-                </span>
-              </button>
-            </div>
           </div>
         </header>
 

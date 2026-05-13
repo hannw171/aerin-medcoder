@@ -82,7 +82,7 @@
     "bpjsClass": "Kelas 2",
     "dpjp": "Dr. Sarah, Sp.A",
     "dischargeDate": "2023-10-24",
-    "status": "Direvisi",
+    "status": "Draft AI",
     "medicalRecord": {
       "anamnesa": "Demam sejak 4 hari SMRS, demam naik turun. Disertai mual, muntah 2x, dan nyeri perut. Mimisan tidak ada, gusi berdarah tidak ada.",
       "ttv": {
@@ -114,41 +114,32 @@
     },
     "codingResult": {
       "primaryDiagnosis": {
-        "id": "A99",
-        "code": "A99",
-        "description": "Unspecified viral haemorrhagic fever"
+        "code": "A91",
+        "description": "Dengue haemorrhagic fever (Unverified)",
+        "insight": "Berdasarkan diagnosis utama dokter Dengue Haemorrhagic Fever (DHF) Grade II, diperkuat oleh hasil NS1 positif, trombositopenia (85000/uL), leukopenia (2500/uL), peningkatan enzim hati (SGOT 120, SGPT 150), serta bukti kebocoran plasma seperti Rumple leede positif, asites minimal, dan penebalan dinding vesica fellea.",
+        "id": "489f1694-efdd-4413-9b1e-6ee74a8cfc76"
       },
       "secondaryDiagnoses": [
         {
-          "code": "K75.9",
-          "description": "Inflammatory liver disease, unspecified",
-          "insight": "Diagnosis 'Hepatitis Reaktif' oleh dokter, didukung oleh peningkatan signifikan pada SGOT dan SGPT, mengindikasikan adanya peradangan hati sebagai respons sekunder terhadap infeksi virus dengue.",
-          "id": "d7871137-3c9d-4ca8-9af6-9e312f2d0f3b"
-        },
-        {
-          "id": "1778681239634",
-          "code": "R18",
-          "description": "Ascites"
+          "code": "K77.0",
+          "description": "Liver disorders in infectious and parasitic diseases classified elsewhere (Unverified)",
+          "insight": "Berdasarkan diagnosis sekunder dokter \"Hepatitis Reaktif\" dan didukung oleh peningkatan enzim hati (SGOT 120 U/L, SGPT 150 U/L) yang sering terjadi pada infeksi virus Dengue. Kode ini spesifik menunjukkan gangguan hati yang terkait dengan penyakit infeksius.",
+          "id": "df371df6-317e-4e29-ae7c-05b470637ef2"
         }
       ],
       "procedures": [
         {
           "code": "99.18",
           "description": "Injection or infusion of electrolytes",
-          "id": "3b8e498d-53a2-443f-ac4a-95be5e6d0011"
+          "id": "a8ce23ff-2ccc-4d22-bd6b-311912bbb753"
         },
         {
-          "id": "1778681508258",
           "code": "90.59",
-          "description": "Microscopic examination of blood, other microscopic examination"
+          "description": "Microscopic examination of blood, other microscopic examination",
+          "id": "28332a9a-f6a9-4453-9969-7d70b5dfd6cc"
         }
       ],
-      "potentialFindings": [
-        {
-          "description": "Minimal Ascites",
-          "insight": "Ascites minimal yang terdeteksi pada USG Abdomen merupakan temuan klinis signifikan yang dapat dikategorikan sebagai komplikasi DHF dan berpotensi menjadi CC dalam INA-CBG, namun tidak secara eksplisit didiagnosis oleh dokter."
-        }
-      ]
+      "potentialFindings": []
     }
   },
   {
@@ -252,31 +243,49 @@
     },
     "codingResult": {
       "primaryDiagnosis": {
-        "id": "1",
-        "code": "E11.5",
-        "description": "Type 2 diabetes mellitus with peripheral angiopathy",
-        "insight": "Based on T2DM history with current foot ulcer."
+        "code": "E11.9",
+        "description": "Type 2 diabetes mellitus: Without complications",
+        "insight": "Pasien memiliki riwayat Diabetes Mellitus Tipe 2 selama 10 tahun dengan kontrol gula darah yang buruk (GDS 350 mg/dL, HbA1c 10.5%), yang menjadi dasar bagi komplikasi yang terjadi.",
+        "id": "81ae8942-af37-4c75-b4d7-faafb7da8f1f"
       },
       "secondaryDiagnoses": [
         {
-          "id": "2",
-          "code": "E11.2",
-          "description": "Type 2 diabetes mellitus with renal complications",
-          "insight": "Indicated by elevated creatinine and proteinuria."
+          "code": "E11.621",
+          "description": "Type 2 diabetes mellitus with foot ulcer (Unverified)",
+          "insight": "Ulkus diabetikum ditemukan di pedis dextra digiti I-II dengan tanda infeksi (pus, hiperemis), merupakan komplikasi vaskular dan neuropatik dari diabetes Tipe 2 yang memerlukan penanganan aktif.",
+          "id": "c8b99ac3-e304-40ee-9e64-fdc16081f9c5"
+        },
+        {
+          "code": "E11.21",
+          "description": "Type 2 diabetes mellitus with diabetic nephropathy (Unverified)",
+          "insight": "Adanya peningkatan kadar kreatinin (2.5 mg/dL), ureum (80 mg/dL), dan proteinuria (+2) mengonfirmasi adanya kerusakan ginjal akibat komplikasi jangka panjang diabetes Tipe 2.",
+          "id": "c3e93b31-9805-4b22-9fd8-c7866d1a323a"
         }
       ],
       "procedures": [
         {
-          "id": "3",
           "code": "86.22",
           "description": "Excisional debridement of wound, infection, or burn",
-          "insight": "Debridement procedure explicitly listed."
+          "id": "a97dd1bf-c8f9-4e37-90ca-2283d72d16fb"
+        },
+        {
+          "code": "99.18",
+          "description": "Injection or infusion of electrolytes",
+          "id": "2d658068-51da-4d4e-b7c8-613dad183a90"
         }
       ],
       "potentialFindings": [
         {
-          "description": "Uncontrolled Hypertension",
-          "insight": "BP is 150/90, not explicitly diagnosed."
+          "code": "I10",
+          "description": "Essential (primary) hypertension",
+          "insight": "Pengukuran tekanan darah 150/90 mmHg mengindikasikan adanya hipertensi yang tidak terdiagnosis secara eksplisit, namun merupakan komorbiditas penting pada pasien diabetes dan nefropati.",
+          "processed": false
+        },
+        {
+          "code": "L03.116",
+          "description": "Cellulitis of right foot (Unverified)",
+          "insight": "Keberadaan pus dan hiperemia pada ulkus pedis dextra, yang memerlukan terapi antibiotik intravena, menunjukkan infeksi jaringan lunak yang signifikan (selulitis) pada kaki kanan.",
+          "processed": false
         }
       ]
     }

@@ -230,7 +230,7 @@ export default function PatientListPage() {
                   </td>
                 </tr>
               ) : (
-                paginatedPatients.map((patient) => (
+                paginatedPatients.map((patient, idx) => (
                   <tr
                     key={patient.id}
                     className="border-b border-slate-300 hover:bg-primary/5 transition-colors"
@@ -253,6 +253,7 @@ export default function PatientListPage() {
                     </td>
                     <td className="px-4 py-4">
                       <span
+                        id={patient.status === "Belum Coding" && idx === 0 ? "tour-patient-belum-coding" : undefined}
                         className={`inline-flex items-center px-2.5 py-1 rounded-full font-medium text-xs border ${patient.status === "Belum Coding"
                             ? "bg-red-50 text-red-700 border-red-200"
                             : patient.status === "Draft AI"
@@ -267,6 +268,7 @@ export default function PatientListPage() {
                     </td>
                     <td className="px-4 py-4 text-right">
                       <Link
+                        id={idx === 0 ? "tour-patient-first-action" : undefined}
                         href={`/coding?patientId=${patient.id}`}
                         className={`px-4 py-2 text-sm font-semibold transition-all inline-block rounded-lg ${patient.status === "Belum Coding"
                           ? "bg-primary text-on-primary hover:bg-primary/90 shadow-sm"

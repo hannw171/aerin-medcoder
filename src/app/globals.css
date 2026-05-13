@@ -25,6 +25,7 @@
   --color-surface: #faf8ff;
   --color-secondary: #495c95;
   --color-primary: #004ac6;
+  --color-primary-rgb: 0, 74, 198;
   --color-inverse-primary: #b4c5ff;
   --color-on-error: #ffffff;
   --color-surface-variant: #e1e2ed;
@@ -98,4 +99,14 @@ body {
   background-color: var(--color-surface);
   color: var(--color-on-surface);
   font-family: var(--font-body-md);
+}
+
+@keyframes glow-pulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(var(--color-primary-rgb), 0.4); }
+  50% { transform: scale(1.02); box-shadow: 0 0 15px 5px rgba(var(--color-primary-rgb), 0.2); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(var(--color-primary-rgb), 0); }
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }

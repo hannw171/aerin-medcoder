@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import AppLayout from "@/components/AppLayout";
+import { TourProvider } from "@/components/TourProvider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -30,7 +31,9 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <AppLayout>{children}</AppLayout>
+        <TourProvider>
+          <AppLayout>{children}</AppLayout>
+        </TourProvider>
       </body>
     </html>
   );

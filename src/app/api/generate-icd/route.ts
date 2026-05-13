@@ -166,7 +166,7 @@ TASKS:
   "primaryDiagnosis": { "code": "...", "description": "...", "insight": "..." },
   "secondaryDiagnoses": [ { "code": "...", "description": "...", "insight": "..." } ],
   "procedures": [ { "code": "...", "description": "..." } ],
-  "potentialFindings": [ { "description": "...", "insight": "..." } ]
+  "potentialFindings": [ { "code": "...", "description": "...", "insight": "..." } ]
 }
 `;
 
@@ -200,6 +200,9 @@ TASKS:
     }
     if (Array.isArray(parsedResponse.procedures)) {
       parsedResponse.procedures.forEach((proc: any) => groundCode(proc, icd9Cache));
+    }
+    if (Array.isArray(parsedResponse.potentialFindings)) {
+      parsedResponse.potentialFindings.forEach((finding: any) => groundCode(finding, icd10Cache));
     }
 
     return NextResponse.json(parsedResponse);
