@@ -12,6 +12,10 @@ export default function PatientListPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortConfig, setSortConfig] = useState<{ key: keyof Patient; direction: 'asc' | 'desc' }>({
+    key: 'registerNo',
+    direction: 'asc'
+  });
 
   useEffect(() => {
     fetch('/api/patients')
@@ -33,11 +37,47 @@ export default function PatientListPage() {
     );
   }, [patients, searchQuery]);
 
+  // Sort Logic
+  const sortedPatients = React.useMemo(() => {
+    let sortableItems = [...filteredPatients];
+    if (sortConfig !== null) {
+      sortableItems.sort((a, b) => {
+        const aValue = a[sortConfig.key];
+        const bValue = b[sortConfig.key];
+
+        if (aValue === null || aValue === undefined) return 1;
+        if (bValue === null || bValue === undefined) return -1;
+
+        if (aValue < bValue) {
+          return sortConfig.direction === 'asc' ? -1 : 1;
+        }
+        if (aValue > bValue) {
+          return sortConfig.direction === 'asc' ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+    return sortableItems;
+  }, [filteredPatients, sortConfig]);
+
+  const requestSort = (key: keyof Patient) => {
+    let direction: 'asc' | 'desc' = 'asc';
+    if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const getSortIcon = (key: keyof Patient) => {
+    if (sortConfig?.key !== key) return "unfold_more";
+    return sortConfig.direction === 'asc' ? "arrow_upward" : "arrow_downward";
+  };
+
   // Pagination Logic
-  const totalItems = filteredPatients.length;
+  const totalItems = sortedPatients.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedPatients = filteredPatients.slice(startIndex, startIndex + itemsPerPage);
+  const paginatedPatients = sortedPatients.slice(startIndex, startIndex + itemsPerPage);
 
   return (
     <div className="h-full flex flex-col min-h-0 overflow-hidden">
@@ -100,26 +140,68 @@ export default function PatientListPage() {
             {/* Header */}
             <thead className="bg-primary/10 border-b border-outline-variant sticky top-0 z-10 shadow-sm">
               <tr>
-                <th className="font-label-sm text-label-sm text-slate-600 px-4 py-4 font-bold uppercase tracking-wider bg-blue-50">
-                  No. Register
+                <th 
+                  className="font-label-sm text-label-sm text-slate-600 px-4 py-4 font-bold uppercase tracking-wider bg-blue-50 cursor-pointer hover:bg-blue-100 transition-colors"
+                  onClick={() => requestSort('registerNo')}
+                >
+                  <div className="flex items-center gap-1">
+                    No. Register
+                    <span className="material-symbols-outlined text-sm">{getSortIcon('registerNo')}</span>
+                  </div>
                 </th>
-                <th className="font-label-sm text-label-sm text-slate-600 px-4 py-4 font-bold uppercase tracking-wider bg-blue-50">
-                  No. RM
+                <th 
+                  className="font-label-sm text-label-sm text-slate-600 px-4 py-4 font-bold uppercase tracking-wider bg-blue-50 cursor-pointer hover:bg-blue-100 transition-colors"
+                  onClick={() => requestSort('rmNo')}
+                >
+                  <div className="flex items-center gap-1">
+                    No. RM
+                    <span className="material-symbols-outlined text-sm">{getSortIcon('rmNo')}</span>
+                  </div>
                 </th>
-                <th className="font-label-sm text-label-sm text-slate-600 px-4 py-4 font-bold uppercase tracking-wider bg-blue-50">
-                  Nama Pasien
+                <th 
+                  className="font-label-sm text-label-sm text-slate-600 px-4 py-4 font-bold uppercase tracking-wider bg-blue-50 cursor-pointer hover:bg-blue-100 transition-colors"
+                  onClick={() => requestSort('name')}
+                >
+                  <div className="flex items-center gap-1">
+                    Nama Pasien
+                    <span className="material-symbols-outlined text-sm">{getSortIcon('name')}</span>
+                  </div>
                 </th>
-                <th className="font-label-sm text-label-sm text-slate-600 px-4 py-4 font-bold uppercase tracking-wider bg-blue-50">
-                  Kelas BPJS
+                <th 
+                  className="font-label-sm text-label-sm text-slate-600 px-4 py-4 font-bold uppercase tracking-wider bg-blue-50 cursor-pointer hover:bg-blue-100 transition-colors"
+                  onClick={() => requestSort('bpjsClass')}
+                >
+                  <div className="flex items-center gap-1">
+                    Kelas BPJS
+                    <span className="material-symbols-outlined text-sm">{getSortIcon('bpjsClass')}</span>
+                  </div>
                 </th>
-                <th className="font-label-sm text-label-sm text-slate-600 px-4 py-4 font-bold uppercase tracking-wider bg-blue-50">
-                  DPJP
+                <th 
+                  className="font-label-sm text-label-sm text-slate-600 px-4 py-4 font-bold uppercase tracking-wider bg-blue-50 cursor-pointer hover:bg-blue-100 transition-colors"
+                  onClick={() => requestSort('dpjp')}
+                >
+                  <div className="flex items-center gap-1">
+                    DPJP
+                    <span className="material-symbols-outlined text-sm">{getSortIcon('dpjp')}</span>
+                  </div>
                 </th>
-                <th className="font-label-sm text-label-sm text-slate-600 px-4 py-4 font-bold uppercase tracking-wider bg-blue-50">
-                  Tanggal Pulang
+                <th 
+                  className="font-label-sm text-label-sm text-slate-600 px-4 py-4 font-bold uppercase tracking-wider bg-blue-50 cursor-pointer hover:bg-blue-100 transition-colors"
+                  onClick={() => requestSort('dischargeDate')}
+                >
+                  <div className="flex items-center gap-1">
+                    Tanggal Pulang
+                    <span className="material-symbols-outlined text-sm">{getSortIcon('dischargeDate')}</span>
+                  </div>
                 </th>
-                <th className="font-label-sm text-label-sm text-slate-600 px-4 py-4 font-bold uppercase tracking-wider bg-blue-50">
-                  Status
+                <th 
+                  className="font-label-sm text-label-sm text-slate-600 px-4 py-4 font-bold uppercase tracking-wider bg-blue-50 cursor-pointer hover:bg-blue-100 transition-colors"
+                  onClick={() => requestSort('status')}
+                >
+                  <div className="flex items-center gap-1">
+                    Status
+                    <span className="material-symbols-outlined text-sm">{getSortIcon('status')}</span>
+                  </div>
                 </th>
                 <th className="font-label-sm text-label-sm text-slate-600 px-4 py-4 font-bold uppercase tracking-wider bg-blue-50 text-right">
                   Action

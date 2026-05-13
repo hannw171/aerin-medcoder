@@ -6,6 +6,7 @@ import { patients } from "@/lib/mockData";
 
 import { SearchableICDInput, type CodeItem } from "@/components/SearchableICDInput";
 import { FinancialImpactCard } from "@/components/FinancialImpactCard";
+import { getEstimatedTariff, determineSeverityLevel, formatIDR } from "@/utils/pricing";
 type CodingResult = {
   primaryDiagnosis: CodeItem | null;
   secondaryDiagnoses: CodeItem[];
@@ -799,22 +800,45 @@ function CodingPageContent() {
               </div>
               
               {/* Potensi Temuan Tambahan */}
-              {codingResult?.potentialFindings && codingResult.potentialFindings.length > 0 && (
-                <div className="bg-amber-50/50 rounded-lg border border-amber-200 p-4 shadow-sm">
-                  <h3 className="font-label-sm text-label-sm text-amber-800 mb-3 uppercase tracking-wider flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[18px]">warning</span>
-                    Potensi Temuan Tambahan (Unverified)
-                  </h3>
-                  <div className="flex flex-col gap-3">
-                    {codingResult.potentialFindings.map((finding, idx) => (
-                      <div key={idx} className="bg-white/80 p-3 rounded border border-amber-100">
-                        <div className="font-semibold text-amber-900 text-sm mb-1">{finding.description}</div>
-                        <div className="text-[13px] text-amber-700/80 italic leading-snug">{finding.insight}</div>
+              {codingResult?.potentialFindings && codingResult.potentialFindings.length > 0 && (() => {
+                const pCode = codingResult.primaryDiagnosis?.code || '';
+                const currentSeverity = determineSeverityLevel(codingResult.secondaryDiagnoses, codingResult.potentialFindings);
+                const currentTariff = getEstimatedTariff(pCode, currentSeverity, codingResult.procedures);
+                const severityWithoutPotential = determineSeverityLevel(codingResult.secondaryDiagnoses, []);
+                const tariffWithoutPotential = getEstimatedTariff(pCode, severityWithoutPotential, codingResult.procedures);
+                
+                const potentialGap = currentTariff - tariffWithoutPotential;
+                const isRevenueOptimization = potentialGap > 0;
+                
+                return (
+                  <div className={`bg-${isRevenueOptimization ? 'amber' : 'blue'}-50/50 rounded-lg border border-${isRevenueOptimization ? 'amber' : 'blue'}-200 p-4 shadow-sm`}>
+                    <h3 className={`font-label-sm text-label-sm text-${isRevenueOptimization ? 'amber' : 'blue'}-800 mb-3 uppercase tracking-wider flex items-center justify-between`}>
+                      <span className="flex items-center gap-2">
+                        <span className="material-symbols-outlined text-[18px]">
+                          {isRevenueOptimization ? 'payments' : 'fact_check'}
+                        </span>
+                        Potensi Temuan Tambahan
+                      </span>
+                      <span className={`px-2 py-0.5 rounded text-xs font-bold ${isRevenueOptimization ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800'}`}>
+                        {isRevenueOptimization ? 'Revenue Optimization' : 'Clinical Accuracy Improvement'}
+                      </span>
+                    </h3>
+                    <div className="flex flex-col gap-3">
+                      {codingResult.potentialFindings.map((finding, idx) => (
+                        <div key={idx} className={`bg-white/80 p-3 rounded border border-${isRevenueOptimization ? 'amber' : 'blue'}-100`}>
+                          <div className={`font-semibold text-${isRevenueOptimization ? 'amber' : 'blue'}-900 text-sm mb-1`}>{finding.description}</div>
+                          <div className={`text-[13px] text-${isRevenueOptimization ? 'amber' : 'blue'}-700/80 italic leading-snug`}>{finding.insight}</div>
+                        </div>
+                      ))}
+                    </div>
+                    {isRevenueOptimization && (
+                      <div className="mt-3 text-sm font-semibold text-emerald-600 bg-emerald-50 px-3 py-2 rounded border border-emerald-200 inline-block">
+                        Estimasi Peningkatan: +{formatIDR(potentialGap)}
                       </div>
-                    ))}
+                    )}
                   </div>
-                </div>
-              )}
+                );
+              })()}
 
               {/* Financial Impact */}
               {codingResult?.primaryDiagnosis && (

@@ -121,6 +121,7 @@ CRITICAL INSTRUCTIONS & VERSIONING:
 2. PROCEDURES: You MUST use the ICD-9-CM (Clinical Modification, Volume 3, CMS 28) standard.
 3. PROHIBITION: DO NOT use CPT (Current Procedural Terminology) or ICD-10-PCS codes.
 4. SCOPING MANDATE: ONLY suggest ICD-10 codes for diagnoses explicitly listed by the physician in the "Clinical Primary Diagnosis" and "Clinical Secondary Diagnosis" sections. DO NOT generate new diagnoses from laboratory results or clinical notes unless they are explicitly confirmed as a diagnosis by the doctor.
+5. POTENTIAL FINDINGS (CC/MCC FOCUS): If you spot strong clinical evidence for significant unlisted conditions, prioritize those that categorize as CC (Comorbidity/Complication) or MCC (Major CC) in INA-CBG. Focus on identifying signs of organ failure, systemic infections, or acute complications that significantly impact resource intensity. Do not flag minor, insignificant symptoms.
 
 GEMINI INSIGHTS (EXPLAINABILITY):
 - For every diagnosis suggested (primary and secondary), provide a brief 'insight' (1-2 powerful sentences) in INDONESIAN language explaining why this code was chosen based on the clinical narrative.

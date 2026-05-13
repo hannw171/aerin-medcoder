@@ -7,7 +7,7 @@
     "bpjsClass": "Kelas 1",
     "dpjp": "Dr. Andi, Sp.PD",
     "dischargeDate": "2023-10-25",
-    "status": "Draft AI",
+    "status": "Selesai",
     "medicalRecord": {
       "anamnesa": "Pasien datang dengan keluhan kelemahan anggota gerak sebelah kanan sejak 2 jam SMRS. Pasien juga mengeluh bicara pelo dan sakit kepala. Riwayat hipertensi sejak 5 tahun lalu tidak terkontrol.",
       "ttv": {
@@ -82,7 +82,7 @@
     "bpjsClass": "Kelas 2",
     "dpjp": "Dr. Sarah, Sp.A",
     "dischargeDate": "2023-10-24",
-    "status": "Draft AI",
+    "status": "Direvisi",
     "medicalRecord": {
       "anamnesa": "Demam sejak 4 hari SMRS, demam naik turun. Disertai mual, muntah 2x, dan nyeri perut. Mimisan tidak ada, gusi berdarah tidak ada.",
       "ttv": {
@@ -114,28 +114,41 @@
     },
     "codingResult": {
       "primaryDiagnosis": {
-        "id": "1",
-        "code": "A91",
-        "description": "Dengue haemorrhagic fever",
-        "insight": "Based on clinical evidence of fever, positive NS1, and thrombocytopenia."
+        "id": "A99",
+        "code": "A99",
+        "description": "Unspecified viral haemorrhagic fever"
       },
       "secondaryDiagnoses": [
         {
-          "id": "2",
           "code": "K75.9",
           "description": "Inflammatory liver disease, unspecified",
-          "insight": "Indicated by elevated SGOT/SGPT and hepatomegaly."
+          "insight": "Diagnosis 'Hepatitis Reaktif' oleh dokter, didukung oleh peningkatan signifikan pada SGOT dan SGPT, mengindikasikan adanya peradangan hati sebagai respons sekunder terhadap infeksi virus dengue.",
+          "id": "d7871137-3c9d-4ca8-9af6-9e312f2d0f3b"
+        },
+        {
+          "id": "1778681239634",
+          "code": "R18",
+          "description": "Ascites"
         }
       ],
       "procedures": [
         {
-          "id": "3",
           "code": "99.18",
           "description": "Injection or infusion of electrolytes",
-          "insight": "Based on IVFD RL 1500cc administration."
+          "id": "3b8e498d-53a2-443f-ac4a-95be5e6d0011"
+        },
+        {
+          "id": "1778681508258",
+          "code": "90.59",
+          "description": "Microscopic examination of blood, other microscopic examination"
         }
       ],
-      "potentialFindings": []
+      "potentialFindings": [
+        {
+          "description": "Minimal Ascites",
+          "insight": "Ascites minimal yang terdeteksi pada USG Abdomen merupakan temuan klinis signifikan yang dapat dikategorikan sebagai komplikasi DHF dan berpotensi menjadi CC dalam INA-CBG, namun tidak secara eksplisit didiagnosis oleh dokter."
+        }
+      ]
     }
   },
   {
@@ -317,7 +330,7 @@
     "bpjsClass": "Kelas 2",
     "dpjp": "Dr. Hendra, Sp.PD-KGH",
     "dischargeDate": "2023-10-26",
-    "status": "Belum Coding",
+    "status": "Draft AI",
     "medicalRecord": {
       "anamnesa": "Sesak napas, mual, dan bengkak di seluruh tubuh sejak 1 minggu. BAK sangat sedikit. Rutin hemodialisa namun terlewat 1 jadwal.",
       "ttv": {
@@ -347,6 +360,50 @@
       ],
       "diagnosisKlinisUtama": "CKD Stage 5",
       "diagnosisKlinisSekunder": "Hyperkalemia, Anemia Renal"
+    },
+    "codingResult": {
+      "primaryDiagnosis": {
+        "code": "N18.5",
+        "description": "Chronic kidney disease, stage 5",
+        "insight": "Pasien didiagnosis CKD Stage 5 yang dikonfirmasi oleh hasil laboratorium (Ureum 210 mg/dL, Kreatinin 9.5 mg/dL), USG ginjal (ginjal mengecil bilateral), dan riwayat hemodialisa, menunjukkan kerusakan ginjal berat yang persisten.",
+        "id": "ad0b7d79-7493-45a9-a91c-95b7c9b9b535"
+      },
+      "secondaryDiagnoses": [
+        {
+          "code": "E87.5",
+          "description": "Hyperkalaemia",
+          "insight": "Kondisi ini didukung oleh hasil laboratorium Kalium 6.8 mEq/L, yang merupakan komplikasi serius dari gagal ginjal kronis dan memerlukan penanganan segera.",
+          "id": "7c59b0bd-0296-4072-896b-d137f9a6483f"
+        },
+        {
+          "code": "D63.1",
+          "description": "Anemia in chronic kidney disease (Unverified)",
+          "insight": "Diagnosa ini didukung oleh nilai hemoglobin 8.0 g/dL dan temuan konjungtiva anemis pada pemeriksaan fisik, yang merupakan komplikasi umum dari penyakit ginjal kronis.",
+          "id": "78a50cdf-573e-4055-93f2-da46e55afb35"
+        }
+      ],
+      "procedures": [
+        {
+          "code": "39.95",
+          "description": "Hemodialysis",
+          "id": "8afd0cfd-58c8-4bda-ad2a-aa6e4d599b2b"
+        },
+        {
+          "code": "38.91",
+          "description": "Arterial catheterization",
+          "id": "55cbe3ed-d3cc-4925-8d2a-75cf18749017"
+        }
+      ],
+      "potentialFindings": [
+        {
+          "description": "Kelebihan volume cairan",
+          "insight": "Pasien menunjukkan gejala edema anasarca, JVP meningkat, sesak napas, dan BAK sangat sedikit, yang sangat konsisten dengan kelebihan volume cairan sebagai komplikasi dari CKD Stage 5."
+        },
+        {
+          "description": "Hipertensi",
+          "insight": "Tekanan darah pasien tercatat 160/90 mmHg, yang mengindikasikan adanya hipertensi, seringkali merupakan komorbiditas atau komplikasi dari penyakit ginjal kronis."
+        }
+      ]
     }
   },
   {
