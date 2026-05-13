@@ -120,6 +120,14 @@ CRITICAL INSTRUCTIONS & VERSIONING:
 1. DIAGNOSES: You MUST use the WHO ICD-10 (2019 Version) standard.
 2. PROCEDURES: You MUST use the ICD-9-CM (Clinical Modification, Volume 3, CMS 28) standard.
 3. PROHIBITION: DO NOT use CPT (Current Procedural Terminology) or ICD-10-PCS codes.
+4. SCOPING MANDATE: ONLY suggest ICD-10 codes for diagnoses explicitly listed by the physician in the "Clinical Primary Diagnosis" and "Clinical Secondary Diagnosis" sections. DO NOT generate new diagnoses from laboratory results or clinical notes unless they are explicitly confirmed as a diagnosis by the doctor.
+
+GEMINI INSIGHTS (EXPLAINABILITY):
+- For every diagnosis suggested (primary and secondary), provide a brief 'insight' (1-2 powerful sentences) explaining why this code was chosen based on the clinical narrative.
+- EVIDENCE-BASED: Gather the insight from the entire medical record. If the doctor listed "Diabetes Mellitus", use the clinical notes (e.g., GDS 300 mg/dL, Polyuria) to justify the insight, but do not create a code for "Polyuria" as a separate diagnosis.
+- Focus on: Anatomical site + Clinical evidence + Link to the code.
+- Avoid generic phrases like "I chose this because...". Use direct, professional clinical language like "Based on clinical evidence of...".
+- LOCAL POLICY AWARENESS: If a code was forced or overridden by a Local Hospital Policy (listed below), you MUST explicitly mention it in the insight, e.g., "Mandated by Local Hospital Policy for '...' cases."
 
 FEW-SHOT CALIBRATION:
 - CT Scan Kepala / Otak / Cranium -> 87.03
@@ -150,12 +158,14 @@ TASKS:
 1. Determine the Primary Diagnosis (Diagnosa Utama).
 2. Determine all relevant Secondary Diagnoses (Diagnosa Sekunder).
 3. Determine all relevant Procedures (Tindakan).
-4. Output ONLY a JSON object that strictly matches this exact structure:
+4. If you find a potential diagnosis in the notes that was NOT explicitly listed by the doctor as a diagnosis, place it in 'potentialFindings'.
+5. Output ONLY a JSON object that strictly matches this exact structure:
 
 {
-  "primaryDiagnosis": { "code": "...", "description": "..." },
-  "secondaryDiagnoses": [ { "code": "...", "description": "..." } ],
-  "procedures": [ { "code": "...", "description": "..." } ]
+  "primaryDiagnosis": { "code": "...", "description": "...", "insight": "..." },
+  "secondaryDiagnoses": [ { "code": "...", "description": "...", "insight": "..." } ],
+  "procedures": [ { "code": "...", "description": "..." } ],
+  "potentialFindings": [ { "description": "...", "insight": "..." } ]
 }
 `;
 

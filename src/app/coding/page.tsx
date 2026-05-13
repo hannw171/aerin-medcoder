@@ -9,6 +9,7 @@ type CodingResult = {
   primaryDiagnosis: CodeItem | null;
   secondaryDiagnoses: CodeItem[];
   procedures: CodeItem[];
+  potentialFindings?: { description: string; insight: string }[];
 };
 
 function RightPanelSkeleton() {
@@ -119,7 +120,8 @@ function CodingPageContent() {
         procedures: (data.procedures || []).map((p: any) => ({
           ...p,
           id: crypto.randomUUID()
-        }))
+        })),
+        potentialFindings: data.potentialFindings || []
       };
 
       setCodingResult(formattedResult);
@@ -645,17 +647,29 @@ function CodingPageContent() {
                       />
                     </div>
                   ) : (
-                    <div className="flex items-center gap-element-gap">
+                    <div className="flex items-start gap-element-gap pt-1">
                       <div className="bg-surface-variant text-on-surface font-mono-data text-mono-data px-4 py-2 rounded-full border border-outline-variant">
                         {codingResult.primaryDiagnosis.code}
                       </div>
-                      <div className="font-body-md text-body-md text-on-surface flex-1">
-                        {codingResult.primaryDiagnosis.description}
+                      <div className="font-body-md text-body-md text-on-surface flex-1 flex flex-col">
+                        <div className="flex items-center gap-2 mt-2">
+                          <span>{codingResult.primaryDiagnosis.description}</span>
+                          {codingResult.primaryDiagnosis.insight && (
+                            <span className="material-symbols-outlined text-[16px] text-emerald-500 cursor-help" title="Gemini Insight">
+                              lightbulb
+                            </span>
+                          )}
+                        </div>
+                        {codingResult.primaryDiagnosis.insight && (
+                          <div className="mt-2.5 mb-1 bg-emerald-50 border-l-2 border-dashed border-emerald-400 p-2.5 rounded-r-md hidden group-hover:block transition-all mr-2">
+                            <p className="text-[13px] italic text-emerald-800 leading-snug">{codingResult.primaryDiagnosis.insight}</p>
+                          </div>
+                        )}
                       </div>
                       {isRevisionMode && (
                         <button 
                           onClick={() => setIsEditingPrimary(true)}
-                          className="text-primary hover:text-primary-variant transition-all"
+                          className="text-primary hover:text-primary-variant transition-all mt-2"
                         >
                           <span className="material-symbols-outlined text-sm">
                             edit
@@ -674,7 +688,7 @@ function CodingPageContent() {
                 <div className="flex flex-col gap-tight-gap">
                   {codingResult?.secondaryDiagnoses.map((diag, idx) => (
                     <div key={diag.id}>
-                      <div className="flex items-center gap-element-gap p-2 hover:bg-surface-container-low rounded border border-transparent hover:border-outline-variant transition-colors group">
+                      <div className="flex items-start gap-element-gap p-2 hover:bg-surface-container-low rounded border border-transparent hover:border-outline-variant transition-colors group">
                         {diag.code === "" ? (
                           <SearchableICDInput
                             type="icd10"
@@ -683,18 +697,30 @@ function CodingPageContent() {
                           />
                         ) : (
                           <>
-                            <div className="bg-surface-variant text-on-surface font-mono-data text-mono-data px-3 py-1 rounded-full border border-outline-variant w-20 text-center">
+                            <div className="bg-surface-variant text-on-surface font-mono-data text-mono-data px-3 py-1 rounded-full border border-outline-variant w-20 text-center shrink-0">
                               {diag.code}
                             </div>
-                            <div className="font-body-md text-body-md text-on-surface flex-1">
-                              {diag.description}
+                            <div className="font-body-md text-body-md text-on-surface flex-1 flex flex-col">
+                              <div className="flex items-center gap-2 mt-1">
+                                <span>{diag.description}</span>
+                                {diag.insight && (
+                                  <span className="material-symbols-outlined text-[16px] text-emerald-500 cursor-help" title="Gemini Insight">
+                                    lightbulb
+                                  </span>
+                                )}
+                              </div>
+                              {diag.insight && (
+                                <div className="mt-2.5 mb-1 bg-emerald-50 border-l-2 border-dashed border-emerald-400 p-2.5 rounded-r-md hidden group-hover:block transition-all mr-2">
+                                  <p className="text-[13px] italic text-emerald-800 leading-snug">{diag.insight}</p>
+                                </div>
+                              )}
                             </div>
                           </>
                         )}
                         {isRevisionMode && (
                           <button 
                             onClick={() => removeSecondaryCode(diag.id)}
-                            className="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
+                            className="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all mt-1"
                           >
                             <span className="material-symbols-outlined text-sm">
                               delete
@@ -770,6 +796,24 @@ function CodingPageContent() {
                   </button>
                 )}
               </div>
+              
+              {/* Potensi Temuan Tambahan */}
+              {codingResult?.potentialFindings && codingResult.potentialFindings.length > 0 && (
+                <div className="bg-amber-50/50 rounded-lg border border-amber-200 p-4 shadow-sm">
+                  <h3 className="font-label-sm text-label-sm text-amber-800 mb-3 uppercase tracking-wider flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[18px]">warning</span>
+                    Potensi Temuan Tambahan (Unverified)
+                  </h3>
+                  <div className="flex flex-col gap-3">
+                    {codingResult.potentialFindings.map((finding, idx) => (
+                      <div key={idx} className="bg-white/80 p-3 rounded border border-amber-100">
+                        <div className="font-semibold text-amber-900 text-sm mb-1">{finding.description}</div>
+                        <div className="text-[13px] text-amber-700/80 italic leading-snug">{finding.insight}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
             <div className="p-panel-padding bg-surface-container border-t border-outline-variant flex-shrink-0 z-10 sticky bottom-0 flex gap-element-gap">
               {!isRevisionMode ? (

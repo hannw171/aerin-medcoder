@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 
-export type CodeItem = { id: string; code: string; description: string; };
+export type CodeItem = { id: string; code: string; description: string; insight?: string; };
 
 export function SearchableICDInput({
   type,

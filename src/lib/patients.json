@@ -111,29 +111,32 @@
     },
     "codingResult": {
       "primaryDiagnosis": {
-        "code": "A99",
-        "description": "Unspecified viral haemorrhagic fever",
-        "id": "be90cd23-44cb-40a3-9f98-1b13123e78cf"
+        "code": "A91",
+        "description": "Dengue haemorrhagic fever (Unverified)",
+        "insight": "Based on the physician's primary diagnosis of Dengue Haemorrhagic Fever Grade II, supported by clinical signs such as fever, nausea, vomiting, abdominal pain, positive Rumple leede test, hepatomegaly, and laboratory findings of low leukocytes and platelets along with a positive NS1 antigen test, the ICD-10 code A91 for Dengue Haemorrhagic Fever is assigned.",
+        "id": "b5d4b303-75a0-4117-b38d-63ca454c8eae"
       },
       "secondaryDiagnoses": [
         {
-          "code": "B19.9",
-          "description": "Unspecified viral hepatitis without hepatic coma",
-          "id": "d668df28-ecb4-4155-9822-61a4af11fbc5"
+          "code": "K72.90",
+          "description": "Hepatic failure, unspecified without coma (Unverified)",
+          "insight": "The physician's diagnosis of Hepatitis reaktif, coupled with the ultrasonographic finding of gallbladder wall thickening and minimal ascites, suggests hepatic involvement, leading to the selection of ICD-10 code K72.90 for unspecified hepatic failure.",
+          "id": "f4201da6-dbfc-482a-bf27-44715304df28"
         }
       ],
       "procedures": [
         {
           "code": "99.18",
           "description": "Injection or infusion of electrolytes",
-          "id": "673ad17e-c48b-4fa2-b1a5-ab97624c4c91"
+          "id": "8da040e1-6f18-4c14-9b26-6a33124c765b"
         },
         {
-          "code": "99.10",
-          "description": "Injection or infusion of thrombolytic agent",
-          "id": "70e4855b-083b-41a3-879c-41117d1a7d06"
+          "code": "99.29",
+          "description": "Injection or infusion of other therapeutic or prophylactic substance",
+          "id": "05134acc-3c24-47ba-ab87-3885e5d16e95"
         }
-      ]
+      ],
+      "potentialFindings": []
     }
   },
   {
