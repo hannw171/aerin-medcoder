@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import AppLayout from "@/components/AppLayout";
 import { TourProvider } from "@/components/TourProvider";
+import { VoiceCommandProvider } from "@/components/VoiceCommandContext";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -31,9 +32,11 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <TourProvider>
-          <AppLayout>{children}</AppLayout>
-        </TourProvider>
+        <VoiceCommandProvider>
+          <TourProvider>
+            <AppLayout>{children}</AppLayout>
+          </TourProvider>
+        </VoiceCommandProvider>
       </body>
     </html>
   );

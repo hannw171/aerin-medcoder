@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTour } from "@/components/TourProvider";
+import { VoiceCommandCenter } from "@/components/VoiceCommandCenter";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -198,6 +199,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               </Link>
             </nav>
           </div>
+          {/* Right side: Voice Command Center */}
+          <VoiceCommandCenter />
         </header>
 
         {/* Main Dashboard Content */}

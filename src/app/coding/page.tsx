@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, Suspense, useEffect } from "react";
+import { useState, useRef, Suspense, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { patients } from "@/lib/mockData";
+import { useVoiceCommandContext } from "@/components/VoiceCommandContext";
 
 import { SearchableICDInput, type CodeItem } from "@/components/SearchableICDInput";
 import { FinancialImpactCard } from "@/components/FinancialImpactCard";
@@ -84,6 +85,25 @@ function CodingPageContent() {
     parentSuggestion: string | null;
   } | null>(null);
 
+  // Register page-specific voice actions using refs to avoid stale closures
+  const { registerActions, unregisterActions } = useVoiceCommandContext();
+  const handleGenerateRef = useRef<(() => void) | null>(null);
+  const handleSaveRef = useRef<(() => void) | null>(null);
+  const enterRevisionModeRef = useRef<(() => void) | null>(null);
+
+  useEffect(() => {
+    registerActions({
+      onGenerate: () => handleGenerateRef.current?.(),
+      onSave: () => handleSaveRef.current?.(),
+      onOpenRevision: () => enterRevisionModeRef.current?.(),
+    });
+    return () => unregisterActions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Always keep refs pointed to the latest function instance (runs every render)
+  // This MUST be in the component body, not inside the functions themselves.
+
   // Fetch latest patient data on mount to ensure persistence
   useEffect(() => {
     if (patientId) {
@@ -105,8 +125,8 @@ function CodingPageContent() {
   }, [patientId]);
 
   const handleGenerate = async () => {
+    handleGenerateRef.current = handleGenerate;
     setIsGenerating(true);
-    setHasError(false);
     try {
       const res = await fetch('/api/generate-icd', {
         method: 'POST',
@@ -388,6 +408,12 @@ function CodingPageContent() {
     });
     setIsEditingPrimary(false);
   };
+
+  // Assign refs here (after all functions are defined) so voice commands always
+  // invoke the latest closure with current state — never stale.
+  handleGenerateRef.current = handleGenerate;
+  handleSaveRef.current = handleSaveAndValidate;
+  enterRevisionModeRef.current = enterRevisionMode;
 
   return (
     <div className="flex-1 flex overflow-hidden -m-8 h-[calc(100vh-64px)]">

@@ -268,7 +268,7 @@ export default function PatientListPage() {
                     </td>
                     <td className="px-4 py-4 text-right">
                       <Link
-                        id={idx === 0 ? "tour-patient-first-action" : undefined}
+                        id={patient.status === "Belum Coding" && !patients.slice(0, idx).some(p => p.status === "Belum Coding") ? "tour-patient-first-action" : undefined}
                         href={`/coding?patientId=${patient.id}`}
                         className={`px-4 py-2 text-sm font-semibold transition-all inline-block rounded-lg ${patient.status === "Belum Coding"
                           ? "bg-primary text-on-primary hover:bg-primary/90 shadow-sm"

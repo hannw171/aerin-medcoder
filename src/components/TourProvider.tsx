@@ -38,6 +38,19 @@ const TOUR_STEPS: Step[] = [
     content: "Tabel Morbiditas & Kontribusi Klinis menunjukkan 10 diagnosa teratas. Anda dapat mengklik baris mana saja untuk melihat detail severity level pasien.",
   },
   {
+    target: "#tour-voice-mic",
+    title: "Kontrol Suara AI",
+    content: "Kendalikan aplikasi hanya dengan suara! Klik ikon mikrofon ini untuk mulai memberikan perintah seperti 'Buka Dashboard' atau 'Analisis AI'.",
+  },
+  {
+    target: "#tour-voice-guide",
+    content: "Bingung apa yang harus diucapkan? Klik ikon bantuan ini untuk melihat daftar perintah suara yang didukung oleh sistem.",
+  },
+  {
+    target: "#tour-voice-text",
+    content: "Jika mikrofon tidak tersedia, Anda tetap bisa memberikan perintah lewat keyboard dengan mengklik ikon keyboard ini.",
+  },
+  {
     target: "#tour-sidebar-patients",
     content: "Langkah selanjutnya, mari kita lihat daftar pasien yang sedang mengantre. Klik menu 'Patient List' ini untuk melanjutkan.",
     overlayClickAction: false,
@@ -138,13 +151,13 @@ export const TourProvider = ({ children }: { children: React.ReactNode }) => {
     
     // Logic to sync stepIndex based on the new path
     if (pathname === "/") {
-      if (stepIndex > 3) setStepIndex(0);
+      if (stepIndex > 6) setStepIndex(0);
     } else if (pathname === "/patient-list") {
-      if (stepIndex < 4) setStepIndex(4);
+      if (stepIndex < 7) setStepIndex(7);
     } else if (pathname === "/coding" || pathname.startsWith("/coding/")) {
-      if (stepIndex < 6) setStepIndex(6);
+      if (stepIndex < 9) setStepIndex(9);
     } else if (pathname === "/settings/policies") {
-      if (stepIndex < 10) setStepIndex(10);
+      if (stepIndex < 13) setStepIndex(13);
     }
 
     // Resume the tour after a very short delay to allow the DOM to settle

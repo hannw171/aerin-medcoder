@@ -470,43 +470,72 @@
     },
     "codingResult": {
       "primaryDiagnosis": {
-        "id": "1",
-        "code": "K74.6",
-        "description": "Other and unspecified cirrhosis of liver",
-        "insight": "Sirosis hepatis explicitly diagnosed."
+        "code": "I85.0",
+        "desc": "Esophageal varices with bleeding",
+        "insight": "Perdarahan akut varises esofagus akibat hipertensi portal pada sirosis hepatis.",
+        "description": "Oesophageal varices with bleeding",
+        "id": "b6824c4b-33b8-4fbc-89e8-9d077f066e40"
       },
       "secondaryDiagnoses": [
         {
-          "id": "2",
-          "code": "I85.0",
-          "description": "Esophageal varices with bleeding",
-          "insight": "Hematemesis from ruptured esophageal varices."
+          "code": "K74.6",
+          "desc": "Other and unspecified cirrhosis of liver",
+          "insight": "Penyakit hati kronis progresif sebagai penyebab hipertensi portal dan varises.",
+          "description": "Other and unspecified cirrhosis of liver",
+          "id": "a69ab592-75be-4ff5-a3ed-c8fa8608ee39"
         },
         {
-          "id": "3",
           "code": "R18",
+          "desc": "Ascites",
+          "insight": "Akumulasi cairan intraabdomen masif akibat dekompensasi hati.",
           "description": "Ascites",
-          "insight": "Ascites explicitly noted."
+          "id": "6cfb8777-517e-4a96-9413-8a662972704e"
         }
       ],
       "procedures": [
         {
-          "id": "4",
-          "code": "42.33",
-          "description": "Endoscopic excision or destruction of lesion or tissue of esophagus",
-          "insight": "Endoscopic ligation of varices performed."
+          "code": "99.04",
+          "desc": "Transfusion of packed cells",
+          "insight": "Koreksi anemia berat akibat perdarahan saluran cerna akut.",
+          "description": "Transfusion of packed cells",
+          "id": "60e83e74-53ea-40e8-bd0c-bf731a7d8cf8"
         },
         {
-          "id": "5",
-          "code": "99.04",
-          "description": "Transfusion of packed cells",
-          "insight": "PRC transfusion administered."
+          "code": "42.91",
+          "desc": "Endoscopic ligation of esophageal varices",
+          "insight": "Intervensi endoskopik untuk menghentikan perdarahan aktif varises esofagus.",
+          "description": "Ligation of esophageal varices",
+          "id": "a91a9435-5e29-435b-8447-12880cdb7ced"
         }
       ],
       "potentialFindings": [
         {
-          "description": "Thrombocytopenia",
-          "insight": "Platelet count 60k but not explicitly diagnosed."
+          "code": "D62",
+          "desc": "Acute posthemorrhagic anemia",
+          "insight": "Anemia berat akibat perdarahan masif, memerlukan transfusi segera.",
+          "description": "Acute posthaemorrhagic anaemia",
+          "processed": false
+        },
+        {
+          "code": "K72.9",
+          "desc": "Hepatic failure, unspecified",
+          "insight": "Dekompenasi fungsi hati berat, ditandai ikterus, asites, koagulopati.",
+          "description": "Hepatic failure, unspecified",
+          "processed": false
+        },
+        {
+          "code": "R57.1",
+          "desc": "Hypovolemic shock",
+          "insight": "Syok hipovolemik akibat perdarahan masif, perlu resusitasi cairan.",
+          "description": "Hypovolaemic shock",
+          "processed": false
+        },
+        {
+          "code": "D69.6",
+          "desc": "Thrombocytopenia, unspecified",
+          "insight": "Penurunan trombosit signifikan, meningkatkan risiko perdarahan.",
+          "description": "Thrombocytopenia, unspecified",
+          "processed": false
         }
       ]
     }
