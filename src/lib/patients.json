@@ -116,41 +116,41 @@
       "primaryDiagnosis": {
         "code": "A91",
         "desc": "Dengue haemorrhagic fever",
-        "insight": "Demam berdarah dengue dengan manifestasi perdarahan dan peningkatan permeabilitas kapiler.",
+        "insight": "Demam berdarah dengue dengan manifestasi perdarahan dan kebocoran plasma.",
         "description": "Dengue haemorrhagic fever (Unverified)",
-        "id": "314375eb-f9a4-46c5-804b-96958fa5eadf"
+        "id": "02ab36d3-a335-4fe8-b220-d46009e48e36"
       },
       "secondaryDiagnoses": [
         {
           "code": "K76.8",
           "desc": "Other specified diseases of liver",
-          "insight": "Inflamasi hepar sekunder akibat infeksi dengue, ditandai peningkatan transaminase.",
+          "insight": "Disfungsi hepar sekunder akibat infeksi dengue, ditandai peningkatan enzim hati.",
           "description": "Other specified diseases of liver",
-          "id": "51fa113b-b748-4fc1-ae73-d09128024d52"
+          "id": "10ecc635-38d7-4728-bfc2-8c826c8473b5"
         }
       ],
       "procedures": [
         {
           "code": "99.18",
-          "desc": "Injection or infusion of therapeutic or prophylactic substance",
-          "insight": "Akses intravena untuk rehidrasi cairan dan pemberian medikasi.",
+          "desc": "Injection or infusion of other therapeutic or prophylactic substance",
+          "insight": "Pemasangan akses intravena untuk rehidrasi dan pemberian medikasi.",
           "description": "Injection or infusion of electrolytes",
-          "id": "67779980-9bec-4efc-bb80-e0a28b81e578"
+          "id": "4f5a8517-e0ae-49dc-9a11-feca41d4fffb"
         }
       ],
       "potentialFindings": [
         {
-          "code": "D69.6",
-          "desc": "Thrombocytopenia, unspecified",
-          "insight": "Penurunan jumlah trombosit, berisiko perdarahan, komplikasi umum DHF.",
-          "description": "Thrombocytopenia, unspecified",
+          "code": "R18",
+          "desc": "Ascites",
+          "insight": "Akumulasi cairan intraabdomen minimal, indikasi kebocoran plasma.",
+          "description": "Ascites",
           "processed": false
         },
         {
-          "code": "R18",
-          "desc": "Ascites",
-          "insight": "Akumulasi cairan bebas intraabdomen, indikasi peningkatan permeabilitas kapiler.",
-          "description": "Ascites",
+          "code": "D69.6",
+          "desc": "Thrombocytopenia, unspecified",
+          "insight": "Penurunan jumlah trombosit signifikan, risiko perdarahan meningkat.",
+          "description": "Thrombocytopenia, unspecified",
           "processed": false
         }
       ]
@@ -258,47 +258,70 @@
     "codingResult": {
       "primaryDiagnosis": {
         "code": "E11.9",
+        "desc": "Type 2 diabetes mellitus without complications",
+        "insight": "Diabetes Mellitus Tipe 2, kondisi dasar pasien.",
         "description": "Type 2 diabetes mellitus: Without complications",
-        "insight": "Pasien memiliki riwayat Diabetes Mellitus Tipe 2 selama 10 tahun dengan kontrol gula darah yang buruk (GDS 350 mg/dL, HbA1c 10.5%), yang menjadi dasar bagi komplikasi yang terjadi.",
-        "id": "81ae8942-af37-4c75-b4d7-faafb7da8f1f"
+        "id": "fd0afa4f-9a23-4403-b3eb-58d2780081f7"
       },
       "secondaryDiagnoses": [
         {
           "code": "E11.621",
-          "description": "Type 2 diabetes mellitus with foot ulcer (Unverified)",
-          "insight": "Ulkus diabetikum ditemukan di pedis dextra digiti I-II dengan tanda infeksi (pus, hiperemis), merupakan komplikasi vaskular dan neuropatik dari diabetes Tipe 2 yang memerlukan penanganan aktif.",
-          "id": "c8b99ac3-e304-40ee-9e64-fdc16081f9c5"
+          "desc": "Type 2 diabetes mellitus with diabetic foot ulcer",
+          "insight": "Ulkus diabetikum pedis dextra terinfeksi, memerlukan penanganan luka.",
+          "description": "Type 2 diabetes mellitus with diabetic foot ulcer (Unverified)",
+          "id": "c57d3dda-0783-473e-a72a-a0776161c1ea"
         },
         {
           "code": "E11.21",
+          "desc": "Type 2 diabetes mellitus with diabetic nephropathy",
+          "insight": "Nefropati diabetik dengan gangguan fungsi ginjal.",
           "description": "Type 2 diabetes mellitus with diabetic nephropathy (Unverified)",
-          "insight": "Adanya peningkatan kadar kreatinin (2.5 mg/dL), ureum (80 mg/dL), dan proteinuria (+2) mengonfirmasi adanya kerusakan ginjal akibat komplikasi jangka panjang diabetes Tipe 2.",
-          "id": "c3e93b31-9805-4b22-9fd8-c7866d1a323a"
+          "id": "39aca040-9938-432c-b83d-155d4cb58ca8"
         }
       ],
       "procedures": [
         {
           "code": "86.22",
+          "desc": "Excisional debridement of wound, infection, or burn",
+          "insight": "Tindakan debridement eksisional untuk mengangkat jaringan nekrotik.",
           "description": "Excisional debridement of wound, infection, or burn",
-          "id": "a97dd1bf-c8f9-4e37-90ca-2283d72d16fb"
+          "id": "d9f8e180-ff47-4a6e-a89d-419dea355394"
+        },
+        {
+          "code": "86.28",
+          "desc": "Nonexcisional debridement of wound, infection, or burn",
+          "insight": "Perawatan luka kronis non-eksisi untuk mendukung penyembuhan.",
+          "description": "Nonexcisional debridement of wound, infection or burn",
+          "id": "94d8d141-15f1-4537-9ebe-0914a7155cc1"
         },
         {
           "code": "99.18",
+          "desc": "Injection or infusion of other therapeutic substance",
+          "insight": "Pemasangan jalur intravena untuk pemberian medikasi.",
           "description": "Injection or infusion of electrolytes",
-          "id": "2d658068-51da-4d4e-b7c8-613dad183a90"
+          "id": "fe9a47a5-537d-4ec2-bf65-41a713e9b58c"
         }
       ],
       "potentialFindings": [
         {
-          "code": "I10",
-          "description": "Essential (primary) hypertension",
-          "insight": "Pengukuran tekanan darah 150/90 mmHg mengindikasikan adanya hipertensi yang tidak terdiagnosis secara eksplisit, namun merupakan komorbiditas penting pada pasien diabetes dan nefropati.",
+          "code": "E11.65",
+          "desc": "Type 2 diabetes mellitus with hyperglycemia",
+          "insight": "Hiperglikemia berat, memerlukan penyesuaian terapi insulin intensif.",
+          "description": "Type 2 diabetes mellitus with hyperglycemia (Unverified)",
           "processed": false
         },
         {
-          "code": "L03.116",
+          "code": "N18.4",
+          "desc": "Chronic kidney disease, stage 4 (severe)",
+          "insight": "Penyakit ginjal kronis stadium 4, memerlukan pemantauan fungsi ginjal.",
+          "description": "Chronic kidney disease, stage 4",
+          "processed": false
+        },
+        {
+          "code": "L03.115",
+          "desc": "Cellulitis of right foot",
+          "insight": "Selulitis pedis dextra akibat infeksi ulkus diabetikum.",
           "description": "Cellulitis of right foot (Unverified)",
-          "insight": "Keberadaan pus dan hiperemia pada ulkus pedis dextra, yang memerlukan terapi antibiotik intravena, menunjukkan infeksi jaringan lunak yang signifikan (selulitis) pada kaki kanan.",
           "processed": false
         }
       ]

@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTour } from "@/components/TourProvider";
 import { VoiceCommandCenter } from "@/components/VoiceCommandCenter";
+import { ProcessTracker } from "@/components/ProcessTracker";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -204,6 +205,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </header>
 
         {/* Main Dashboard Content */}
+        <ProcessTracker />
         <main className="flex-1 p-8 overflow-y-auto">{children}</main>
       </div>
     </div>

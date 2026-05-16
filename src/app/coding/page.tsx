@@ -8,6 +8,7 @@ import { useVoiceCommandContext } from "@/components/VoiceCommandContext";
 import { SearchableICDInput, type CodeItem } from "@/components/SearchableICDInput";
 import { FinancialImpactCard } from "@/components/FinancialImpactCard";
 import { getEstimatedTariff, determineSeverityLevel, formatIDR } from "@/utils/pricing";
+import { useBackgroundCoder } from "@/store/useBackgroundCoder";
 type CodingResult = {
   primaryDiagnosis: CodeItem | null;
   secondaryDiagnoses: CodeItem[];
@@ -87,6 +88,7 @@ function CodingPageContent() {
 
   // Register page-specific voice actions using refs to avoid stale closures
   const { registerActions, unregisterActions } = useVoiceCommandContext();
+  const { startGeneration, completeGeneration, failGeneration } = useBackgroundCoder();
   const handleGenerateRef = useRef<(() => void) | null>(null);
   const handleSaveRef = useRef<(() => void) | null>(null);
   const enterRevisionModeRef = useRef<(() => void) | null>(null);
@@ -124,66 +126,68 @@ function CodingPageContent() {
     }
   }, [patientId]);
 
-  const handleGenerate = async () => {
-    handleGenerateRef.current = handleGenerate;
+  const handleGenerate = () => {
+    // Task 2: Non-blocking — user can navigate away immediately
+    startGeneration({ id: patient.id, name: patient.name });
     setIsGenerating(true);
-    try {
-      const res = await fetch('/api/generate-icd', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ medicalRecord: patient.medicalRecord })
-      });
 
-      if (!res.ok) {
-        throw new Error('Failed to generate AI codes');
-      }
+    // Fire-and-forget promise — does NOT block navigation
+    fetch('/api/generate-icd', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ medicalRecord: patient.medicalRecord })
+    })
+      .then(async (res) => {
+        if (!res.ok) throw new Error('Failed to generate AI codes');
+        const data = await res.json();
 
-      const data = await res.json();
+        const formattedResult: CodingResult = {
+          primaryDiagnosis: data.primaryDiagnosis ? {
+            ...data.primaryDiagnosis,
+            id: crypto.randomUUID()
+          } : null,
+          secondaryDiagnoses: (data.secondaryDiagnoses || []).map((d: any) => ({
+            ...d,
+            id: crypto.randomUUID()
+          })),
+          procedures: (data.procedures || []).map((p: any) => ({
+            ...p,
+            id: crypto.randomUUID()
+          })),
+          potentialFindings: (data.potentialFindings || []).map((f: any) => ({
+            ...f,
+            processed: false
+          }))
+        };
 
-      const formattedResult: CodingResult = {
-        primaryDiagnosis: data.primaryDiagnosis ? {
-          ...data.primaryDiagnosis,
-          id: crypto.randomUUID()
-        } : null,
-        secondaryDiagnoses: (data.secondaryDiagnoses || []).map((d: any) => ({
-          ...d,
-          id: crypto.randomUUID()
-        })),
-        procedures: (data.procedures || []).map((p: any) => ({
-          ...p,
-          id: crypto.randomUUID()
-        })),
-        potentialFindings: (data.potentialFindings || []).map((f: any) => ({
-          ...f,
-          processed: false
-        }))
-      };
+        // Update local UI state (only effective if user is still on this page)
+        setCodingResult(formattedResult);
+        setIsGenerated(true);
+        setIsManuallyEdited(false);
+        setCurrentStatus('Draft AI');
+        setIsGenerating(false);
 
-      setCodingResult(formattedResult);
-      setIsGenerated(true);
-      setIsManuallyEdited(false);
-      setCurrentStatus('Draft AI');
+        // Mark global tracker as complete
+        completeGeneration(formattedResult);
 
-      // Background auto-save
-      fetch(`/api/patients/${patient.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          codingResult: formattedResult,
-          status: 'Draft AI'
-        }),
-        keepalive: true
+        // Background auto-save
+        fetch(`/api/patients/${patient.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ codingResult: formattedResult, status: 'Draft AI' }),
+          keepalive: true
+        })
+          .then(() => setLastSavedTime(new Date()))
+          .catch(err => console.error('Auto-save failed:', err));
       })
-        .then(() => setLastSavedTime(new Date()))
-        .catch(err => console.error('Auto-save failed:', err));
-    } catch (error) {
-      console.error(error);
-      setHasError(true);
-      setToastMessage("Gagal melakukan generate dengan AI.");
-      setTimeout(() => setToastMessage(""), 3000);
-    } finally {
-      setIsGenerating(false);
-    }
+      .catch((error) => {
+        console.error(error);
+        setIsGenerating(false);
+        setHasError(true);
+        setToastMessage("Gagal melakukan generate dengan AI.");
+        setTimeout(() => setToastMessage(""), 3000);
+        failGeneration("Gagal menganalisis rekam medis.");
+      });
   };
 
   const enterRevisionMode = () => {
