@@ -44,7 +44,7 @@ export function useVoiceCommand() {
       }
 
       if (normalized.includes("buka kebijakan") || normalized.includes("kebijakan")) {
-        router.push("/settings/policies");
+        router.push("/regulation-settings");
         setStatus("idle");
         return;
       }

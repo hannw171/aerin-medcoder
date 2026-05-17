@@ -95,7 +95,7 @@ const TOUR_STEPS: Step[] = [
   },
   {
     target: "#tour-sidebar-policies",
-    content: "Terakhir, AI membutuhkan panduan. Mari kita atur 'Kebijakan Lokal'. Klik menu ini.",
+    content: "Terakhir, AI membutuhkan panduan. Mari kita atur 'Pengaturan Regulasi'. Klik menu ini.",
     overlayClickAction: false,
     skipBeacon: true,
     styles: {
@@ -103,10 +103,10 @@ const TOUR_STEPS: Step[] = [
     }
   },
 
-  // --- POLICIES (Path: /settings/policies) --- Steps 10-12
+  // --- REGULATION SETTINGS (Path: /regulation-settings) --- Steps 13-15
   {
     target: "#tour-policies-header",
-    content: "Halaman Kebijakan Lokal memungkinkan Anda menetapkan aturan rumah sakit yang spesifik. AI akan secara ketat mematuhi aturan ini saat melakukan generate kode.",
+    content: "Halaman Pengaturan Regulasi memungkinkan Anda menetapkan aturan pemetaan kode ICD dan parameter kepatuhan BPJS. AI akan secara ketat mematuhi aturan ini.",
     skipBeacon: true,
   },
   {
@@ -156,7 +156,7 @@ export const TourProvider = ({ children }: { children: React.ReactNode }) => {
       if (stepIndex < 7) setStepIndex(7);
     } else if (pathname === "/coding" || pathname.startsWith("/coding/")) {
       if (stepIndex < 9) setStepIndex(9);
-    } else if (pathname === "/settings/policies") {
+    } else if (pathname === "/regulation-settings") {
       if (stepIndex < 13) setStepIndex(13);
     }
 

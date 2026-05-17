@@ -86,22 +86,22 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
             <Link
               id="tour-sidebar-policies"
-              href="/settings/policies"
+              href="/regulation-settings"
               className={`flex items-center px-3 py-3 transition-all duration-200 w-full group relative ${
-                pathname === "/settings/policies"
+                pathname === "/regulation-settings"
                   ? "bg-primary text-on-primary border-l-4 border-primary-fixed rounded-r-xl shadow-sm"
                   : "text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-xl"
               } ${isExpanded ? 'justify-start' : 'justify-center'}`}
-              title={!isExpanded ? "Pengaturan Kebijakan Internal" : ""}
+              title={!isExpanded ? "Pengaturan Regulasi" : ""}
             >
               <span
-                className={`material-symbols-outlined flex-shrink-0 transition-colors duration-200 ${pathname === "/settings/policies" ? "text-on-primary" : ""}`}
-                style={pathname === "/settings/policies" ? { fontVariationSettings: "'FILL' 1" } : {}}
+                className={`material-symbols-outlined flex-shrink-0 transition-colors duration-200 ${pathname === "/regulation-settings" ? "text-on-primary" : ""}`}
+                style={pathname === "/regulation-settings" ? { fontVariationSettings: "'FILL' 1" } : {}}
               >
                 settings
               </span>
               <span className={`whitespace-wrap font-semibold transition-all duration-300 overflow-hidden ${isExpanded ? 'ml-3 opacity-100 w-full' : 'opacity-0 w-0'}`}>
-                Pengaturan Kebijakan Internal
+                Pengaturan Regulasi
               </span>
             </Link>
 
