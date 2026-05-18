@@ -196,6 +196,15 @@ export default function PatientListPage() {
                 </th>
                 <th 
                   className="font-label-sm text-label-sm text-slate-600 px-4 py-4 font-bold uppercase tracking-wider bg-blue-50 cursor-pointer hover:bg-blue-100 transition-colors"
+                  onClick={() => requestSort('serviceType')}
+                >
+                  <div className="flex items-center gap-1">
+                    Jenis Layanan
+                    <span className="material-symbols-outlined text-sm">{getSortIcon('serviceType')}</span>
+                  </div>
+                </th>
+                <th 
+                  className="font-label-sm text-label-sm text-slate-600 px-4 py-4 font-bold uppercase tracking-wider bg-blue-50 cursor-pointer hover:bg-blue-100 transition-colors"
                   onClick={() => requestSort('status')}
                 >
                   <div className="flex items-center gap-1">
@@ -212,7 +221,7 @@ export default function PatientListPage() {
             <tbody className="font-body-md text-body-md text-on-surface bg-surface">
               {isLoading ? (
                 <tr>
-                  <td colSpan={8} className="px-4 py-12 text-center text-slate-500">
+                  <td colSpan={9} className="px-4 py-12 text-center text-slate-500">
                     <div className="flex flex-col items-center justify-center gap-2">
                       <span className="material-symbols-outlined animate-spin text-3xl">progress_activity</span>
                       <p>Memuat data pasien...</p>
@@ -221,7 +230,7 @@ export default function PatientListPage() {
                 </tr>
               ) : paginatedPatients.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="px-4 py-12 text-center text-slate-500">
+                  <td colSpan={9} className="px-4 py-12 text-center text-slate-500">
                     <div className="flex flex-col items-center justify-center gap-2">
                       <span className="material-symbols-outlined text-4xl text-slate-300">search_off</span>
                       <p className="font-medium text-slate-600">Tidak ada data ditemukan</p>
@@ -253,14 +262,30 @@ export default function PatientListPage() {
                     </td>
                     <td className="px-4 py-4">
                       <span
+                        className={`inline-flex items-center px-2.5 py-1 rounded-full font-semibold text-xs border ${
+                          patient.serviceType === "RANAP"
+                            ? "bg-teal-50 text-teal-700 border-teal-200"
+                            : "bg-purple-50 text-purple-700 border-purple-200"
+                        }`}
+                      >
+                        <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${
+                          patient.serviceType === "RANAP" ? "bg-teal-500" : "bg-purple-500"
+                        }`} />
+                        {patient.serviceType === "RANAP" ? "Rawat Inap" : "Rawat Jalan"}
+                      </span>
+                    </td>
+                    <td className="px-4 py-4">
+                      <span
                         id={patient.status === "Belum Coding" && idx === 0 ? "tour-patient-belum-coding" : undefined}
                         className={`inline-flex items-center px-2.5 py-1 rounded-full font-medium text-xs border ${patient.status === "Belum Coding"
                             ? "bg-red-50 text-red-700 border-red-200"
                             : patient.status === "Draft AI"
                               ? "bg-amber-50 text-amber-700 border-amber-200"
-                              : patient.status === "Direvisi"
-                                ? "bg-blue-50 text-blue-700 border-blue-200"
-                                : "bg-emerald-50 text-emerald-600 border-emerald-200"
+                              : patient.status === "Pending Klarifikasi"
+                                ? "bg-orange-50 text-orange-700 border-orange-200 animate-pulse font-semibold"
+                                : patient.status === "Direvisi"
+                                  ? "bg-blue-50 text-blue-700 border-blue-200"
+                                  : "bg-emerald-50 text-emerald-600 border-emerald-200"
                           }`}
                       >
                         {patient.status}
@@ -272,14 +297,14 @@ export default function PatientListPage() {
                         href={`/coding?patientId=${patient.id}`}
                         className={`px-4 py-2 text-sm font-semibold transition-all inline-block rounded-lg ${patient.status === "Belum Coding"
                           ? "bg-primary text-on-primary hover:bg-primary/90 shadow-sm"
-                          : patient.status === "Draft AI" || patient.status === "Direvisi"
+                          : patient.status === "Draft AI" || patient.status === "Direvisi" || patient.status === "Pending Klarifikasi"
                             ? "border border-primary text-primary hover:bg-primary/10"
                             : "text-slate-500 hover:text-primary hover:bg-primary/5 underline"
                           }`}
                       >
                         {patient.status === "Belum Coding"
                           ? "Code Now"
-                          : patient.status === "Draft AI" || patient.status === "Direvisi"
+                          : patient.status === "Draft AI" || patient.status === "Direvisi" || patient.status === "Pending Klarifikasi"
                             ? "Review"
                             : "View"}
                       </Link>

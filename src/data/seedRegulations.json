@@ -1,0 +1,486 @@
+[
+  {
+    "id": "e8a15b3c-941f-46e7-a9a3-5f05d9c2a7a4",
+    "targetCode": "O80.9",
+    "ruleType": "Batasan Usia",
+    "recommendation": "Persalinan normal hanya dapat diklaim untuk pasien usia produktif reproduksi. Pastikan usia pasien sesuai.",
+    "condition": {
+      "minAge": 12,
+      "maxAge": 55
+    }
+  },
+  {
+    "id": "f5d72f1a-8c3b-482d-9b5f-1c4e9d7a6b8e",
+    "targetCode": "C50.9",
+    "ruleType": "Restriksi Gender",
+    "recommendation": "Neoplasma ganas payudara mayoritas terjadi pada wanita. Jika pasien laki-laki, pastikan dokumentasi patologi anatomi sangat jelas.",
+    "condition": {
+      "requiredGender": "Perempuan"
+    }
+  },
+  {
+    "id": "a1b2c3d4-e5f6-4a5b-8c9d-0e1f2a3b4c5d",
+    "targetCode": "E11",
+    "ruleType": "Screening PRB",
+    "recommendation": "Diabetes Mellitus Tipe 2 adalah diagnosa PRB (Program Rujuk Balik). Pastikan tidak ada komplikasi akut. Jika pasien stabil, wajib dirujuk kembali ke FKTP.",
+    "condition": {
+      "mandatoryClinicalKeywords": "stabil, rutin, kontrol, tanpa penyulit"
+    }
+  },
+  {
+    "id": "8b5f3a1c-924d-4e78-b1a9-3f05c9d2a4e1",
+    "targetCode": "GLOBAL_RANAP",
+    "ruleType": "Tips FAQ Casemix",
+    "recommendation": "[Aturan Restriksi Pengulangan Rawat Inap (Readmisi <= 30 Hari)] Peringatan INA-CBG: Kunjungan rawat inap berulang dengan diagnosis utama yang sama di fasilitas yang sama dalam waktu <= 30 hari diklasifikasikan sebagai readmisi. Klaim wajib digabungkan menjadi satu episode pelayanan. Koder hanya diizinkan memisahkan episode jika rekam medis membuktikan pasien masuk karena kondisi kegawatdaruratan, penyakit kronis, tindakan yang sudah terjadwal yang tidak bisa satu episode, atau rujukan ke FKRTL berbeda/kelas lebih tinggi.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "rawat inap, berulang, diagnosis sama, gawat darurat, penyakit kronis, tindakan terjadwal"
+    }
+  },
+  {
+    "id": "3c9f2d1e-84ab-4291-a7b5-2d4e8c1f3a6b",
+    "targetCode": "GLOBAL_RAJAN",
+    "ruleType": "Tips FAQ Casemix",
+    "recommendation": "[Aturan Restriksi Pengulangan Rawat Jalan (Fragmentasi <= 7 Hari)] Peringatan INA-CBG: Kunjungan rawat jalan dengan diagnosis yang sama dalam rentang waktu <= 7 hari berpotensi dianggap fragmentasi pelayanan dan tidak bisa diklaim terpisah. Koder wajib memeriksa riwayat tanggal kunjungan sebelumnya. Pengecualian pemisahan episode hanya berlaku bila terdapat indikasi kegawatdaruratan, kunjungan penyakit kronis rutin, prosedur/terapi terjadwal yang tidak bisa disatukan, atau konsultasi hasil pemeriksaan penunjang.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "rawat jalan, berulang, diagnosis sama, gawat darurat, penyakit kronis, prosedur terjadwal, konsultasi penunjang"
+    }
+  },
+  {
+    "id": "7d4e5f6a-1b2c-4a3b-9c8d-0e1f2a3b4c5d",
+    "targetCode": "P03",
+    "ruleType": "Batasan Usia",
+    "recommendation": "[Klaim Bayi Baru Lahir dengan Tindakan pada Persalinan] Peringatan INA-CBG: Untuk kasus bayi baru lahir yang memiliki tindakan pada saat persalinan (kode P03.0-P03.6), kasus ini wajib dibayarkan jika termasuk dalam dispute klaim masa transisi PMK 76/2016. Koder diinstruksikan untuk memisahkan pengajuan klaim anak dari ibunya apabila tindakan klinis pada bayi memenuhi kriteria kode P03.0-P03.6.",
+    "condition": {
+      "minAge": 0,
+      "maxAge": 0,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "bayi baru lahir, tindakan persalinan, dispute"
+    }
+  },
+  {
+    "id": "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
+    "targetCode": "GLOBAL",
+    "ruleType": "Tips FAQ Casemix",
+    "recommendation": "[Kriteria Pemilihan Diagnosis Utama Berdasarkan Sumber Daya] Jika pada akhir episode perawatan pasien memiliki lebih dari satu diagnosis, koder diwajibkan untuk membandingkan rincian billing atau rekam medis untuk menentukan kondisi mana yang menyerap/menggunakan sumber daya pelayanan paling tinggi (pemeriksaan penunjang, tindakan bedah, obat terbanyak, dll) sesuai aturan koding morbiditas ICD-10 Versi Tahun 2010. Kondisi dengan pemakaian resource terbanyak itulah yang mutlak ditetapkan sebagai Diagnosis Utama.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "diagnosis lebih dari satu, sumber daya terbesar"
+    }
+  },
+  {
+    "id": "9f8e7d6c-5b4a-3f2e-1d0c-9b8a7f6e5d4c",
+    "targetCode": "J44.1",
+    "ruleType": "Tips FAQ Casemix",
+    "recommendation": "[Aturan Kode Gabungan Akut dan Kronis (Combination Code Tersedia)] Jika DPJP menulis diagnosis ganda berupa kondisi akut dan kronis pada organ yang sama (misal PPOK dengan eksaserbasi akut), dan ICD-10 menyediakan 1 kode gabungan khusus, J00-J99 JANGAN koding penyakit akut dan kronis secara terpisah. Langsung gunakan kode gabungan tunggal (contoh: J44.1 untuk PPOK eksaserbasi akut) sebagai diagnosis utama.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "akut, kronis, eksaserbasi akut"
+    }
+  },
+  {
+    "id": "5a4b3c2d-1e0f-9a8b-7c6d-5e4f3a2b1c0d",
+    "targetCode": "N17.9",
+    "ruleType": "Tips FAQ Casemix",
+    "recommendation": "[Aturan Kode Gabungan Akut dan Kronis (Combination Code Tidak Tersedia)] Bila ada diagnosis akut dan kronis secara bersamaan tetapi tidak memiliki kode gabungan di ICD-10 (contoh: Gagal Ginjal Akut dan Gagal Ginjal Kronik), koder WAJIB menetapkan penyakit Akut (misal N17.9) sebagai Diagnosis Utama, sedangkan penyakit Kronik diinput sebagai Diagnosis Sekunder.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "akut, kronis, gagal ginjal"
+    }
+  },
+  {
+    "id": "a1c2e3f4-b5d6-47e8-9f0a-1b2c3d4e5f6a",
+    "targetCode": "E11",
+    "ruleType": "Screening PRB",
+    "recommendation": "[Kriteria Rujuk Balik Kasus Kronis (Diabetes Mellitus)] Peringatan PRB Gatekeeper: Kondisi klinis pasien terindikasi stabil kronis tanpa komplikasi baru. Sesuai regulasi, pasien wajib dialihkan ke status Program Rujuk Balik (PRB) ke FKTP. Siapkan lembar klarifikasi untuk DPJP.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "target HbA1c < 7%, gula darah puasa 80-130, gula darah 2 jam pp < 180, insulin basal < 20 unit, eGFR > 60, tekanan darah terkontrol, stabil"
+    }
+  },
+  {
+    "id": "f4e3d2c1-b0a9-4876-8543-210fedcba987",
+    "targetCode": "I10",
+    "ruleType": "Screening PRB",
+    "recommendation": "[Hipertensi Esensial Primer (Kriteria Rujukan dan Rujuk Balik PRB)] Hipertensi (I10) adalah kompetensi dasar FKTP. Rujukan ke FKRTL hanya sah jika memenuhi kriteria gagal terapi 3 bulan, status krisis/resisten, komorbiditas khusus, atau kelompok lansia (≥60 tahun). Sebaliknya, jika kondisi pasien terindikasi stabil kronis tanpa komplikasi baru (TD < 140/90 dalam 3 bulan, tidak terdapat HMOD, terkontrol), pasien wajib dialihkan ke Program Rujuk Balik (PRB) ke FKTP. Jika ditagihkan sebagai diagnosis tunggal tanpa severity level atau indikator penyulit, klasifikasikan sebagai error klaim.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "tekanan darah < 140/90, dalam waktu 3 bulan, tidak terdapat HMOD, bukan hipertensi sekunder, terkontrol, stabil, hipertensi krisis, hipertensi resisten, gagal jantung, kehamilan, dislipidemia, lansia, geriatri, tekanan darah tidak tercapai target dalam 3 bulan, anemia, infeksi, TB paru, hipertensi sekunder"
+    }
+  },
+  {
+    "id": "2d3e4f5a-6b7c-48d9-e0f1-a2b3c4d5e6f7",
+    "targetCode": "I50",
+    "ruleType": "Screening PRB",
+    "recommendation": "[Rujukan dan Kriteria Rujuk Balik Kasus Kronis Gagal Jantung (Heart Failure)] Pada pasien baru (kunjungan pertama), klaim wajib melampirkan indikasi subspesialistik (misal perlunya ekokardiografi atau ada perburukan cepat). Namun, jika kasus kronik telah stabil (NYHA Fc I-II, observasi 3 bulan, volume cairan stabil/euvolemia, hemodinamik stabil), pasien wajib dialihkan ke status Program Rujuk Balik (PRB) ke FKTP. Penagihan RS tanpa indikasi relaps/perburukan akut memicu dispute; siapkan lembar klarifikasi untuk DPJP.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "NYHA Fc I-II, observasi 3 bulan, volume cairan tubuh tidak bertambah, hemodinamik stabil, euvolemia, stabil, akut, perburukan klinis, kegawatdaruratan, ekokardiografi, kondisi akut, perburukan dalam waktu cepat, spesialis jantung"
+    }
+  },
+  {
+    "id": "e7d6c5b4-a3f2-41d0-9c8b-7a6e5d4c3b2a",
+    "targetCode": "J45",
+    "ruleType": "Screening PRB",
+    "recommendation": "[Asma Bronkial (Kriteria Rujukan dan Rujuk Balik PRB)] Asma adalah diagnosa murni kompetensi FKTP. Rujukan ke FKRTL hanya logis jika rekam medis mencatat serangan akut sedang/berat, eksaserbasi sering, komplikasi, penggunaan steroid IV, atau oksigen di IGD. Jika kondisi pasien telah stabil kronis tanpa komplikasi baru (ACT >= 25, tidak terbangun malam hari, gejala harian < 2x seminggu), pasien wajib dialihkan ke status PRB ke FKTP. Cegah klaim rawat jalan rutin tanpa penyulit.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "asma stabil, terkontrol, Asthma Control Test >= 25, tidak terbangun pada malam hari, gejala harian < 2x seminggu, stabil, eksaserbasi sering, serangan akut sedang, serangan akut berat, komplikasi, steroid sistemik injeksi, oksigen"
+    }
+  },
+  {
+    "id": "3a4b5c6d-7e8f-490a-bc1d-2e3f4a5b6c7d",
+    "targetCode": "P03",
+    "ruleType": "Batasan Usia",
+    "recommendation": "[Klaim Terpisah Bayi Baru Lahir Sakit] Pastikan bayi baru lahir memiliki kondisi sakit atau membutuhkan perawatan kesehatan khusus agar dapat diklaim terpisah dari ibunya. Jika bayi lahir sehat dan hanya menerima pelayanan neonatal esensial, klaim wajib digabung dengan paket persalinan ibunya untuk menghindari pending atau dispute klaim. Bayi yang lahir dengan tindakan persalinan dalam kondisi sakit yang membutuhkan perawatan kesehatan lain mutlak diklaim terpisah dari klaim persalinan ibunya.",
+    "condition": {
+      "minAge": 0,
+      "maxAge": 0,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "sakit, perawatan, neonatal esensial, lahir sakit, membutuhkan perawatan lain"
+    }
+  },
+  {
+    "id": "c5d6e7f8-a9b0-4c1d-2e3f-4a5b6c7d8e9f",
+    "targetCode": "P96.8",
+    "ruleType": "Batasan Usia",
+    "recommendation": "[Kontrol Ulang Rawat Jalan Bayi Baru Lahir Usia < 7 Hari] Gunakan kode diagnosis utama P96.8 (Other specified conditions originating in the perinatal period) untuk pelayanan rawat jalan bayi baru lahir berusia kurang dari 7 hari yang datang untuk kontrol ulang. Lakukan verifikasi tanggal lahir bayi di rekam medis untuk memastikan akurasi usia kronologis saat pelayanan.",
+    "condition": {
+      "minAge": 0,
+      "maxAge": 7,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "kontrol ulang, rawat jalan, kontrol bayi"
+    }
+  },
+  {
+    "id": "f8e7d6c5-b4a3-4f2e-1d0c-9b8a7f6e5d4c",
+    "targetCode": "O80",
+    "ruleType": "Restriksi Gender",
+    "recommendation": "[Metode Persalinan Sebagai Diagnosis Utama atau Sekunder] Kode persalinan O80-O84 wajib diletakkan sebagai diagnosis sekunder jika ada komplikasi persalinan (di mana komplikasi menjadi diagnosis utama). Jika persalinan berlangsung normal tanpa penyulit, kode O80-O84 diposisikan sebagai diagnosis utama, didampingi kode Z37.- (outcome of delivery) sebagai diagnosis sekunder.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": "Perempuan",
+      "mandatoryClinicalKeywords": "persalinan, melahirkan"
+    }
+  },
+  {
+    "id": "1c2d3e4f-5a6b-47c8-9d0e-1f2a3b4c5d6e",
+    "targetCode": "Z30.2",
+    "ruleType": "Restriksi Gender",
+    "recommendation": "[Rujukan Tubektomi Interval Pasca Persalinan] Pasien wanita yang telah melahirkan di FKTP and dirujuk khusus untuk menjalani prosedur sterilisasi/tubektomi interval di FKRTL wajib dikode dengan Z30.2 (Sterilization) sebagai diagnosis utama. Cek kesesuaian berkas rujukan untuk memastikan tidak ada klaim keliru atas penyakit penyerta lain sebagai diagnosis utama.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": "Perempuan",
+      "mandatoryClinicalKeywords": "tubektomi, sterilisasi, rujukan, tubektomi interval, rujukan FKTP"
+    }
+  },
+  {
+    "id": "9a8b7c6d-5e4f-43a2-b1c0-d9e8f7a6b5c4",
+    "targetCode": "Z51.1",
+    "ruleType": "Tips FAQ Casemix",
+    "recommendation": "[Pelayanan Kemoterapi Oral di Rawat Jalan] Untuk pasien rawat jalan yang mendapatkan obat kemoterapi oral, diagnosis utama yang wajib digunakan adalah Z51.1. Perhatikan bahwa kode neoplasma/kanker pendukung SAMA SEKALI TIDAK BOLEH diinput sebagai diagnosis sekunder dalam episode pelayanan ini untuk menghindari otomatis pending klaim.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "kemoterapi oral, rawat jalan"
+    }
+  },
+  {
+    "id": "4b3c2d1e-0f9a-48b7-6c5d-4e3f2a1b0c9d",
+    "targetCode": "Z51.1",
+    "ruleType": "Tips FAQ Casemix",
+    "recommendation": "[Pelayanan Kemoterapi Injeksi] Bila pasien mendapatkan pelayanan kemoterapi injeksi (rawat jalan atau rawat inap), tetapkan Z51.1 sebagai diagnosis utama, sertakan kode neoplasma ganasnya sebagai diagnosis sekunder, serta wajib menginput kode prosedur 99.25. Pastikan komponen administrasi ini lengkap di rekam medis.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "kemoterapi, injeksi, prosedur 99.25, kemoterapi injeksi"
+    }
+  },
+  {
+    "id": "d9e8f7a6-b5c4-43a2-b1c0-d9e8f7a6b5c4",
+    "targetCode": "Z53",
+    "ruleType": "Tips FAQ Casemix",
+    "recommendation": "[Pembatalan Tindakan Operasi Akibat Kurang Persiapan FKRTL] Jika operasi dibatalkan karena pihak rumah sakit kurang melakukan persiapan prabedah (misalnya belum melengkapi pemeriksaan penunjang standar), kasus tersebut TIDAK DAPAT DITAGIHKAN ke BPJS Kesehatan. Coder dilarang mengajukan klaim ini guna mencegah temuan audit atau penolakan klaim.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "batal operasi, kurang persiapan"
+    }
+  },
+  {
+    "id": "a1b2c3d4-e5f6-47a8-b9c0-1d2e3f4a5b6c",
+    "targetCode": "GLOBAL",
+    "ruleType": "Tips FAQ Casemix",
+    "recommendation": "[Sistem Pengodean Berpasangan (Dagger dan Asterisk)] Apabila rekam medis pasien mencantumkan diagnosis berpasangan atau kode kombinasi etiologi-manifestasi, kode dagger (†) harus dikode sebagai diagnosis utama dan kode asterisk (*) sebagai diagnosis sekunder. Ingat untuk tidak menginput simbol matematika/tanda († atau *) ke dalam aplikasi INA-CBG.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "dagger, asterisk, kode kombinasi etiologi manifestasi"
+    }
+  },
+  {
+    "id": "6c7d8e9f-a0b1-4c2d-3e4f-5a6b7c8d9e0f",
+    "targetCode": "GLOBAL",
+    "ruleType": "Tips FAQ Casemix",
+    "recommendation": "[Klaim Kasus Psikiatri dan Kusta Fase Subakut & Kronis] Untuk klaim pasien jiwa atau kusta dengan rawat inap lama, fase subakut dihitung pada LOS hari ke 43-103 (mendapat tarif INA-CBG + tarif subakut) dan fase kronis pada LOS hari ke 104-180 (mendapat tarif INA-CBG + tarif subakut + tarif kronis). Pastikan salinan lembar scoring WHODAS 2.0 yang ditandatangani DPJP dilampirkan sebagai syarat dokumen pendukung klaim. Coder wajib menginput nilai scoring tersebut ke kolom ADL di aplikasi INA-CBG agar tarif top-up terhitung secara otomatis.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "psikiatri, kusta, WHODAS 2.0, LOS, rawat inap lama"
+    }
+  },
+  {
+    "id": "f5e4d3c2-b1a0-4987-6543-210fedcba987",
+    "targetCode": "Z53",
+    "ruleType": "Tips FAQ Casemix",
+    "recommendation": "[Pasien Rawat Inap dengan Pembatalan Operasi] Jika operasi dibatalkan karena kontraindikasi/indikasi medis dan pasien harus tetap rawat inap, klaim menggunakan diagnosis utama Z53.0 (Procedures not carried out because of contraindication) disertai diagnosis klinis penyebab pembatalan. Jika pembatalan karena faktor non-medis, gunakan kode Z53.1-Z53.9; di mana jika lama rawat < 6 jam diklaim sebagai rawat jalan, dan jika lama rawat > 6 jam diklaim sebagai rawat inap.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "batal operasi, kontraindikasi, indikasi medis, lama rawat, kontraindikasi medis, non medis"
+    }
+  },
+  {
+    "id": "2b3c4d5e-6f7a-48b9-c0d1-e2f3a4b5c6d7",
+    "targetCode": "GLOBAL",
+    "ruleType": "Screening PRB",
+    "recommendation": "[Kriteria Kelayakan Rujukan Pasien Ke FKRTL] Pastikan rujukan pasien dari FKTP ke FKRTL didasarkan pada kebutuhan penanganan spesialistik/subspesialistik atau adanya komplikasi medis yang melampaui kompetensi layanan primer. Rujukan tanpa indikasi medis spesifik atau di luar kriteria penanganan komprehensif berpotensi memicu pending klaim dan audit kendali biaya.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "indikasi medis, gawat darurat, spesialistik, komplikasi"
+    }
+  },
+  {
+    "id": "7e8f9a0b-1c2d-43e4-b5f6-a7b8c9d0e1f2",
+    "targetCode": "GLOBAL_RAJAN",
+    "ruleType": "Tips FAQ Casemix",
+    "recommendation": "[Aturan Episode Rawat Jalan - Satu Hari Pelayanan] Pasien yang mendapat pelayanan rawat jalan pada satu atau lebih klinik spesialis pada hari yang sama dihitung sebagai 1 (satu) episode, sehingga hanya dapat diklaim 1 kali untuk hari tersebut.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": ""
+    }
+  },
+  {
+    "id": "3d4e5f6a-7b8c-49d0-e1f2-a3b4c5d6e7f8",
+    "targetCode": "GLOBAL_RAJAN",
+    "ruleType": "Tips FAQ Casemix",
+    "recommendation": "[Aturan Episode IGD < 6 Jam] Pelayanan IGD yang berlangsung kurang dari 6 jam dan/atau belum mendapatkan pelayanan rawat inap termasuk dalam 1 (satu) episode rawat jalan.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": ""
+    }
+  },
+  {
+    "id": "c5b4a3f2-1d0c-49b8-a7f6-e5d4c3b2a10f",
+    "targetCode": "GLOBAL_RANAP",
+    "ruleType": "Tips FAQ Casemix",
+    "recommendation": "[Aturan Episode IGD > 6 Jam] Pelayanan IGD lebih dari 6 jam termasuk dalam 1 (satu) episode rawat inap dan diklaimkan sebagai rawat inap kelas 3, dengan syarat sesuai indikasi medis dan secara administrasi telah resmi menjadi pasien rawat inap.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": ""
+    }
+  },
+  {
+    "id": "a9b0c1d2-3e4f-45a6-b7c8-9d0e1f2a3b4c",
+    "targetCode": "P03",
+    "ruleType": "Tips FAQ Casemix",
+    "recommendation": "[Bundling Klaim Bayi Lahir Sehat dengan Persalinan Ibu] Bayi lahir dengan tindakan persalinan dalam kondisi sehat yang mendapat pelayanan neonatal esensial diklaim dalam 1 (satu) paket persalinan ibunya, bukan sebagai klaim terpisah.",
+    "condition": {
+      "minAge": 0,
+      "maxAge": 0,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "neonatal esensial, lahir sehat"
+    }
+  },
+  {
+    "id": "f8a7b6c5-d4e3-42f1-b0a9-876543210fed",
+    "targetCode": "Z09.8",
+    "ruleType": "Tips FAQ Casemix",
+    "recommendation": "[Pengodean Kontrol Ulang Rawat Jalan] Pasien kontrol ulang rawat jalan dengan diagnosis yang sama menggunakan kode Z (misal Z09.8) sebagai diagnosis utama, sedangkan diagnosis penyakitnya dikode sebagai diagnosis sekunder.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "kontrol ulang, rawat jalan, diagnosis sama"
+    }
+  },
+  {
+    "id": "1e2f3a4b-5c6d-47e8-9f0a-1b2c3d4e5f6a",
+    "targetCode": "Z51.0",
+    "ruleType": "Tips FAQ Casemix",
+    "recommendation": "[Pengodean Radioterapi] Pasien rawat jalan atau rawat inap yang hanya menjalani radioterapi dikode Z51.0 sebagai diagnosis utama dan kode neoplasma menjadi diagnosis sekunder.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "radioterapi"
+    }
+  },
+  {
+    "id": "9d8e7d6c-5b4a-43f2-e1d0-c9b8a7f6e5d4",
+    "targetCode": "Z51.5",
+    "ruleType": "Tips FAQ Casemix",
+    "recommendation": "[Pengodean Perawatan Paliatif] Kode Z51.5 hanya digunakan jika DPJP secara spesifik menuliskan diagnosis perawatan paliatif; jika pasien paliatif datang dengan kondisi medis lain, dikode sesuai penyakit yang mendasari masuknya ke FKRTL.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "palliative care, perawatan paliatif"
+    }
+  },
+  {
+    "id": "5c4b3c2d-1e0f-49a8-b7c6-d5e4f3a2b1c0",
+    "targetCode": "D56.1",
+    "ruleType": "Tips FAQ Casemix",
+    "recommendation": "[Pengodean Kontrol Ulang Thalasemia Mayor dengan Kelasi Besi] Pasien Thalasemia Mayor saat kontrol ulang rawat jalan yang diberikan obat kelasi besi diinput sebagai rawat jalan dengan D56.1 (Beta Thalassaemia) sebagai diagnosis utama.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "thalasemia mayor, kelasi besi, deferipone, deferoksamin, deferasirox, kontrol ulang"
+    }
+  },
+  {
+    "id": "d9e8f7a6-b5c4-43d2-a1b0-c9b8a7f6e5d4",
+    "targetCode": "GLOBAL",
+    "ruleType": "Tips FAQ Casemix",
+    "recommendation": "[Aturan Tindakan Tidak Selesai karena Penyulit Intraoperatif] Jika saat tindakan ditemukan penyulit sehingga tindakan utama tidak dapat diselesaikan, dikode hanya sesuai tindakan yang berhasil dilakukan (misal: PTCA tanpa stent, atau laparotomi tanpa eksisi).",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "penyulit intraoperatif, tindakan tidak selesai"
+    }
+  },
+  {
+    "id": "4a3b2c1d-0e9f-48a7-b6c5-d4e3f2a1b0c9",
+    "targetCode": "GLOBAL_RAJAN",
+    "ruleType": "Tips FAQ Casemix",
+    "recommendation": "[Aturan Terapi Berulang Rawat Jalan (Hemodialisa, Rehabilitasi, Transfusi, dll)] Pasien terapi berulang rawat jalan (hemodialisa, rehabilitasi, transfusi, dll) menggunakan kode Z sebagai diagnosis utama dan kode penyakit sebagai sekunder, dengan episode dihitung per 1 kali kunjungan.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "hemodialisa, rehabilitasi medik, rehabilitasi psikososial, transfusi, kemoterapi, radioterapi, pelayanan gigi, terapi berulang"
+    }
+  },
+  {
+    "id": "1b2c3d4e-5f6a-47b8-c9d0-1e2f3a4b5c6d",
+    "targetCode": "GLOBAL_RANAP",
+    "ruleType": "Tips FAQ Casemix",
+    "recommendation": "[Aturan Episode Rawat Inap - Lanjutan dari Rawat Jalan Hari yang Sama] Pelayanan rawat inap yang merupakan kelanjutan dari rawat jalan atau IGD pada hari yang sama sudah termasuk dalam 1 (satu) episode rawat inap dan tidak diklaim sebagai episode rawat jalan tersendiri.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": ""
+    }
+  },
+  {
+    "id": "6d5c4b3a-2e1f-4098-b7a6-e5d4c3b2a10f",
+    "targetCode": "GLOBAL_RANAP",
+    "ruleType": "Tips FAQ Casemix",
+    "recommendation": "[Aturan Rawat Inap < 6 Jam dengan Pasien Meninggal] Pasien yang telah mendapat pelayanan rawat inap dengan lama perawatan kurang dari 6 jam dan meninggal dunia tetap dihitung sebagai 1 (satu) episode rawat inap.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "meninggal, rawat inap singkat"
+    }
+  },
+  {
+    "id": "a1b2c3d4-e5f6-47b8-a9c0-1d2e3f4a5b6c",
+    "targetCode": "A18.2",
+    "ruleType": "Screening PRB",
+    "recommendation": "[Tuberkulosis Kelenjar Getah Bening (TB Limfadenitis)] Pastikan pasien TB Limfadenitis memiliki komorbid atau penyulit yang jelas tercatat dalam rekam medis sebelum diklaim sebagai pelayanan FKRTL (RS). Tanpa penyulit, kasus ini seharusnya diselesaikan penuh di puskesmas/klinik (FKTP). Jika diklaim tanpa bukti penyulit klinis, persiapkan argumen medis karena klaim berpotensi besar ditolak (pending audit).",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "komplikasi, penyulit"
+    }
+  },
+  {
+    "id": "f5e4d3c2-b1a0-49c8-8765-43210fedcba9",
+    "targetCode": "A30",
+    "ruleType": "Screening PRB",
+    "recommendation": "[Penyakit Kusta (Leprosy)] Rujukan kusta wajib disertai alasan klinis kedaruratan atau komplikasi seperti reaksi ENL yang melepuh, neuritis, atau ulserasi. Cek resume medis dari DPJP; jika diagnosis kusta murni diajukan tanpa penyulit, hal tersebut adalah murni kompetensi dasar FKTP dan sangat rawan dispute Casemix.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "efek samping serius, ENL melepuh, neuritis, bercak ulserasi, reaksi tipe 1"
+    }
+  },
+  {
+    "id": "c5b4a3f2-1d0c-49e8-b7a6-e5d4c3b2a10f",
+    "targetCode": "J44.9",
+    "ruleType": "Screening PRB",
+    "recommendation": "[Penyakit Paru Obstruktif Kronik (PPOK)] Kasus PPOK (J44.9) tanpa kegawatdaruratan wajib dikelola di FKTP. Klaim rujukan ke FKRTL baru diizinkan dan aman dari pending jika pasien terbukti masuk lewat jalur IGD dengan keterangan eksaserbasi akut (kegawatdaruratan medis/ancaman kehidupan) atau terdapat surat rujukan resmi dari Puskesmas/Klinik akibat ketidaktersediaan sarana/prasarana (misal fasilitas O2 atau nebulisasi tidak memadai) di faskes tingkat pertama. Jika pasien datang dengan keluhan stabil tanpa kelengkapan berkas rujukan indikasi tersebut, klaim berisiko tinggi ditolak karena melanggar alur berjenjang; koder wajib melakukan verifikasi bukti klinis di rekam medis.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "ancaman kehidupan, kegawatdaruratan medis, tidak terdapat sarana, tidak terdapat prasarana"
+    }
+  },
+  {
+    "id": "3d4e5f6a-7b8c-49e8-bc1d-2e3f4a5b6c7d",
+    "targetCode": "D17.9",
+    "ruleType": "Screening PRB",
+    "recommendation": "[Lipoma (Neoplasma Jinak Jaringan Lemak)] Untuk optimalisasi data klaim, pastikan ekstraksi EHR dari SIMRS memiliki justifikasi ukuran > 6cm atau adanya kompresi saraf/pembuluh darah, nyeri tekan/spontan, pertumbuhan cepat, atau lokasi berisiko. Koding D17.9 di FKRTL tanpa indikasi ini sering lolos oleh DPJP namun berujung dispute. Setel flag peringatan di sistem untuk melakukan pending berkas internal jika keyword klinis tersebut absen.",
+    "condition": {
+      "minAge": null,
+      "maxAge": null,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "ukuran massa > 6 cm, pertumbuhan cepat, nyeri spontan, nyeri tekan, lokasi berisiko, kompresi saraf, pembuluh darah"
+    }
+  },
+  {
+    "id": "e7d6c5b4-a3f2-41e8-9c8b-7a6e5d4c3b2a",
+    "targetCode": "R56.0",
+    "ruleType": "Batasan Usia",
+    "recommendation": "[Kejang Demam (Febrile Convulsions)] Validasi usia pasien secara ketat melalui bridging demografi (umumnya batas toleransi sistem BPJS adalah balita/anak < 6 tahun, yaitu rentang usia kronologis 0 sampai 5 tahun). Rujukan sekunder hanya sah jika kejang bersifat refrakter atau ada instruksi spesifik untuk pemeriksaan EEG/pencitraan. Terapkan logical rule ini di engine koding untuk mencegah kebocoran klaim akibat human error penetapan diagnosis pada pasien dewasa.",
+    "condition": {
+      "minAge": 0,
+      "maxAge": 5,
+      "requiredGender": null,
+      "mandatoryClinicalKeywords": "tidak membaik antikonvulsan, lini ketiga, fenobarbital, EEG, pencitraan"
+    }
+  }
+]

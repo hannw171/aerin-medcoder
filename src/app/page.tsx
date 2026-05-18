@@ -53,7 +53,7 @@ export default function DashboardPage() {
     top10Diagnoses
   } = useMemo(() => {
     const totalPasien = patients.length;
-    const antreanReview = patients.filter(p => p.status === 'Draft AI').length;
+    const antreanReview = patients.filter(p => p.status === 'Draft AI' || p.status === 'Direvisi' || p.status === 'Pending Klarifikasi').length;
     const selesaiCount = patients.filter(p => p.status === 'Selesai').length;
     const completedPercent = totalPasien > 0 ? Math.round((selesaiCount / totalPasien) * 100) : 0;
 
@@ -72,14 +72,14 @@ export default function DashboardPage() {
         const baselineTariff = getEstimatedTariff(pCode, 1, p.codingResult.procedures);
         const tariffWithoutPotential = getEstimatedTariff(pCode, severityWithoutPotential, p.codingResult.procedures);
         
-        const gain = (p.status === 'Selesai' || p.status === 'Draft AI') ? (currentTariff - baselineTariff) : 0;
+        const gain = (p.status === 'Selesai' || p.status === 'Draft AI' || p.status === 'Direvisi' || p.status === 'Pending Klarifikasi') ? (currentTariff - baselineTariff) : 0;
 
         if (p.status === 'Selesai') {
           const sGain = currentTariff - baselineTariff;
           if (sGain > 0) optimasiNilaiKlaim += sGain;
         }
         
-        if (p.status === 'Draft AI' && p.codingResult.potentialFindings && p.codingResult.potentialFindings.length > 0) {
+        if ((p.status === 'Draft AI' || p.status === 'Direvisi' || p.status === 'Pending Klarifikasi') && p.codingResult.potentialFindings && p.codingResult.potentialFindings.length > 0) {
           const diff = currentTariff - tariffWithoutPotential;
           if (diff > 0) potensiTemuan += diff;
         }
@@ -190,15 +190,38 @@ export default function DashboardPage() {
           <div className="text-xs text-on-surface-variant mt-2 font-medium">Rata-rata persetujuan koding</div>
         </div>
 
-        <div className={`bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col justify-between hover:border-amber-500/50 transition-colors shadow-sm group ${potensiTemuan > 0 ? 'animate-glow-pulse' : ''}`}>
+        <div className={`bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col justify-between transition-colors shadow-sm group ${
+          potensiTemuan > 0 
+            ? 'hover:border-amber-500/50 animate-glow-pulse' 
+            : 'hover:border-emerald-500/50'
+        }`}>
           <div className="flex justify-between items-start mb-4">
-            <span className="font-body-md text-on-surface-variant group-hover:text-amber-600 transition-colors">Potensi Temuan (Unverified)</span>
-            <span className="material-symbols-outlined text-amber-500 bg-amber-50 p-2 rounded-lg">lightbulb</span>
+            <span className={`font-body-md text-on-surface-variant transition-colors ${
+              potensiTemuan > 0 ? 'group-hover:text-amber-600' : 'group-hover:text-emerald-600'
+            }`}>
+              Potensi Temuan (Unverified)
+            </span>
+            <span className={`material-symbols-outlined p-2 rounded-lg ${
+              potensiTemuan > 0 ? 'text-amber-500 bg-amber-50' : 'text-emerald-500 bg-emerald-50'
+            }`}>
+              {potensiTemuan > 0 ? 'lightbulb' : 'verified_user'}
+            </span>
           </div>
-          <div className="text-2xl font-display font-bold text-on-surface text-amber-600">
+          <div className={`text-2xl font-display font-bold text-on-surface ${
+            potensiTemuan > 0 ? 'text-amber-600' : 'text-emerald-600'
+          }`}>
             <NumberTicker value={potensiTemuan} />
           </div>
-          <div className="text-xs text-amber-600/80 mt-2 font-medium italic">Estimasi nilai dari Draft AI</div>
+          {potensiTemuan > 0 ? (
+            <div className="text-xs text-amber-600/80 mt-2 font-medium italic">
+              Estimasi nilai dari Draft AI
+            </div>
+          ) : (
+            <div className="text-xs text-emerald-600/80 mt-2 font-medium flex items-center gap-1">
+              <span className="material-symbols-outlined text-[14px]">check_circle</span>
+              Semua berkas optimal & terverifikasi
+            </div>
+          )}
         </div>
 
         <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col justify-between hover:border-blue-500/50 transition-colors shadow-sm group">

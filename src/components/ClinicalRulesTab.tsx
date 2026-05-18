@@ -3,40 +3,12 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Types for a compliance rule
-interface BaseRule {
-  id: string;
-  targetCode: string;
-  ruleType: "Batasan Usia" | "Screening PRB" | "Restriksi Gender" | "Tips FAQ Casemix";
-  recommendation: string;
-}
-
-interface AgeRule extends BaseRule {
-  ruleType: "Batasan Usia";
-  minAge: number;
-  maxAge: number;
-}
-
-interface GenderRule extends BaseRule {
-  ruleType: "Restriksi Gender";
-  gender: "Laki-laki" | "Perempuan";
-}
-
-interface ScreeningRule extends BaseRule {
-  ruleType: "Screening PRB";
-  keywords: string; // comma‑separated list
-}
-
-interface TipsRule extends BaseRule {
-  ruleType: "Tips FAQ Casemix";
-}
-
-type Rule = AgeRule | GenderRule | ScreeningRule | TipsRule;
+import { useRegulationStore, RuleType } from "@/store/useRegulationStore";
 
 export function ClinicalRulesTab() {
   // ---------- Form State ----------
   const [targetCode, setTargetCode] = useState("");
-  const [ruleType, setRuleType] = useState<Rule["ruleType"]>("Batasan Usia");
+  const [ruleType, setRuleType] = useState<RuleType>("Batasan Usia");
   const [recommendation, setRecommendation] = useState("");
 
   // Conditional fields
@@ -45,8 +17,7 @@ export function ClinicalRulesTab() {
   const [gender, setGender] = useState("Laki-laki");
   const [keywords, setKeywords] = useState("");
 
-  // ---------- Rules List ----------
-  const [rules, setRules] = useState<Rule[]>([]);
+  const { rules, addRule, deleteRule } = useRegulationStore();
 
   const resetForm = () => {
     setTargetCode("");
@@ -62,52 +33,41 @@ export function ClinicalRulesTab() {
     e.preventDefault();
     if (!targetCode || !recommendation) return;
 
-    const newRule: Rule = (() => {
-      const base = {
-        id: crypto.randomUUID(),
-        targetCode,
-        ruleType,
-        recommendation,
-      } as BaseRule;
+    const newRuleCondition: any = {};
+    if (ruleType === "Batasan Usia") {
+      newRuleCondition.minAge = Number(minAge) || 0;
+      newRuleCondition.maxAge = Number(maxAge) || 0;
+    } else if (ruleType === "Restriksi Gender") {
+      newRuleCondition.requiredGender = gender;
+    } else if (ruleType === "Screening PRB") {
+      newRuleCondition.mandatoryClinicalKeywords = keywords;
+    }
 
-      switch (ruleType) {
-        case "Batasan Usia":
-          return {
-            ...base,
-            ruleType,
-            minAge: Number(minAge) || 0,
-            maxAge: Number(maxAge) || 0,
-          } as AgeRule;
-        case "Restriksi Gender":
-          return { ...base, ruleType, gender } as GenderRule;
-        case "Screening PRB":
-          return { ...base, ruleType, keywords } as ScreeningRule;
-        case "Tips FAQ Casemix":
-          return { ...base, ruleType } as TipsRule;
-      }
-    })();
-
-    setRules((prev) => [...prev, newRule]);
+    addRule({
+      targetCode,
+      ruleType,
+      recommendation,
+      condition: Object.keys(newRuleCondition).length > 0 ? newRuleCondition : undefined,
+    });
     resetForm();
   };
 
   const handleDelete = (id: string) => {
-    setRules((prev) => prev.filter((r) => r.id !== id));
+    deleteRule(id);
   };
 
   // ---------- Render Helpers ----------
-  const renderCondition = (rule: Rule) => {
+  const renderCondition = (rule: any) => {
     switch (rule.ruleType) {
       case "Batasan Usia":
-        const age = rule as AgeRule;
-        return `${age.minAge} ≤ Usia ≤ ${age.maxAge}`;
+        return `${rule.condition?.minAge} ≤ Usia ≤ ${rule.condition?.maxAge}`;
       case "Restriksi Gender":
-        const g = rule as GenderRule;
-        return `Gender: ${g.gender}`;
+        return `Gender: ${rule.condition?.requiredGender}`;
       case "Screening PRB":
-        const s = rule as ScreeningRule;
-        return `Kata Kunci: ${s.keywords}`;
+        return `Kata Kunci: ${rule.condition?.mandatoryClinicalKeywords}`;
       case "Tips FAQ Casemix":
+        return "‑";
+      default:
         return "‑";
     }
   };
@@ -135,7 +95,7 @@ export function ClinicalRulesTab() {
             <label className="text-sm font-bold text-slate-700 block mb-2">Tipe Aturan</label>
             <select
               value={ruleType}
-              onChange={(e) => setRuleType(e.target.value as Rule["ruleType"]) }
+              onChange={(e) => setRuleType(e.target.value as RuleType) }
               className="w-full px-4 py-3 border border-outline-variant rounded-xl bg-background text-on-surface focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-sm font-medium"
             >
               <option value="Batasan Usia">Batasan Usia</option>

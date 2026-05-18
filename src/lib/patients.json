@@ -4,10 +4,14 @@
     "registerNo": "2023001",
     "rmNo": "01-22-33",
     "name": "Budi Santoso",
+    "age": 62,
+    "gender": "L",
+    "serviceType": "RANAP",
+    "admissionDate": "2023-10-21",
+    "dischargeDate": "2023-10-25",
     "bpjsClass": "Kelas 1",
     "dpjp": "Dr. Andi, Sp.PD",
-    "dischargeDate": "2023-10-25",
-    "status": "Selesai",
+    "status": "Belum Coding",
     "medicalRecord": {
       "anamnesa": "Pasien datang dengan keluhan kelemahan anggota gerak sebelah kanan sejak 2 jam SMRS. Pasien juga mengeluh bicara pelo dan sakit kepala. Riwayat hipertensi sejak 5 tahun lalu tidak terkontrol.",
       "ttv": {
@@ -38,40 +42,6 @@
       ],
       "diagnosisKlinisUtama": "Stroke Non Hemoragik (SNH)",
       "diagnosisKlinisSekunder": "Hipertensi Grade II"
-    },
-    "codingResult": {
-      "primaryDiagnosis": {
-        "code": "I63.9",
-        "description": "Cerebral infarction, unspecified",
-        "insight": "Based on the clinical diagnosis of 'Stroke Non Hemoragik (SNH)' and confirmed by CT Scan Kepala showing a 'lesi hipodens di capsula interna sinistra, sesuai dengan gambaran infark serebri' alongside symptoms like right-sided weakness and slurred speech, the code I63.9 is mandated by Local Hospital Policy for SNH cases.",
-        "id": "e536a15a-c375-4c14-a871-4b8e24beb8f2"
-      },
-      "secondaryDiagnoses": [
-        {
-          "code": "I10",
-          "description": "Essential (primary) hypertension",
-          "insight": "The patient has an uncontrolled history of hypertension for 5 years and current blood pressure of 180/100 mmHg, which clinically classifies as Grade II hypertension, supporting the diagnosis of essential (primary) hypertension.",
-          "id": "5f518052-4ab8-4267-bb95-99620951c755"
-        }
-      ],
-      "procedures": [
-        {
-          "code": "87.03",
-          "description": "Computerized axial tomography of head",
-          "id": "d7c79406-c6d2-44be-a974-de859f75e5af"
-        },
-        {
-          "code": "99.18",
-          "description": "Injection or infusion of electrolytes",
-          "id": "a78d8ca8-51f0-4cf2-bae0-d754237bb1b0"
-        },
-        {
-          "code": "57.94",
-          "description": "Insertion of indwelling urinary catheter",
-          "id": "2d2c8520-3ee4-4367-a86f-8d2c24a0e2bc"
-        }
-      ],
-      "potentialFindings": []
     }
   },
   {
@@ -79,9 +49,13 @@
     "registerNo": "2023002",
     "rmNo": "01-22-34",
     "name": "Siti Aminah",
+    "age": 8,
+    "gender": "P",
+    "serviceType": "RANAP",
+    "admissionDate": "2023-10-20",
+    "dischargeDate": "2023-10-24",
     "bpjsClass": "Kelas 2",
     "dpjp": "Dr. Sarah, Sp.A",
-    "dischargeDate": "2023-10-24",
     "status": "Draft AI",
     "medicalRecord": {
       "anamnesa": "Demam sejak 4 hari SMRS, demam naik turun. Disertai mual, muntah 2x, dan nyeri perut. Mimisan tidak ada, gusi berdarah tidak ada.",
@@ -114,46 +88,28 @@
     },
     "codingResult": {
       "primaryDiagnosis": {
+        "id": "1",
         "code": "A91",
-        "desc": "Dengue haemorrhagic fever",
-        "insight": "Demam berdarah dengue dengan manifestasi perdarahan dan kebocoran plasma.",
-        "description": "Dengue haemorrhagic fever (Unverified)",
-        "id": "02ab36d3-a335-4fe8-b220-d46009e48e36"
+        "description": "Dengue haemorrhagic fever",
+        "insight": "Based on clinical evidence of fever, positive NS1, and thrombocytopenia."
       },
       "secondaryDiagnoses": [
         {
-          "code": "K76.8",
-          "desc": "Other specified diseases of liver",
-          "insight": "Disfungsi hepar sekunder akibat infeksi dengue, ditandai peningkatan enzim hati.",
-          "description": "Other specified diseases of liver",
-          "id": "10ecc635-38d7-4728-bfc2-8c826c8473b5"
+          "id": "2",
+          "code": "K75.9",
+          "description": "Inflammatory liver disease, unspecified",
+          "insight": "Indicated by elevated SGOT/SGPT and hepatomegaly."
         }
       ],
       "procedures": [
         {
+          "id": "3",
           "code": "99.18",
-          "desc": "Injection or infusion of other therapeutic or prophylactic substance",
-          "insight": "Pemasangan akses intravena untuk rehidrasi dan pemberian medikasi.",
           "description": "Injection or infusion of electrolytes",
-          "id": "4f5a8517-e0ae-49dc-9a11-feca41d4fffb"
+          "insight": "Based on IVFD RL 1500cc administration."
         }
       ],
-      "potentialFindings": [
-        {
-          "code": "R18",
-          "desc": "Ascites",
-          "insight": "Akumulasi cairan intraabdomen minimal, indikasi kebocoran plasma.",
-          "description": "Ascites",
-          "processed": false
-        },
-        {
-          "code": "D69.6",
-          "desc": "Thrombocytopenia, unspecified",
-          "insight": "Penurunan jumlah trombosit signifikan, risiko perdarahan meningkat.",
-          "description": "Thrombocytopenia, unspecified",
-          "processed": false
-        }
-      ]
+      "potentialFindings": []
     }
   },
   {
@@ -161,9 +117,13 @@
     "registerNo": "2023003",
     "rmNo": "01-22-35",
     "name": "Ahmad Hidayat",
+    "age": 24,
+    "gender": "L",
+    "serviceType": "RANAP",
+    "admissionDate": "2023-10-22",
+    "dischargeDate": "2023-10-24",
     "bpjsClass": "Kelas 1",
     "dpjp": "Dr. Lukman, Sp.B",
-    "dischargeDate": "2023-10-24",
     "status": "Selesai",
     "medicalRecord": {
       "anamnesa": "Nyeri perut kanan bawah sejak 1 hari SMRS. Awalnya nyeri di sekitar pusar lalu berpindah ke kanan bawah. Mual (+), muntah (+), demam (+).",
@@ -219,9 +179,13 @@
     "registerNo": "2023004",
     "rmNo": "01-22-36",
     "name": "Sri Mulyani",
+    "age": 58,
+    "gender": "P",
+    "serviceType": "RANAP",
+    "admissionDate": "2023-10-15",
+    "dischargeDate": "2023-10-23",
     "bpjsClass": "Kelas 3",
     "dpjp": "Dr. Budi, Sp.PD-KEMD",
-    "dischargeDate": "2023-10-23",
     "status": "Draft AI",
     "medicalRecord": {
       "anamnesa": "Badan lemas sejak 1 minggu. Sering kencing malam hari, banyak makan dan minum. Luka di kaki kanan tidak sembuh-sembuh sejak 2 minggu lalu. Riwayat DM sejak 10 tahun.",
@@ -257,72 +221,31 @@
     },
     "codingResult": {
       "primaryDiagnosis": {
-        "code": "E11.9",
-        "desc": "Type 2 diabetes mellitus without complications",
-        "insight": "Diabetes Mellitus Tipe 2, kondisi dasar pasien.",
-        "description": "Type 2 diabetes mellitus: Without complications",
-        "id": "fd0afa4f-9a23-4403-b3eb-58d2780081f7"
+        "id": "1",
+        "code": "E11.5",
+        "description": "Type 2 diabetes mellitus with peripheral angiopathy",
+        "insight": "Based on T2DM history with current foot ulcer."
       },
       "secondaryDiagnoses": [
         {
-          "code": "E11.621",
-          "desc": "Type 2 diabetes mellitus with diabetic foot ulcer",
-          "insight": "Ulkus diabetikum pedis dextra terinfeksi, memerlukan penanganan luka.",
-          "description": "Type 2 diabetes mellitus with diabetic foot ulcer (Unverified)",
-          "id": "c57d3dda-0783-473e-a72a-a0776161c1ea"
-        },
-        {
-          "code": "E11.21",
-          "desc": "Type 2 diabetes mellitus with diabetic nephropathy",
-          "insight": "Nefropati diabetik dengan gangguan fungsi ginjal.",
-          "description": "Type 2 diabetes mellitus with diabetic nephropathy (Unverified)",
-          "id": "39aca040-9938-432c-b83d-155d4cb58ca8"
+          "id": "2",
+          "code": "E11.2",
+          "description": "Type 2 diabetes mellitus with renal complications",
+          "insight": "Indicated by elevated creatinine and proteinuria."
         }
       ],
       "procedures": [
         {
+          "id": "3",
           "code": "86.22",
-          "desc": "Excisional debridement of wound, infection, or burn",
-          "insight": "Tindakan debridement eksisional untuk mengangkat jaringan nekrotik.",
           "description": "Excisional debridement of wound, infection, or burn",
-          "id": "d9f8e180-ff47-4a6e-a89d-419dea355394"
-        },
-        {
-          "code": "86.28",
-          "desc": "Nonexcisional debridement of wound, infection, or burn",
-          "insight": "Perawatan luka kronis non-eksisi untuk mendukung penyembuhan.",
-          "description": "Nonexcisional debridement of wound, infection or burn",
-          "id": "94d8d141-15f1-4537-9ebe-0914a7155cc1"
-        },
-        {
-          "code": "99.18",
-          "desc": "Injection or infusion of other therapeutic substance",
-          "insight": "Pemasangan jalur intravena untuk pemberian medikasi.",
-          "description": "Injection or infusion of electrolytes",
-          "id": "fe9a47a5-537d-4ec2-bf65-41a713e9b58c"
+          "insight": "Debridement procedure explicitly listed."
         }
       ],
       "potentialFindings": [
         {
-          "code": "E11.65",
-          "desc": "Type 2 diabetes mellitus with hyperglycemia",
-          "insight": "Hiperglikemia berat, memerlukan penyesuaian terapi insulin intensif.",
-          "description": "Type 2 diabetes mellitus with hyperglycemia (Unverified)",
-          "processed": false
-        },
-        {
-          "code": "N18.4",
-          "desc": "Chronic kidney disease, stage 4 (severe)",
-          "insight": "Penyakit ginjal kronis stadium 4, memerlukan pemantauan fungsi ginjal.",
-          "description": "Chronic kidney disease, stage 4",
-          "processed": false
-        },
-        {
-          "code": "L03.115",
-          "desc": "Cellulitis of right foot",
-          "insight": "Selulitis pedis dextra akibat infeksi ulkus diabetikum.",
-          "description": "Cellulitis of right foot (Unverified)",
-          "processed": false
+          "description": "Uncontrolled Hypertension",
+          "insight": "BP is 150/90, not explicitly diagnosed."
         }
       ]
     }
@@ -332,9 +255,13 @@
     "registerNo": "2023005",
     "rmNo": "01-22-37",
     "name": "Rizky Pratama",
+    "age": 45,
+    "gender": "L",
+    "serviceType": "RANAP",
+    "admissionDate": "2023-10-17",
+    "dischargeDate": "2023-10-22",
     "bpjsClass": "Kelas 1",
     "dpjp": "Dr. Dewi, Sp.P",
-    "dischargeDate": "2023-10-22",
     "status": "Belum Coding",
     "medicalRecord": {
       "anamnesa": "Sesak napas dan batuk berdahak sejak 3 hari SMRS. Dahak warna kekuningan. Demam (+) menggigil. Riwayat merokok (+).",
@@ -373,10 +300,14 @@
     "registerNo": "2023006",
     "rmNo": "01-22-38",
     "name": "Agus Salim",
+    "age": 52,
+    "gender": "L",
+    "serviceType": "RANAP",
+    "admissionDate": "2023-10-22",
+    "dischargeDate": "2023-10-26",
     "bpjsClass": "Kelas 2",
     "dpjp": "Dr. Hendra, Sp.PD-KGH",
-    "dischargeDate": "2023-10-26",
-    "status": "Draft AI",
+    "status": "Belum Coding",
     "medicalRecord": {
       "anamnesa": "Sesak napas, mual, dan bengkak di seluruh tubuh sejak 1 minggu. BAK sangat sedikit. Rutin hemodialisa namun terlewat 1 jadwal.",
       "ttv": {
@@ -406,50 +337,6 @@
       ],
       "diagnosisKlinisUtama": "CKD Stage 5",
       "diagnosisKlinisSekunder": "Hyperkalemia, Anemia Renal"
-    },
-    "codingResult": {
-      "primaryDiagnosis": {
-        "code": "N18.5",
-        "description": "Chronic kidney disease, stage 5",
-        "insight": "Pasien didiagnosis CKD Stage 5 yang dikonfirmasi oleh hasil laboratorium (Ureum 210 mg/dL, Kreatinin 9.5 mg/dL), USG ginjal (ginjal mengecil bilateral), dan riwayat hemodialisa, menunjukkan kerusakan ginjal berat yang persisten.",
-        "id": "ad0b7d79-7493-45a9-a91c-95b7c9b9b535"
-      },
-      "secondaryDiagnoses": [
-        {
-          "code": "E87.5",
-          "description": "Hyperkalaemia",
-          "insight": "Kondisi ini didukung oleh hasil laboratorium Kalium 6.8 mEq/L, yang merupakan komplikasi serius dari gagal ginjal kronis dan memerlukan penanganan segera.",
-          "id": "7c59b0bd-0296-4072-896b-d137f9a6483f"
-        },
-        {
-          "code": "D63.1",
-          "description": "Anemia in chronic kidney disease (Unverified)",
-          "insight": "Diagnosa ini didukung oleh nilai hemoglobin 8.0 g/dL dan temuan konjungtiva anemis pada pemeriksaan fisik, yang merupakan komplikasi umum dari penyakit ginjal kronis.",
-          "id": "78a50cdf-573e-4055-93f2-da46e55afb35"
-        }
-      ],
-      "procedures": [
-        {
-          "code": "39.95",
-          "description": "Hemodialysis",
-          "id": "8afd0cfd-58c8-4bda-ad2a-aa6e4d599b2b"
-        },
-        {
-          "code": "38.91",
-          "description": "Arterial catheterization",
-          "id": "55cbe3ed-d3cc-4925-8d2a-75cf18749017"
-        }
-      ],
-      "potentialFindings": [
-        {
-          "description": "Kelebihan volume cairan",
-          "insight": "Pasien menunjukkan gejala edema anasarca, JVP meningkat, sesak napas, dan BAK sangat sedikit, yang sangat konsisten dengan kelebihan volume cairan sebagai komplikasi dari CKD Stage 5."
-        },
-        {
-          "description": "Hipertensi",
-          "insight": "Tekanan darah pasien tercatat 160/90 mmHg, yang mengindikasikan adanya hipertensi, seringkali merupakan komorbiditas atau komplikasi dari penyakit ginjal kronis."
-        }
-      ]
     }
   },
   {
@@ -457,9 +344,13 @@
     "registerNo": "2023007",
     "rmNo": "01-22-39",
     "name": "Toni Supriadi",
+    "age": 49,
+    "gender": "L",
+    "serviceType": "RANAP",
+    "admissionDate": "2023-10-20",
+    "dischargeDate": "2023-10-26",
     "bpjsClass": "Kelas 3",
     "dpjp": "Dr. Ratna, Sp.PD-KGEH",
-    "dischargeDate": "2023-10-26",
     "status": "Draft AI",
     "medicalRecord": {
       "anamnesa": "Muntah darah hitam 2x sejak pagi, BAB hitam lengket (melena). Perut membesar sejak 1 bulan lalu. Mata menguning. Riwayat minum alkohol berat.",
@@ -493,72 +384,43 @@
     },
     "codingResult": {
       "primaryDiagnosis": {
-        "code": "I85.0",
-        "desc": "Esophageal varices with bleeding",
-        "insight": "Perdarahan akut varises esofagus akibat hipertensi portal pada sirosis hepatis.",
-        "description": "Oesophageal varices with bleeding",
-        "id": "b6824c4b-33b8-4fbc-89e8-9d077f066e40"
+        "id": "1",
+        "code": "K74.6",
+        "description": "Other and unspecified cirrhosis of liver",
+        "insight": "Sirosis hepatis explicitly diagnosed."
       },
       "secondaryDiagnoses": [
         {
-          "code": "K74.6",
-          "desc": "Other and unspecified cirrhosis of liver",
-          "insight": "Penyakit hati kronis progresif sebagai penyebab hipertensi portal dan varises.",
-          "description": "Other and unspecified cirrhosis of liver",
-          "id": "a69ab592-75be-4ff5-a3ed-c8fa8608ee39"
+          "id": "2",
+          "code": "I85.0",
+          "description": "Esophageal varices with bleeding",
+          "insight": "Hematemesis from ruptured esophageal varices."
         },
         {
+          "id": "3",
           "code": "R18",
-          "desc": "Ascites",
-          "insight": "Akumulasi cairan intraabdomen masif akibat dekompensasi hati.",
           "description": "Ascites",
-          "id": "6cfb8777-517e-4a96-9413-8a662972704e"
+          "insight": "Ascites explicitly noted."
         }
       ],
       "procedures": [
         {
-          "code": "99.04",
-          "desc": "Transfusion of packed cells",
-          "insight": "Koreksi anemia berat akibat perdarahan saluran cerna akut.",
-          "description": "Transfusion of packed cells",
-          "id": "60e83e74-53ea-40e8-bd0c-bf731a7d8cf8"
+          "id": "4",
+          "code": "42.33",
+          "description": "Endoscopic excision or destruction of lesion or tissue of esophagus",
+          "insight": "Endoscopic ligation of varices performed."
         },
         {
-          "code": "42.91",
-          "desc": "Endoscopic ligation of esophageal varices",
-          "insight": "Intervensi endoskopik untuk menghentikan perdarahan aktif varises esofagus.",
-          "description": "Ligation of esophageal varices",
-          "id": "a91a9435-5e29-435b-8447-12880cdb7ced"
+          "id": "5",
+          "code": "99.04",
+          "description": "Transfusion of packed cells",
+          "insight": "PRC transfusion administered."
         }
       ],
       "potentialFindings": [
         {
-          "code": "D62",
-          "desc": "Acute posthemorrhagic anemia",
-          "insight": "Anemia berat akibat perdarahan masif, memerlukan transfusi segera.",
-          "description": "Acute posthaemorrhagic anaemia",
-          "processed": false
-        },
-        {
-          "code": "K72.9",
-          "desc": "Hepatic failure, unspecified",
-          "insight": "Dekompenasi fungsi hati berat, ditandai ikterus, asites, koagulopati.",
-          "description": "Hepatic failure, unspecified",
-          "processed": false
-        },
-        {
-          "code": "R57.1",
-          "desc": "Hypovolemic shock",
-          "insight": "Syok hipovolemik akibat perdarahan masif, perlu resusitasi cairan.",
-          "description": "Hypovolaemic shock",
-          "processed": false
-        },
-        {
-          "code": "D69.6",
-          "desc": "Thrombocytopenia, unspecified",
-          "insight": "Penurunan trombosit signifikan, meningkatkan risiko perdarahan.",
-          "description": "Thrombocytopenia, unspecified",
-          "processed": false
+          "description": "Thrombocytopenia",
+          "insight": "Platelet count 60k but not explicitly diagnosed."
         }
       ]
     }
@@ -568,9 +430,13 @@
     "registerNo": "2023008",
     "rmNo": "01-22-40",
     "name": "Sari Wulandari",
+    "age": 28,
+    "gender": "P",
+    "serviceType": "RANAP",
+    "admissionDate": "2023-10-23",
+    "dischargeDate": "2023-10-26",
     "bpjsClass": "Kelas 1",
     "dpjp": "Dr. Lina, Sp.OG",
-    "dischargeDate": "2023-10-26",
     "status": "Selesai",
     "medicalRecord": {
       "anamnesa": "Hamil 34 minggu, datang rujukan dari bidan dengan tekanan darah tinggi dan sakit kepala hebat. Pandangan kabur (+), mual muntah (+).",
@@ -632,9 +498,13 @@
     "registerNo": "2023009",
     "rmNo": "01-22-41",
     "name": "Fitri Ramadhani",
+    "age": 26,
+    "gender": "P",
+    "serviceType": "RANAP",
+    "admissionDate": "2023-10-24",
+    "dischargeDate": "2023-10-25",
     "bpjsClass": "Kelas 2",
     "dpjp": "Dr. Rudi, Sp.OG",
-    "dischargeDate": "2023-10-25",
     "status": "Belum Coding",
     "medicalRecord": {
       "anamnesa": "Perdarahan merembes dari jalan lahir setelah melahirkan spontan di dukun beranak 2 jam lalu. Plasenta dikatakan sudah lahir namun tidak lengkap. Pasien tampak lemas.",
@@ -672,9 +542,13 @@
     "registerNo": "2023010",
     "rmNo": "01-22-42",
     "name": "Wahyu Saputra",
+    "age": 34,
+    "gender": "L",
+    "serviceType": "RANAP",
+    "admissionDate": "2023-10-18",
+    "dischargeDate": "2023-10-25",
     "bpjsClass": "Kelas 3",
     "dpjp": "Dr. Tari, Sp.PD-KPTI",
-    "dischargeDate": "2023-10-25",
     "status": "Draft AI",
     "medicalRecord": {
       "anamnesa": "Batuk darah sejak 2 hari SMRS. Batuk lama berdahak sudah 1 bulan. Berkeringat malam hari dan berat badan turun drastis. Pasien adalah ODHA dengan ARV tidak rutin.",
@@ -734,9 +608,13 @@
     "registerNo": "2023011",
     "rmNo": "01-22-43",
     "name": "Dwi Astuti",
+    "age": 31,
+    "gender": "P",
+    "serviceType": "RANAP",
+    "admissionDate": "2023-10-22",
+    "dischargeDate": "2023-10-24",
     "bpjsClass": "Kelas 1",
     "dpjp": "Dr. Anton, Sp.PD",
-    "dischargeDate": "2023-10-24",
     "status": "Selesai",
     "medicalRecord": {
       "anamnesa": "BAB cair >10x/hari sejak 2 hari lalu. Muntah 5x. Lemas, haus, kencing berkurang.",
@@ -803,12 +681,16 @@
     "registerNo": "2023012",
     "rmNo": "01-22-44",
     "name": "Joko Supriyanto",
+    "age": 40,
+    "gender": "L",
+    "serviceType": "RANAP",
+    "admissionDate": "2023-10-23",
+    "dischargeDate": "2023-10-24",
     "bpjsClass": "Kelas 2",
     "dpjp": "Dr. Budi, Sp.PD",
-    "dischargeDate": "2023-10-24",
     "status": "Draft AI",
     "medicalRecord": {
-      "anamnesa": "Nyeri ulu hati terasa perih dan panas sejak 1 bulan, memberat 2 hari ini. Mual (+), perut kembung (+). Pola makan tidak teratur.",
+      "anamnesa": "Nyeri ulu hati terasa perih dan panas sejak 1 month, memberat 2 hari ini. Mual (+), perut kembung (+). Pola makan tidak teratur.",
       "ttv": {
         "td": "120/80",
         "nadi": "85",
@@ -849,9 +731,13 @@
     "registerNo": "2023013",
     "rmNo": "01-22-45",
     "name": "Rina Kumala",
+    "age": 23,
+    "gender": "P",
+    "serviceType": "RANAP",
+    "admissionDate": "2023-10-22",
+    "dischargeDate": "2023-10-23",
     "bpjsClass": "Kelas 3",
     "dpjp": "Dr. Ratna, Sp.OG",
-    "dischargeDate": "2023-10-23",
     "status": "Draft AI",
     "medicalRecord": {
       "anamnesa": "Hamil 39 minggu, mules-mules sejak malam. Keluar lendir darah. Air ketuban belum pecah.",
@@ -881,20 +767,18 @@
     },
     "codingResult": {
       "primaryDiagnosis": {
+        "id": "1",
         "code": "O80",
-        "desc": "Single spontaneous delivery",
-        "insight": "Persalinan pervaginam tunggal spontan tanpa komplikasi.",
-        "description": "Single spontaneous delivery (Unverified)",
-        "id": "1a610059-8c0e-4117-95c6-e821f5facd52"
+        "description": "Single spontaneous delivery",
+        "insight": "Diagnosed spontaneous vaginal delivery."
       },
       "secondaryDiagnoses": [],
       "procedures": [
         {
+          "id": "2",
           "code": "73.59",
-          "desc": "Other specified spontaneous vaginal delivery",
-          "insight": "Tindakan persalinan pervaginam spontan.",
           "description": "Other manually assisted delivery",
-          "id": "4314eba9-8182-4a20-bd82-7d8f42580c33"
+          "insight": "Normal delivery performed."
         }
       ],
       "potentialFindings": []
@@ -905,9 +789,13 @@
     "registerNo": "2023014",
     "rmNo": "01-22-46",
     "name": "Junaedi",
+    "age": 65,
+    "gender": "L",
+    "serviceType": "RANAP",
+    "admissionDate": "2023-10-19",
+    "dischargeDate": "2023-10-23",
     "bpjsClass": "Kelas 1",
     "dpjp": "Dr. Hendra, Sp.JP",
-    "dischargeDate": "2023-10-23",
     "status": "Selesai",
     "medicalRecord": {
       "anamnesa": "Sesak napas saat beraktivitas dan tidur telentang. Bengkak pada kedua kaki sejak 2 minggu. Sering terbangun malam karena sesak.",
@@ -968,9 +856,13 @@
     "registerNo": "2023015",
     "rmNo": "01-22-47",
     "name": "Nita Talia",
+    "age": 2,
+    "gender": "P",
+    "serviceType": "RANAP",
+    "admissionDate": "2023-10-20",
+    "dischargeDate": "2023-10-22",
     "bpjsClass": "Kelas 2",
     "dpjp": "Dr. Sarah, Sp.A",
-    "dischargeDate": "2023-10-22",
     "status": "Belum Coding",
     "medicalRecord": {
       "anamnesa": "Anak usia 2 tahun demam mendadak sejak 2 hari lalu. Anak gelisah, sering menangis sambil memegang telinga kanan. Keluar cairan warna kekuningan dari telinga.",
@@ -1005,9 +897,13 @@
     "registerNo": "2023016",
     "rmNo": "01-22-48",
     "name": "Hendrik Wijaya",
+    "age": 55,
+    "gender": "L",
+    "serviceType": "RANAP",
+    "admissionDate": "2023-10-18",
+    "dischargeDate": "2023-10-21",
     "bpjsClass": "Kelas 1",
     "dpjp": "Dr. Rahman, Sp.An-KIC",
-    "dischargeDate": "2023-10-21",
     "status": "Belum Coding",
     "medicalRecord": {
       "anamnesa": "Pasien rujukan dari bangsal dengan penurunan kesadaran. Sebelumnya dirawat dengan ISK berulang. Kini napas cepat, demam tinggi, dan akral dingin.",
@@ -1035,6 +931,446 @@
       "dischargeMeds": [],
       "diagnosisKlinisUtama": "Sepsis",
       "diagnosisKlinisSekunder": "Urinary Tract Infection (UTI), Syok Septik"
+    }
+  },
+  {
+    "id": "p17",
+    "registerNo": "2026017",
+    "rmNo": "01-22-49",
+    "name": "Ahmad Sanusi",
+    "age": 54,
+    "gender": "L",
+    "serviceType": "RAJAN",
+    "admissionDate": "2026-05-15",
+    "dischargeDate": "2026-05-15",
+    "bpjsClass": "Kelas 2",
+    "dpjp": "Dr. Andi, Sp.PD",
+    "status": "Selesai",
+    "medicalRecord": {
+      "anamnesa": "Pasien datang ke Poliklinik Penyakit Dalam untuk kontrol rutin bulanan dengan keluhan lemas yang sudah jauh berkurang. Riwayat Diabetes Mellitus Tipe 2 sejak 3 tahun lalu, rutin mengonsumsi obat batuan dari RS.",
+      "ttv": {
+        "td": "120/80",
+        "nadi": "80",
+        "rr": "18",
+        "suhu": "36.5",
+        "spo2": "99",
+        "nyeri": "0"
+      },
+      "physicalExam": "Keadaan umum baik, kesadaran compos mentis. Mata cekung tidak ada, turgor kulit baik. Tidak ditemukan tanda-tanda ulkus diabetikum pada ekstremitas bawah.",
+      "labResult": "Gula Darah Sewaktu (GDS): 115 mg/dL (Terkontrol), HbA1c terakhir: 6.4%, Fungsi ginjal normal (eGFR > 60).",
+      "radiologyResult": "",
+      "procedures": [
+        "Edukasi diet mandiri",
+        "Pengambilan darah vena"
+      ],
+      "inpatientMeds": [],
+      "dischargeMeds": [
+        "Metformin 2x500mg PO",
+        "Glimepiride 1x2mg PO"
+      ],
+      "diagnosisKlinisUtama": "Diabetes Mellitus Tipe 2 Tanpa Komplikasi",
+      "diagnosisKlinisSekunder": ""
+    },
+    "codingResult": {
+      "primaryDiagnosis": {
+        "code": "Z09.8",
+        "description": "Follow-up examination after other treatment for other conditions",
+        "id": "646ef2e3-497b-4540-b6fb-4ce2d4388360"
+      },
+      "secondaryDiagnoses": [
+        {
+          "code": "E11.9",
+          "description": "Type 2 diabetes mellitus: Without complications",
+          "id": "70e10dab-27fa-4794-9efb-afc007ed5216"
+        }
+      ],
+      "procedures": [
+        {
+          "id": "1779033182783",
+          "code": "99.18",
+          "description": "Injection or infusion of electrolytes"
+        }
+      ],
+      "potentialFindings": [],
+      "complianceAlerts": [
+        {
+          "type": "Screening PRB",
+          "isViolated": true,
+          "message": "Diabetes Mellitus Tipe 2 tanpa komplikasi adalah diagnosa PRB. Pasien stabil dan terkontrol, sehingga wajib dirujuk kembali ke FKTP.",
+          "clarificationText": "Mohon konfirmasi DPJP apakah pasien dapat dialihkan ke Program Rujuk Balik (PRB) ke FKTP karena kondisi DM Tipe 2 yang stabil dan tanpa komplikasi akut."
+        }
+      ]
+    },
+    "auditOverride": true
+  },
+  {
+    "id": "p18",
+    "registerNo": "2026018",
+    "rmNo": "01-22-50",
+    "name": "Ny. Margaretha",
+    "age": 52,
+    "gender": "P",
+    "serviceType": "RAJAN",
+    "admissionDate": "2026-05-15",
+    "dischargeDate": "2026-05-15",
+    "bpjsClass": "Kelas 1",
+    "dpjp": "Dr. Andi, Sp.PD",
+    "status": "Draft AI",
+    "medicalRecord": {
+      "anamnesa": "Pasien datang untuk kontrol rutin Hipertensi. Keluhan pusing, kaku kuduk, atau pandangan kabur disangkal oleh pasien. Pasien menyatakan patuh minum obat di rumah.",
+      "ttv": {
+        "td": "125/80",
+        "nadi": "84",
+        "rr": "16",
+        "suhu": "36.6",
+        "spo2": "98",
+        "nyeri": "0"
+      },
+      "physicalExam": "Compos mentis, tanda vital stabil. Jantung: S1 S2 tunggal reguler, murmur tidak ada. Paru: Vesikuler kanan kiri seimbang. Tidak ada tanda-tanda HMOD.",
+      "labResult": "Fungsi ginjal dalam batas normal (Ureum: 24, Kreatinin: 0.8). Profil lipid terkontrol.",
+      "radiologyResult": "",
+      "procedures": [
+        "Pemeriksaan tensi berkala"
+      ],
+      "inpatientMeds": [],
+      "dischargeMeds": [
+        "Amlodipine 1x10mg PO (Malam)",
+        "Candesartan 1x8mg PO"
+      ],
+      "diagnosisKlinisUtama": "Hipertensi Esensial Primer",
+      "diagnosisKlinisSekunder": ""
+    },
+    "codingResult": {
+      "primaryDiagnosis": {
+        "code": "Z09.8",
+        "description": "Follow-up examination after other treatment for other conditions",
+        "id": "3371a624-ecd1-47be-97b3-d3368b96f7d7"
+      },
+      "secondaryDiagnoses": [
+        {
+          "code": "I10",
+          "description": "Essential (primary) hypertension",
+          "id": "e3011f3f-72d0-4a64-a96f-0ddfe8d48e9d"
+        }
+      ],
+      "procedures": [],
+      "potentialFindings": [],
+      "complianceAlerts": [
+        {
+          "type": "Tips FAQ Casemix",
+          "targetCode": "Z09.8",
+          "isViolated": false,
+          "message": "Pengodean kontrol ulang rawat jalan telah diterapkan sesuai pedoman: Z09.8 sebagai diagnosis utama dan I10 sebagai diagnosis sekunder.",
+          "clarificationText": "N/A"
+        },
+        {
+          "type": "Screening PRB",
+          "targetCode": "I10",
+          "isViolated": true,
+          "message": "Pasien datang untuk kontrol rutin Hipertensi tanpa komplikasi akut atau kondisi gawat darurat yang jelas. Kasus ini berpotensi sebagai Program Rujuk Balik (PRB) dan seharusnya dikelola di Fasilitas Kesehatan Tingkat Pertama (FKTP).",
+          "clarificationText": "Mohon konfirmasi apakah terdapat indikasi medis yang jelas untuk rawat lanjut di FKRTL atau apakah pasien dapat dirujuk kembali ke FKTP sesuai program PRB."
+        }
+      ]
+    }
+  },
+  {
+    "id": "p19",
+    "registerNo": "2026019",
+    "rmNo": "01-22-51",
+    "name": "Bambang Wijaya",
+    "age": 35,
+    "gender": "L",
+    "serviceType": "RAJAN",
+    "admissionDate": "2026-05-16",
+    "dischargeDate": "2026-05-16",
+    "bpjsClass": "Kelas 3",
+    "dpjp": "Dr. Dewi, Sp.P",
+    "status": "Belum Coding",
+    "medicalRecord": {
+      "anamnesa": "Kontrol rutin Poliklinik Paru dengan riwayat Asma Bronkial kronis sejak remaja. Pasien menyatakan tidak pernah mengalami serangan sesak napas dalam 3 bulan terakhir. Terbangun malam hari karena sesak disangkal.",
+      "ttv": {
+        "td": "120/70",
+        "nadi": "78",
+        "rr": "18",
+        "suhu": "36.2",
+        "spo2": "99",
+        "nyeri": "0"
+      },
+      "physicalExam": "Kesadaran penuh. Auskultasi paru: Vesikuler normal bilateral, wheezing SAMA SEKALI TIDAK TERDENGAR pada kedua lapang paru, ronkhi (-).",
+      "labResult": "Asthma Control Test (ACT) Score: 25 (Asma Terkontrol Sempurna).",
+      "radiologyResult": "",
+      "procedures": [
+        "Edukasi penggunaan inhaler rutin"
+      ],
+      "inpatientMeds": [],
+      "dischargeMeds": [
+        "Fluticasone propionate Inhaler 2x1 puff (Maintenance)",
+        "Salbutamol tablet 2mg PO (k/p sesak)"
+      ],
+      "diagnosisKlinisUtama": "Asma Bronkial Terkontrol",
+      "diagnosisKlinisSekunder": ""
+    }
+  },
+  {
+    "id": "p20",
+    "registerNo": "2026020",
+    "rmNo": "01-22-52",
+    "name": "Hartono",
+    "age": 59,
+    "gender": "L",
+    "serviceType": "RAJAN",
+    "admissionDate": "2026-05-16",
+    "dischargeDate": "2026-05-16",
+    "bpjsClass": "Kelas 2",
+    "dpjp": "Dr. Hendra, Sp.JP",
+    "status": "Belum Coding",
+    "medicalRecord": {
+      "anamnesa": "Pasien dengan riwayat Gagal Jantung Kronis datang untuk kontrol bulanan ke poli jantung. Mengeluh lelah hanya jika melakukan aktivitas fisik yang berat. Sesak napas saat tidur telentang (orthopnea) atau bengkak kaki tidak ada.",
+      "ttv": {
+        "td": "115/75",
+        "nadi": "72",
+        "rr": "17",
+        "suhu": "36.4",
+        "spo2": "97",
+        "nyeri": "0"
+      },
+      "physicalExam": "Hemodinamik terpantau stabil, status volume cairan seimbang (euvolemia). Edema pitting pada kedua kaki (-). JVP tidak meningkat.",
+      "labResult": "Elektrolit normal (Kalium: 4.1, Natrium: 138).",
+      "radiologyResult": "",
+      "procedures": [
+        "Pemeriksaan EKG berkala (Irama Sinus, HR 72 bpm)"
+      ],
+      "inpatientMeds": [],
+      "dischargeMeds": [
+        "Bisoprolol 1x2.5mg PO",
+        "Ramipril 1x5mg PO",
+        "Furosemide 1x40mg PO (Pagi)"
+      ],
+      "diagnosisKlinisUtama": "Chronic Heart Failure NYHA Class II Stable",
+      "diagnosisKlinisSekunder": ""
+    }
+  },
+  {
+    "id": "p21",
+    "registerNo": "2026021",
+    "rmNo": "01-22-53",
+    "name": "Siti Rahayu",
+    "age": 27,
+    "gender": "P",
+    "serviceType": "RAJAN",
+    "admissionDate": "2026-05-16",
+    "dischargeDate": "2026-05-16",
+    "bpjsClass": "Kelas 1",
+    "dpjp": "Dr. Budi, Sp.S",
+    "status": "Belum Coding",
+    "medicalRecord": {
+      "anamnesa": "Kontrol rutin ke Poliklinik Saraf dengan riwayat Epilepsi sejak 2 tahun lalu. Pasien mengonfirmasi sudah bebas serangan kejang (seizure-free) selama lebih dari 12 bulan terakhir. Obat dikonsumsi sangat patuh.",
+      "ttv": {
+        "td": "110/70",
+        "nadi": "80",
+        "rr": "16",
+        "suhu": "36.7",
+        "spo2": "99",
+        "nyeri": "0"
+      },
+      "physicalExam": "Kesadaran compos mentis. Pemeriksaan neurologis tanda rangsang meningeal (-), nervus kranialis dalam batas normal, motorik 5/5 di seluruh ekstremitas, tidak ada defisit neurologis akut.",
+      "labResult": "DbN.",
+      "radiologyResult": "",
+      "procedures": [],
+      "inpatientMeds": [],
+      "dischargeMeds": [
+        "Asam Valproat 2x500mg PO (Maintenance)"
+      ],
+      "diagnosisKlinisUtama": "Epilepsi Terkontrol Bebas Kejang",
+      "diagnosisKlinisSekunder": ""
+    }
+  },
+  {
+    "id": "p22",
+    "registerNo": "2026022",
+    "rmNo": "01-22-54",
+    "name": "Sugeng",
+    "age": 58,
+    "gender": "L",
+    "serviceType": "RAJAN",
+    "admissionDate": "2026-05-17",
+    "dischargeDate": "2026-05-17",
+    "bpjsClass": "Kelas 3",
+    "dpjp": "Dr. Dewi, Sp.P",
+    "status": "Belum Coding",
+    "medicalRecord": {
+      "anamnesa": "Kontrol rutin kasus Penyakit Paru Obstruktif Kronik (PPOK) stabil. Keluhan sesak napas berat disangkal, batuk sesekali minimal dengan dahak jernih encer. Tidak ada tanda eksaserbasi akut.",
+      "ttv": {
+        "td": "130/80",
+        "nadi": "85",
+        "rr": "19",
+        "suhu": "36.4",
+        "spo2": "96",
+        "nyeri": "1"
+      },
+      "physicalExam": "Keadaan umum tenang, tidak tampak sesak atau sianosis. Retraksi dinding dada (-). Auskultasi: suara napas vesikuler mengalami sedikit pemanjangan ekspirasi, wheezing minimal (-), ronkhi (-).",
+      "labResult": "DbN.",
+      "radiologyResult": "",
+      "procedures": [],
+      "inpatientMeds": [],
+      "dischargeMeds": [
+        "Tiotropium bromide Inhaler 1x1 puff (24 jam)",
+        "Ambroxol 3x30mg PO"
+      ],
+      "diagnosisKlinisUtama": "PPOK Eksaserbasi Akut Negatif / Kondisi Stabil",
+      "diagnosisKlinisSekunder": ""
+    }
+  },
+  {
+    "id": "p23",
+    "registerNo": "2026023",
+    "rmNo": "01-22-55",
+    "name": "Ny. Ratnawati",
+    "age": 61,
+    "gender": "P",
+    "serviceType": "RAJAN",
+    "admissionDate": "2026-05-17",
+    "dischargeDate": "2026-05-17",
+    "bpjsClass": "Kelas 2",
+    "dpjp": "Dr. Budi, Sp.S",
+    "status": "Belum Coding",
+    "medicalRecord": {
+      "anamnesa": "Pasien kontrol rutin pasca Stroke Iskemik (Infark Serebri) kronis 1.5 tahun lalu. Keluhan kelemahan baru atau bicara pelo mendadak disangkal. Pasien rutin menjalani terapi pemeliharaan di rumah.",
+      "ttv": {
+        "td": "130/85",
+        "nadi": "76",
+        "rr": "18",
+        "suhu": "36.5",
+        "spo2": "98",
+        "nyeri": "0"
+      },
+      "physicalExam": "Compos mentis. Defisit neurologis lama berupa hemiparese ringan dextra sisa (kekuatan motorik atas 4/5, bawah 4/5), tidak ada perburukan klinis baru dibandingkan bulan lalu.",
+      "labResult": "Profil koagulasi dan fungsi ginjal terpantau stabil.",
+      "radiologyResult": "",
+      "procedures": [
+        "Edukasi pencegahan stroke sekunder"
+      ],
+      "inpatientMeds": [],
+      "dischargeMeds": [
+        "Aspilets 1x80mg PO (Antiplatelet)",
+        "Atorvastatin 1x20mg PO (Lipid lowering)",
+        "Amlodipine 1x5mg PO"
+      ],
+      "diagnosisKlinisUtama": "Sekuele Infark Serebri / Pasca Stroke Stabil",
+      "diagnosisKlinisSekunder": "Hipertensi Terkontrol"
+    }
+  },
+  {
+    "id": "p24",
+    "registerNo": "2026024",
+    "rmNo": "01-22-56",
+    "name": "Joko Prasetyo",
+    "age": 39,
+    "gender": "L",
+    "serviceType": "RAJAN",
+    "admissionDate": "2026-05-17",
+    "dischargeDate": "2026-05-17",
+    "bpjsClass": "Kelas 3",
+    "dpjp": "Dr. Utami, Sp.KJ",
+    "status": "Belum Coding",
+    "medicalRecord": {
+      "anamnesa": "Pasien dengan riwayat Skizofrenia Paranoid datang didampingi keluarga untuk kontrol rutin bulanan dan mengambil obat. Keluarga menyatakan pasien tenang di rumah, rajin membantu aktivitas domestik, halusinasi pendengaran atau amuk negatif.",
+      "ttv": {
+        "td": "120/80",
+        "nadi": "82",
+        "rr": "18",
+        "suhu": "36.6",
+        "spo2": "99",
+        "nyeri": "0"
+      },
+      "physicalExam": "Status Mental: Penampilan rapi, kontak mata adekuat, afek sesuai, proses pikir koheren, waham atau halusinasi tidak aktif saat pemeriksaan. Pasien kooperatif.",
+      "labResult": "",
+      "radiologyResult": "",
+      "procedures": [
+        "Psikoterapi suportif rawat jalan"
+      ],
+      "inpatientMeds": [],
+      "dischargeMeds": [
+        "Risperidone 2x2mg PO (Maintenance)",
+        "Clozapine 1x25mg PO (Malam)"
+      ],
+      "diagnosisKlinisUtama": "Skizofrenia Paranoid Kontrol Rutin Terkontrol",
+      "diagnosisKlinisSekunder": ""
+    }
+  },
+  {
+    "id": "p25",
+    "registerNo": "2026025",
+    "rmNo": "01-22-57",
+    "name": "Hendra Gunawan",
+    "age": 51,
+    "gender": "L",
+    "serviceType": "RAJAN",
+    "admissionDate": "2026-05-17",
+    "dischargeDate": "2026-05-17",
+    "bpjsClass": "Kelas 1",
+    "dpjp": "Dr. Hendra, Sp.JP",
+    "status": "Belum Coding",
+    "medicalRecord": {
+      "anamnesa": "Kontrol rutin bulanan Poliklinik Jantung pasca intervensi PCI (Pemasangan Stent Jantung) 1 tahun lalu akibat CAD. Keluhan nyeri dada kiri menembus punggung (angina pectoris) disangkal. Sesak napas saat beraktivitas ringan tidak ada.",
+      "ttv": {
+        "td": "120/75",
+        "nadi": "68",
+        "rr": "16",
+        "suhu": "36.3",
+        "spo2": "98",
+        "nyeri": "0"
+      },
+      "physicalExam": "Compos mentis, status klinis tenang. Auskultasi jantung: Bunyi jantung I dan II normal, bising jantung (-). Paru: Ronkhi (-), wheezing (-).",
+      "labResult": "EKG harian: Irama Sinus, HR 68 bpm, tidak tampak ST elevasi maupun ST depresi baru.",
+      "radiologyResult": "",
+      "procedures": [
+        "Pemeriksaan EKG 12 Leads berkala"
+      ],
+      "inpatientMeds": [],
+      "dischargeMeds": [
+        "Clopidogrel 1x75mg PO",
+        "Aspilets 1x80mg PO",
+        "Atorvastatin 1x40mg PO",
+        "Concor 1x2.5mg PO"
+      ],
+      "diagnosisKlinisUtama": "Penyakit Jantung Iskemik Kronis / Post PCI Stabil",
+      "diagnosisKlinisSekunder": ""
+    }
+  },
+  {
+    "id": "p26",
+    "registerNo": "2026026",
+    "rmNo": "01-22-58",
+    "name": "Ny. Aminah",
+    "age": 48,
+    "gender": "P",
+    "serviceType": "RAJAN",
+    "admissionDate": "2026-05-17",
+    "dischargeDate": "2026-05-17",
+    "bpjsClass": "Kelas 2",
+    "dpjp": "Dr. Andi, Sp.PD",
+    "status": "Belum Coding",
+    "medicalRecord": {
+      "anamnesa": "Kontrol rutin bulanan kasus Diabetes Mellitus Tipe 2. Keluhan sering haus (polidipsi), lapar (polifagi), atau penurunan BB drastis disangkal. Pasien patuh menjalani diet rendah gula.",
+      "ttv": {
+        "td": "120/80",
+        "nadi": "76",
+        "rr": "18",
+        "suhu": "36.5",
+        "spo2": "99",
+        "nyeri": "0"
+      },
+      "physicalExam": "Keadaan umum baik, gizi adekuat. Ekstremitas: akral hangat, CRT < 2 detik, pulsasi arteri dorsalis pedis kuat, tidak ada tanda komplikasi neuropati perifer.",
+      "labResult": "Gula Darah Puasa (GDP): 102 mg/dL (Normal), Gula Darah 2 Jam PP: 135 mg/dL (Terkontrol).",
+      "radiologyResult": "",
+      "procedures": [],
+      "inpatientMeds": [],
+      "dischargeMeds": [
+        "Metformin 3x500mg PO"
+      ],
+      "diagnosisKlinisUtama": "Diabetes Mellitus Tipe 2 Tanpa Penyulit",
+      "diagnosisKlinisSekunder": ""
     }
   }
 ]

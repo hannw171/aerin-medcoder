@@ -7,11 +7,20 @@ export interface BackgroundPatient {
   name: string;
 }
 
+export interface ComplianceAlert {
+  type: "Screening PRB" | "Batasan Usia" | "Restriksi Gender" | "Tips FAQ Casemix";
+  targetCode: string;
+  isViolated: boolean;
+  message: string;
+  clarificationText: string;
+}
+
 export interface BackgroundResults {
   primaryDiagnosis: { code: string; description: string } | null;
   secondaryDiagnoses: { code: string; description: string }[];
   procedures: { code: string; description: string }[];
   potentialFindings?: { code: string; description: string; insight: string }[];
+  complianceAlerts?: ComplianceAlert[];
 }
 
 interface BackgroundCoderState {

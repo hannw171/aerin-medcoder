@@ -100,7 +100,7 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const { medicalRecord } = body;
+    const { medicalRecord, complianceGuardrail } = body;
 
     if (!medicalRecord) {
       return NextResponse.json({ error: 'medicalRecord data is required' }, { status: 400 });
@@ -123,14 +123,16 @@ RULES:
 1. Diagnoses → ICD-10 (WHO 2019). Procedures → ICD-9-CM Vol.3 CMS28. NO CPT or ICD-10-PCS.
 2. Code ONLY diagnoses explicitly stated by physician in Primary/Secondary Diagnosis fields.
 3. Prefer 3-5 digit ICD-10 codes for E-Klaim compatibility (e.g., J18.9 or M47.26, not J18.900 or M47.261).
-4. insight field: max 15 words, in Indonesian, professional clinical language. No filler phrases.
-5. potentialFindings: ONLY list conditions that qualify as CC or MCC in INA-CBG (e.g., organ failure, sepsis, acute complications). SKIP stable/minor findings like controlled hypertension.
-6. If a Local Hospital Policy applies, note it in insight: "Kebijakan Lokal RS: [rule]".
+4. Perform compliance audits on the generated codes based on patient demographics, service type, and casemix guidelines.
 
 PROCEDURE REFERENCE (ICD-9-CM):
 CT Scan kepala→87.03 | EKG→89.52 | Echo→88.73 | Rontgen thorax→87.49 | USG abdomen→88.76 | Infus IV→99.18 | Kateter Foley→57.94
 
-${localPoliciesText}PATIENT RECORD:
+${localPoliciesText}
+
+${complianceGuardrail || ''}
+
+PATIENT RECORD:
 Primary Dx: ${medicalRecord.diagnosisKlinisUtama || 'N/A'}
 Secondary Dx: ${medicalRecord.diagnosisKlinisSekunder || 'N/A'}
 Anamnesa: ${medicalRecord.anamnesa || 'N/A'}
@@ -142,12 +144,19 @@ Procedures: ${JSON.stringify(medicalRecord.procedures || [])}
 Meds (Inpatient): ${JSON.stringify(medicalRecord.inpatientMeds || [])}
 Meds (Discharge): ${JSON.stringify(medicalRecord.dischargeMeds || [])}
 
-OUTPUT: Respond ONLY with a single valid JSON object:
+OUTPUT: Respond ONLY with a single valid JSON object of this exact structure:
 {
-  "primaryDiagnosis": { "code": "STRING", "desc": "STRING", "insight": "STRING" },
-  "secondaryDiagnoses": [ { "code": "STRING", "desc": "STRING", "insight": "STRING" } ],
-  "procedures": [ { "code": "STRING", "desc": "STRING", "insight": "STRING" } ],
-  "potentialFindings": [ { "code": "STRING", "desc": "STRING", "insight": "STRING" } ]
+  "icd10": ["CODE1", "CODE2", ...],
+  "icd9": ["CODE1", "CODE2", ...],
+  "complianceAlerts": [
+    {
+      "type": "Screening PRB" | "Batasan Usia" | "Restriksi Gender" | "Tips FAQ Casemix",
+      "targetCode": "CODE STRING (e.g., Z09.8, E11, P03)",
+      "isViolated": boolean,
+      "message": "Warning message detail",
+      "clarificationText": "Polite text for DPJP clarification (e.g., Mohon konfirmasi DPJP...)"
+    }
+  ]
 }
 `;
 
@@ -162,34 +171,36 @@ OUTPUT: Respond ONLY with a single valid JSON object:
       return NextResponse.json({ error: 'Invalid JSON response from AI' }, { status: 500 });
     }
 
-    // Post-processing Grounding Logic — verifies codes against in-memory ICD dictionaries
-    // The AI uses 'desc', grounding overwrites it with the official dictionary description
-    const groundCode = (item: any, mapCache: Map<string, string> | null) => {
-      if (!item || !item.code || !mapCache) return;
-      const normalizedCode = item.code.replace(/\./g, '').toLowerCase();
-      if (mapCache.has(normalizedCode)) {
-        item.description = mapCache.get(normalizedCode);
-      } else {
-        item.description = (item.desc || item.description || '') + ' (Unverified)';
-      }
-      // Normalize field name: ensure 'description' is always present for frontend
-      if (!item.description && item.desc) item.description = item.desc;
-    };
-    
-    if (parsedResponse.primaryDiagnosis) {
-      groundCode(parsedResponse.primaryDiagnosis, icd10Cache);
-    }
-    if (Array.isArray(parsedResponse.secondaryDiagnoses)) {
-      parsedResponse.secondaryDiagnoses.forEach((diag: any) => groundCode(diag, icd10Cache));
-    }
-    if (Array.isArray(parsedResponse.procedures)) {
-      parsedResponse.procedures.forEach((proc: any) => groundCode(proc, icd9Cache));
-    }
-    if (Array.isArray(parsedResponse.potentialFindings)) {
-      parsedResponse.potentialFindings.forEach((finding: any) => groundCode(finding, icd10Cache));
-    }
+    // Grounding & Mapping to keep frontend backward compatibility
+    const icd10Codes = Array.isArray(parsedResponse.icd10) ? parsedResponse.icd10 : [];
+    const icd9Codes = Array.isArray(parsedResponse.icd9) ? parsedResponse.icd9 : [];
 
-    return NextResponse.json(parsedResponse);
+    const primaryCode = icd10Codes[0] || null;
+    const secondaryCodes = icd10Codes.slice(1);
+
+    const getGroundedItem = (code: string | null, mapCache: Map<string, string> | null) => {
+      if (!code) return null;
+      const normalizedCode = code.replace(/\./g, '').toLowerCase();
+      let description = "Unverified description";
+      if (mapCache && mapCache.has(normalizedCode)) {
+        description = mapCache.get(normalizedCode) || "";
+      }
+      return { code, description };
+    };
+
+    const primaryDiagnosis = primaryCode ? getGroundedItem(primaryCode, icd10Cache) : null;
+    const secondaryDiagnoses = secondaryCodes.map((code: string) => getGroundedItem(code, icd10Cache)).filter(Boolean);
+    const procedures = icd9Codes.map((code: string) => getGroundedItem(code, icd9Cache)).filter(Boolean);
+
+    const responseData = {
+      ...parsedResponse,
+      primaryDiagnosis,
+      secondaryDiagnoses,
+      procedures,
+      potentialFindings: []
+    };
+
+    return NextResponse.json(responseData);
 
   } catch (error) {
     console.error('Error generating ICD codes:', error);

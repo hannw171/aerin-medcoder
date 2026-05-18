@@ -2,18 +2,21 @@
 
 import { useState, useRef, Suspense, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { patients } from "@/lib/mockData";
+import { patients, type Patient } from "@/lib/mockData";
 import { useVoiceCommandContext } from "@/components/VoiceCommandContext";
 
 import { SearchableICDInput, type CodeItem } from "@/components/SearchableICDInput";
 import { FinancialImpactCard } from "@/components/FinancialImpactCard";
 import { getEstimatedTariff, determineSeverityLevel, formatIDR } from "@/utils/pricing";
-import { useBackgroundCoder } from "@/store/useBackgroundCoder";
+import { useBackgroundCoder, type ComplianceAlert } from "@/store/useBackgroundCoder";
+import { enrichPromptWithCompliance } from "@/utils/complianceInterceptor";
+
 type CodingResult = {
   primaryDiagnosis: CodeItem | null;
   secondaryDiagnoses: CodeItem[];
   procedures: CodeItem[];
   potentialFindings?: { code: string; description: string; insight: string; processed?: boolean }[];
+  complianceAlerts?: ComplianceAlert[];
 };
 
 function RightPanelSkeleton() {
@@ -85,6 +88,14 @@ function CodingPageContent() {
     insight: string;
     parentSuggestion: string | null;
   } | null>(null);
+  const [showComplianceModal, setShowComplianceModal] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const handleCopyText = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setToastMessage("Teks klarifikasi berhasil disalin!");
+    setTimeout(() => setToastMessage(""), 3000);
+  };
 
   // Register page-specific voice actions using refs to avoid stale closures
   const { registerActions, unregisterActions } = useVoiceCommandContext();
@@ -126,7 +137,81 @@ function CodingPageContent() {
     }
   }, [patientId]);
 
+  // Reactive Resolution Engine for Compliance Alerts (Task 2.5)
+  useEffect(() => {
+    if (!codingResult || !codingResult.complianceAlerts || codingResult.complianceAlerts.length === 0) return;
+
+    const currentPrimaryCode = codingResult.primaryDiagnosis?.code || "";
+
+    let hasChanges = false;
+    const updatedAlerts = codingResult.complianceAlerts.map(alert => {
+      let shouldBeViolated = alert.isViolated;
+      let newMessage = alert.message;
+
+      // Ensure we keep track of original message for future evaluations
+      const originalMessage = (alert as any)._originalMessage || alert.message;
+
+      // Condition A: Filtering Rules (PRB, Batasan Usia, Restriksi Gender)
+      if (
+        alert.type === "Screening PRB" ||
+        alert.type === "Batasan Usia" ||
+        alert.type === "Restriksi Gender"
+      ) {
+        if (!currentPrimaryCode.startsWith(alert.targetCode)) {
+          // Coder changed it away from the problematic code => Resolved!
+          shouldBeViolated = false;
+          newMessage = `✓ Teratasi: Diagnosis utama telah dialihkan dari kode ${alert.targetCode}.`;
+        } else {
+          // Reverted back to the problematic code
+          shouldBeViolated = true;
+          newMessage = originalMessage;
+        }
+      }
+      // Condition B: Correction Rules (Tips FAQ Casemix)
+      else if (alert.type === "Tips FAQ Casemix") {
+        if (currentPrimaryCode.startsWith(alert.targetCode)) {
+          // Coder followed the suggestion => Resolved!
+          shouldBeViolated = false;
+          newMessage = `✓ Teratasi: Kode berhasil disesuaikan dengan panduan Casemix (${alert.targetCode}).`;
+        } else {
+          // Reverted back to ignoring the suggestion
+          shouldBeViolated = true;
+          newMessage = originalMessage;
+        }
+      }
+
+      if (alert.isViolated !== shouldBeViolated || alert.message !== newMessage) {
+        hasChanges = true;
+        return {
+          ...alert,
+          isViolated: shouldBeViolated,
+          message: newMessage,
+          _originalMessage: originalMessage
+        };
+      }
+      
+      if (!(alert as any)._originalMessage) {
+        return { ...alert, _originalMessage: alert.message };
+      }
+
+      return alert;
+    });
+
+    if (hasChanges) {
+      setCodingResult(prev => prev ? { ...prev, complianceAlerts: updatedAlerts } : null);
+    }
+  }, [codingResult?.primaryDiagnosis?.code, codingResult?.secondaryDiagnoses]);
+
   const handleGenerate = () => {
+    const currentGender: 'L' | 'P' = patient.gender || 'L';
+    const currentAge = patient.age || 45;
+    const serviceType = patient.serviceType || 'RANAP';
+    const anamnesaText = patient.medicalRecord?.anamnesa || '';
+
+    // 2. Intercept and enrich compliance prompt
+    const patientText = `${patient.medicalRecord?.diagnosisKlinisUtama || ''} ${patient.medicalRecord?.diagnosisKlinisSekunder || ''} ${anamnesaText}`;
+    const complianceGuardrail = enrichPromptWithCompliance(patientText, currentAge, currentGender, serviceType);
+
     // Task 2: Non-blocking — user can navigate away immediately
     startGeneration({ id: patient.id, name: patient.name });
     setIsGenerating(true);
@@ -135,7 +220,10 @@ function CodingPageContent() {
     fetch('/api/generate-icd', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ medicalRecord: patient.medicalRecord })
+      body: JSON.stringify({ 
+        medicalRecord: patient.medicalRecord,
+        complianceGuardrail
+      })
     })
       .then(async (res) => {
         if (!res.ok) throw new Error('Failed to generate AI codes');
@@ -157,7 +245,8 @@ function CodingPageContent() {
           potentialFindings: (data.potentialFindings || []).map((f: any) => ({
             ...f,
             processed: false
-          }))
+          })),
+          complianceAlerts: data.complianceAlerts || []
         };
 
         // Update local UI state (only effective if user is still on this page)
@@ -205,7 +294,7 @@ function CodingPageContent() {
   };
 
   const handleUpdate = async () => {
-    setIsGenerating(true);
+    setIsSaving(true);
     let updatedResult = codingResult;
     if (codingResult) {
       updatedResult = {
@@ -224,7 +313,7 @@ function CodingPageContent() {
           status: 'Direvisi'
         })
       });
-      setIsGenerating(false);
+      setIsSaving(false);
       setIsRevisionMode(false);
       setIsEditingPrimary(false);
       setIsManuallyEdited(true);
@@ -235,29 +324,36 @@ function CodingPageContent() {
       setTimeout(() => setToastMessage(""), 3000);
     } catch (error) {
       console.error(error);
-      setIsGenerating(false);
+      setIsSaving(false);
       setToastMessage("Gagal menyimpan.");
       setTimeout(() => setToastMessage(""), 3000);
     }
   };
 
-  const handleSaveAndValidate = async () => {
-    setIsGenerating(true);
+  const executeSave = async (newStatus: 'Selesai' | 'Pending Klarifikasi', extraFields?: Partial<Patient>) => {
+    setIsSaving(true);
     try {
       const res = await fetch(`/api/patients/${patient.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           codingResult: codingResult,
-          status: 'Selesai'
+          status: newStatus,
+          ...extraFields
         })
       });
 
       if (!res.ok) throw new Error("Failed to save");
 
       setLastSavedTime(new Date());
-      setCurrentStatus('Selesai');
-      setToastMessage("Data Pasien Berhasil Diverifikasi dan Disimpan");
+      setCurrentStatus(newStatus);
+      setToastMessage(
+        newStatus === 'Pending Klarifikasi'
+          ? "Data Pasien Disimpan dengan Status Pending Klarifikasi"
+          : "Data Pasien Berhasil Diverifikasi dan Disimpan"
+      );
+      
+      setShowComplianceModal(false);
       
       // Delay redirect to allow user to see the success toast
       setTimeout(() => {
@@ -265,10 +361,19 @@ function CodingPageContent() {
       }, 2000);
     } catch (error) {
       console.error(error);
-      setIsGenerating(false);
+      setIsSaving(false);
       setToastMessage("Gagal menyimpan data.");
       setTimeout(() => setToastMessage(""), 3000);
     }
+  };
+
+  const handleSaveAndValidate = async () => {
+    const activeAlerts = codingResult?.complianceAlerts?.filter(alert => alert.isViolated) || [];
+    if (activeAlerts.length > 0) {
+      setShowComplianceModal(true);
+      return;
+    }
+    await executeSave('Selesai');
   };
 
   // Task 3: Parent code suggestion utility
@@ -427,15 +532,24 @@ function CodingPageContent() {
           <h2 className="font-headline-md text-headline-md text-on-background mb-4">
             Anamnesis & Resume Medis
           </h2>
-          <div className="flex gap-tight-gap mb-4">
+          <div className="flex flex-wrap gap-2 mb-4">
             <span className="bg-surface-container-highest text-on-surface font-mono-data text-mono-data px-3 py-1 rounded-full">
-              Patient: {patient.registerNo} - {patient.name}
+              Pasien: {patient.name} ({patient.registerNo})
             </span>
             <span className="bg-surface-container-highest text-on-surface font-mono-data text-mono-data px-3 py-1 rounded-full">
               RM: {patient.rmNo}
             </span>
             <span className="bg-surface-container-highest text-on-surface font-mono-data text-mono-data px-3 py-1 rounded-full">
-              DOA: {patient.dischargeDate}
+              Umur: {patient.age} Tahun
+            </span>
+            <span className="bg-surface-container-highest text-on-surface font-mono-data text-mono-data px-3 py-1 rounded-full">
+              Jenis Kelamin: {patient.gender === 'L' ? 'Laki-laki' : 'Perempuan'}
+            </span>
+            <span className="bg-surface-container-highest text-on-surface font-mono-data text-mono-data px-3 py-1 rounded-full">
+              Tanggal Masuk: {patient.admissionDate || "-"}
+            </span>
+            <span className="bg-surface-container-highest text-on-surface font-mono-data text-mono-data px-3 py-1 rounded-full">
+              Tanggal Pulang: {patient.dischargeDate}
             </span>
           </div>
           <div id="tour-coding-narrative" className="flex gap-4 border-b border-outline-variant w-full">
@@ -960,6 +1074,69 @@ function CodingPageContent() {
                 )}
               </div>
 
+              {/* PRB & Casemix Alert Panel */}
+              {codingResult?.complianceAlerts && codingResult.complianceAlerts.length > 0 && (
+                <div className="flex flex-col gap-3">
+                  <h3 className="font-label-sm text-label-sm uppercase tracking-wider text-slate-500 flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[18px]">gavel</span>
+                    BPJS & Casemix Compliance Alerts
+                  </h3>
+                  <div className="flex flex-col gap-3">
+                    {codingResult.complianceAlerts.map((alert, idx) => {
+                      const isViolated = alert.isViolated;
+                      const wrapperStyle = isViolated 
+                        ? "border-amber-500/30 bg-amber-600/30" 
+                        : "border-emerald-500/30 bg-emerald-600/30";
+                      const iconAndTextStyle = isViolated ? "text-amber-700" : "text-emerald-700";
+                      const badgeStyle = isViolated 
+                        ? "bg-amber-600 text-amber-300 border-amber-500/20" 
+                        : "bg-emerald-600 text-emerald-300 border-emerald-500/20";
+                      
+                      return (
+                        <div
+                          key={idx}
+                          className={`rounded-xl border p-4 flex flex-col gap-3 transition-all duration-300 ${wrapperStyle}`}
+                        >
+                          <div className="flex items-start gap-3">
+                            <span className={`material-symbols-outlined shrink-0 ${iconAndTextStyle}`}>
+                              {isViolated ? "warning" : "check_circle"}
+                            </span>
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${badgeStyle}`}>
+                                  {alert.type}
+                                </span>
+                              </div>
+                              <p className={`text-sm font-medium leading-relaxed ${iconAndTextStyle}`}>
+                                {alert.message}
+                              </p>
+                            </div>
+                          </div>
+
+                          {isViolated && alert.clarificationText && (
+                            <div className="mt-2 bg-slate-900/60 rounded-lg p-3 border border-slate-700/30 flex flex-col gap-2">
+                              <span className="text-[11px] font-bold text-amber-400 uppercase tracking-wider">
+                                Teks Klarifikasi DPJP (WA / Sistem)
+                              </span>
+                              <div className="text-xs text-slate-300 bg-slate-950/50 p-2.5 rounded font-mono break-words border border-slate-800">
+                                {alert.clarificationText}
+                              </div>
+                              <button
+                                onClick={() => handleCopyText(alert.clarificationText)}
+                                className="self-end inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white text-xs font-bold shadow transition-all duration-150"
+                              >
+                                <span className="material-symbols-outlined text-[14px]">content_copy</span>
+                                Salin Teks Klarifikasi
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
               {/* Potensi Temuan Tambahan */}
               <div id="tour-coding-potential" className="flex flex-col gap-3">
                 {codingResult?.potentialFindings && codingResult.potentialFindings.length > 0 ? (
@@ -1107,10 +1284,12 @@ function CodingPageContent() {
                       >
                         Revisi
                       </button>
-                      <button onClick={handleSaveAndValidate} disabled={isGenerating} className="flex-1 bg-emerald-600 text-white font-label-sm text-label-sm py-3 rounded-lg flex items-center justify-center gap-tight-gap hover:bg-emerald-700 transition-colors shadow-sm disabled:opacity-70">
-                        <span className="material-symbols-outlined text-sm">
-                          check_circle
-                        </span>
+                      <button onClick={handleSaveAndValidate} disabled={isGenerating || isSaving} className="flex-1 bg-emerald-600 text-white font-label-sm text-label-sm py-3 rounded-lg flex items-center justify-center gap-tight-gap hover:bg-emerald-700 transition-colors shadow-sm disabled:opacity-70">
+                        {isSaving ? (
+                          <span className="material-symbols-outlined animate-spin text-sm">progress_activity</span>
+                        ) : (
+                          <span className="material-symbols-outlined text-sm">check_circle</span>
+                        )}
                         Validasi & Simpan
                       </button>
                     </>
@@ -1126,10 +1305,10 @@ function CodingPageContent() {
                   </button>
                   <button
                     onClick={handleUpdate}
-                    disabled={isGenerating}
+                    disabled={isGenerating || isSaving}
                     className="flex-1 bg-emerald-600 text-white font-label-sm text-label-sm py-3 rounded-lg flex items-center justify-center gap-tight-gap hover:bg-emerald-700 transition-colors shadow-sm disabled:opacity-70"
                   >
-                    {isGenerating ? (
+                    {isSaving ? (
                       <span className="material-symbols-outlined animate-spin text-sm">progress_activity</span>
                     ) : (
                       <span className="material-symbols-outlined text-sm">check_circle</span>
@@ -1208,6 +1387,104 @@ function CodingPageContent() {
               <button
                 onClick={() => setSmartAdjustFinding(null)}
                 className="w-full py-2.5 border border-slate-200 rounded-xl text-slate-500 text-sm font-medium hover:bg-slate-50 transition-colors"
+              >
+                Batal
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Compliance Intercept Modal */}
+      {showComplianceModal && (
+        <div className="absolute inset-0 bg-black/45 backdrop-blur-sm z-50 flex items-center justify-center p-6 animate-fade-in">
+          <div className="bg-white border border-slate-100 rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col animate-scale-up">
+            {/* Modal Header */}
+            <div className="bg-gradient-to-r from-amber-500 to-orange-600 p-6 text-white">
+              <div className="flex items-center gap-3 mb-1">
+                <span className="material-symbols-outlined text-[24px]">warning</span>
+                <h3 className="font-bold text-lg">Catatan Kepatuhan Terdeteksi</h3>
+              </div>
+              <p className="text-amber-50/90 text-xs leading-relaxed">
+                Aerin mendeteksi potensi ketidakpatuhan atau potensi rujukan balik (PRB) pada hasil koding pasien ini. Silakan pilih opsi penanganan di bawah ini.
+              </p>
+            </div>
+
+            <div className="p-6 flex flex-col gap-4 max-h-[60vh] overflow-y-auto">
+              <div className="flex flex-col gap-3">
+                <p className="text-[11px] uppercase tracking-wide font-bold text-slate-500">Aturan Kepatuhan yang Terpicu:</p>
+                <div className="flex flex-col gap-2">
+                  {(codingResult?.complianceAlerts?.filter(a => a.isViolated) || []).map((alert, idx) => (
+                    <div key={idx} className="bg-amber-50 border border-amber-00/60 rounded-xl p-3 flex flex-col gap-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-200">
+                          {alert.type}
+                        </span>
+                      </div>
+                      <p className="text-xs font-semibold text-amber-900 leading-relaxed">
+                        {alert.message}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Options Description */}
+              <div className="mt-2 flex flex-col gap-3">
+                <p className="text-[11px] uppercase tracking-wide font-bold text-slate-500">Opsi Tindakan:</p>
+                
+                {/* Option 1 */}
+                <button
+                  onClick={() => executeSave('Pending Klarifikasi')}
+                  disabled={isSaving}
+                  className="w-full flex items-start gap-3.5 p-4 bg-amber-50 hover:bg-amber-100/80 border border-amber-200 rounded-xl transition-all text-left group cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center shrink-0 shadow-sm text-white group-hover:scale-105 transition-transform">
+                    {isSaving ? (
+                      <span className="material-symbols-outlined text-[20px] animate-spin">progress_activity</span>
+                    ) : (
+                      <span className="material-symbols-outlined text-[20px]">chat</span>
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-bold text-amber-900 text-sm">Tahan & Kirim Klarifikasi ke DPJP</div>
+                    <div className="text-[12px] text-amber-700/80 mt-0.5 leading-relaxed">
+                      Simpan dengan status <span className="font-semibold">"Pending Klarifikasi"</span> untuk mengirim pertanyaan konfirmasi/klarifikasi otomatis ke dokter DPJP.
+                    </div>
+                  </div>
+                  <span className="material-symbols-outlined text-amber-400 text-sm shrink-0 self-center">arrow_forward</span>
+                </button>
+
+                {/* Option 2 */}
+                <button
+                  onClick={() => executeSave('Selesai', { auditOverride: true })}
+                  disabled={isSaving}
+                  className="w-full flex items-start gap-3.5 p-4 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl transition-all text-left group cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  <div className="w-10 h-10 bg-slate-600 rounded-xl flex items-center justify-center shrink-0 shadow-sm text-white group-hover:scale-105 transition-transform">
+                    {isSaving ? (
+                      <span className="material-symbols-outlined text-[20px] animate-spin">progress_activity</span>
+                    ) : (
+                      <span className="material-symbols-outlined text-[20px]">verified</span>
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-bold text-slate-900 text-sm">Tetap Simpan & Klaim RS (Ada Penyulit)</div>
+                    <div className="text-[12px] text-slate-600/80 mt-0.5 leading-relaxed">
+                      Gunakan opsi ini jika terdapat penyulit klinis yang melegitimasi klaim rumah sakit. Sistem akan mencatat riwayat override audit ini.
+                    </div>
+                  </div>
+                  <span className="material-symbols-outlined text-slate-400 text-sm shrink-0 self-center">arrow_forward</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="bg-slate-50 border-t border-slate-100 p-4 flex gap-3">
+              <button
+                onClick={() => setShowComplianceModal(false)}
+                disabled={isSaving}
+                className="flex-1 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-600 text-sm font-medium hover:bg-slate-50 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Batal
               </button>
