@@ -42,6 +42,29 @@
       ],
       "diagnosisKlinisUtama": "Stroke Non Hemoragik (SNH)",
       "diagnosisKlinisSekunder": "Hipertensi Grade II"
+    },
+    "codingResult": {
+      "primaryDiagnosis": {
+        "code": "I21.9",
+        "description": "Acute myocardial infarction, unspecified",
+        "id": "d95f3006-3295-4e8f-b5fd-1e5653721065"
+      },
+      "secondaryDiagnoses": [
+        {
+          "code": "I10",
+          "description": "Essential (primary) hypertension",
+          "id": "45e51c7e-e169-4df2-8f16-c45394822875"
+        }
+      ],
+      "procedures": [
+        {
+          "code": "88.72",
+          "description": "Diagnostic ultrasound of heart",
+          "id": "e69ec0cc-9a72-4277-a235-c6154da9d939"
+        }
+      ],
+      "potentialFindings": [],
+      "complianceAlerts": []
     }
   },
   {
@@ -945,7 +968,7 @@
     "dischargeDate": "2026-05-15",
     "bpjsClass": "Kelas 2",
     "dpjp": "Dr. Andi, Sp.PD",
-    "status": "Selesai",
+    "status": "Draft AI",
     "medicalRecord": {
       "anamnesa": "Pasien datang ke Poliklinik Penyakit Dalam untuk kontrol rutin bulanan dengan keluhan lemas yang sudah jauh berkurang. Riwayat Diabetes Mellitus Tipe 2 sejak 3 tahun lalu, rutin mengonsumsi obat batuan dari RS.",
       "ttv": {
@@ -973,35 +996,35 @@
     },
     "codingResult": {
       "primaryDiagnosis": {
-        "code": "Z09.8",
-        "description": "Follow-up examination after other treatment for other conditions",
-        "id": "646ef2e3-497b-4540-b6fb-4ce2d4388360"
+        "code": "Z09.0",
+        "description": "Follow-up examination after surgery",
+        "id": "90b6e8f5-d6e8-4ced-9a34-d46f64561400"
       },
       "secondaryDiagnoses": [
         {
-          "code": "E11.9",
-          "description": "Type 2 diabetes mellitus: Without complications",
-          "id": "70e10dab-27fa-4794-9efb-afc007ed5216"
+          "code": "I10",
+          "description": "Essential (primary) hypertension",
+          "id": "ac18a5e4-3c86-458a-acf8-bac19a1f94eb"
         }
       ],
       "procedures": [
         {
-          "id": "1779033182783",
           "code": "99.18",
-          "description": "Injection or infusion of electrolytes"
+          "description": "Injection or infusion of other therapeutic or prophylactic substance",
+          "id": "548bfd22-6a5f-4849-a104-2cf85f320f54"
         }
       ],
       "potentialFindings": [],
       "complianceAlerts": [
         {
-          "type": "Screening PRB",
+          "type": "Tips FAQ Casemix",
+          "targetCode": "Z09.8",
           "isViolated": true,
-          "message": "Diabetes Mellitus Tipe 2 tanpa komplikasi adalah diagnosa PRB. Pasien stabil dan terkontrol, sehingga wajib dirujuk kembali ke FKTP.",
-          "clarificationText": "Mohon konfirmasi DPJP apakah pasien dapat dialihkan ke Program Rujuk Balik (PRB) ke FKTP karena kondisi DM Tipe 2 yang stabil dan tanpa komplikasi akut."
+          "message": "Bila dilakukan kontrol pasca prosedur, gunakan Z09.8 sebagai diagnosa utama.",
+          "clarificationText": "Mohon konfirmasi DPJP..."
         }
       ]
-    },
-    "auditOverride": true
+    }
   },
   {
     "id": "p18",
