@@ -106,6 +106,26 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             </Link>
 
             <Link
+              href="/audit-logs"
+              className={`flex items-center px-3 py-3 transition-all duration-200 w-full group relative ${
+                pathname === "/audit-logs"
+                  ? "bg-primary text-on-primary border-l-4 border-primary-fixed rounded-r-xl shadow-sm"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-xl"
+              } ${isExpanded ? 'justify-start' : 'justify-center'}`}
+              title={!isExpanded ? "Log Audit Internal" : ""}
+            >
+              <span
+                className={`material-symbols-outlined flex-shrink-0 transition-colors duration-200 ${pathname === "/audit-logs" ? "text-on-primary" : ""}`}
+                style={pathname === "/audit-logs" ? { fontVariationSettings: "'FILL' 1" } : {}}
+              >
+                fact_check
+              </span>
+              <span className={`whitespace-wrap font-semibold transition-all duration-300 overflow-hidden ${isExpanded ? 'ml-3 opacity-100 w-full' : 'opacity-0 w-0'}`}>
+                Log Audit Internal
+              </span>
+            </Link>
+
+            <Link
               href="/settings/policies/simulator"
               className={`flex items-center px-3 py-3 transition-all duration-200 w-full group relative ${
                 pathname.startsWith("/settings/policies/simulator")
@@ -191,12 +211,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 } h-16 flex items-center px-1`}
               >
                 Patient List
-              </Link>
-              <Link
-                href="#"
-                className="text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-all h-16 flex items-center px-1"
-              >
-                Reports
               </Link>
             </nav>
           </div>

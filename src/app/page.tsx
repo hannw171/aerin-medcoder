@@ -50,12 +50,21 @@ export default function DashboardPage() {
     completedPercent,
     optimasiNilaiKlaim,
     potensiTemuan,
+    pendingCount,
+    accuracyRate,
     top10Diagnoses
   } = useMemo(() => {
     const totalPasien = patients.length;
-    const antreanReview = patients.filter(p => p.status === 'Draft AI' || p.status === 'Direvisi' || p.status === 'Pending Klarifikasi').length;
-    const selesaiCount = patients.filter(p => p.status === 'Selesai').length;
+    const antreanReview = patients.filter(p => p.status === 'Belum Coding').length;
+    
+    const selesaiPatients = patients.filter(p => p.status === 'Selesai');
+    const selesaiCount = selesaiPatients.length;
     const completedPercent = totalPasien > 0 ? Math.round((selesaiCount / totalPasien) * 100) : 0;
+    
+    const approvedAsIs = selesaiPatients.filter(p => !p.auditOverride).length;
+    const accuracyRate = selesaiCount > 0 ? (approvedAsIs / selesaiCount) * 100 : 94.2;
+
+    const pendingCount = patients.filter(p => p.status === 'Pending Klarifikasi').length;
 
     let optimasiNilaiKlaim = 0;
     let potensiTemuan = 0;
@@ -126,6 +135,8 @@ export default function DashboardPage() {
       completedPercent,
       optimasiNilaiKlaim,
       potensiTemuan,
+      pendingCount,
+      accuracyRate,
       top10Diagnoses
     };
   }, [patients]);
@@ -179,42 +190,60 @@ export default function DashboardPage() {
           <div className="text-xs text-emerald-600/80 mt-2 font-medium">Nilai terselamatkan (Kasus Selesai)</div>
         </div>
 
-        <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col justify-between hover:border-primary/50 transition-colors shadow-sm group">
+        <div className={`bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col justify-between transition-colors shadow-sm group ${
+          accuracyRate === 100 ? 'hover:border-emerald-500/50' : 'hover:border-primary/50'
+        }`}>
           <div className="flex justify-between items-start mb-4">
-            <span className="font-body-md text-on-surface-variant group-hover:text-primary transition-colors">Akurasi AI</span>
-            <span className="material-symbols-outlined text-primary bg-primary/5 p-2 rounded-lg">verified</span>
+            <span className={`font-body-md text-on-surface-variant transition-colors ${
+              accuracyRate === 100 ? 'group-hover:text-emerald-600' : 'group-hover:text-primary'
+            }`}>
+              Akurasi AI
+            </span>
+            <span className={`material-symbols-outlined p-2 rounded-lg ${
+              accuracyRate === 100 ? 'text-emerald-500 bg-emerald-50 animate-pulse' : 'text-primary bg-primary/5'
+            }`}>
+              {accuracyRate === 100 ? 'workspace_premium' : 'verified'}
+            </span>
           </div>
-          <div className="text-2xl font-display font-bold text-on-surface">
-            94.2%
+          <div className={`text-2xl font-display font-bold ${
+            accuracyRate === 100 ? 'text-emerald-500' : 'text-on-surface'
+          }`}>
+            {accuracyRate.toFixed(1)}%
           </div>
-          <div className="text-xs text-on-surface-variant mt-2 font-medium">Rata-rata persetujuan koding</div>
+          <div className={`text-xs mt-2 font-medium ${
+            accuracyRate === 100 ? 'text-emerald-600/80' : 'text-on-surface-variant'
+          }`}>
+            {accuracyRate === 100 
+              ? "Sempurna: Seluruh rekomendasi AI disetujui langsung tanpa intervensi override penyulit." 
+              : "Rata-rata draf koding AI yang langsung disetujui koder tanpa koreksi regulasi."}
+          </div>
         </div>
 
         <div className={`bg-surface-container-lowest border border-outline-variant rounded-xl p-6 flex flex-col justify-between transition-colors shadow-sm group ${
-          potensiTemuan > 0 
+          pendingCount > 0 
             ? 'hover:border-amber-500/50 animate-glow-pulse' 
             : 'hover:border-emerald-500/50'
         }`}>
           <div className="flex justify-between items-start mb-4">
             <span className={`font-body-md text-on-surface-variant transition-colors ${
-              potensiTemuan > 0 ? 'group-hover:text-amber-600' : 'group-hover:text-emerald-600'
+              pendingCount > 0 ? 'group-hover:text-amber-600' : 'group-hover:text-emerald-600'
             }`}>
-              Potensi Temuan (Unverified)
+              Potensi Temuan Pending/PRB
             </span>
             <span className={`material-symbols-outlined p-2 rounded-lg ${
-              potensiTemuan > 0 ? 'text-amber-500 bg-amber-50' : 'text-emerald-500 bg-emerald-50'
+              pendingCount > 0 ? 'text-amber-500 bg-amber-50' : 'text-emerald-500 bg-emerald-50'
             }`}>
-              {potensiTemuan > 0 ? 'lightbulb' : 'verified_user'}
+              {pendingCount > 0 ? 'lightbulb' : 'verified_user'}
             </span>
           </div>
           <div className={`text-2xl font-display font-bold text-on-surface ${
-            potensiTemuan > 0 ? 'text-amber-600' : 'text-emerald-600'
+            pendingCount > 0 ? 'text-amber-600' : 'text-emerald-600'
           }`}>
-            <NumberTicker value={potensiTemuan} />
+            {pendingCount} Pasien
           </div>
-          {potensiTemuan > 0 ? (
+          {pendingCount > 0 ? (
             <div className="text-xs text-amber-600/80 mt-2 font-medium italic">
-              Estimasi nilai dari Draft AI
+              Menunggu klarifikasi DPJP (Potensi PRB/Pending)
             </div>
           ) : (
             <div className="text-xs text-emerald-600/80 mt-2 font-medium flex items-center gap-1">
