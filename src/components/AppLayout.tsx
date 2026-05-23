@@ -12,6 +12,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   
   const { startTour } = useTour();
@@ -36,10 +37,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     return pathname === path || pathname.startsWith(path + "/");
   };
 
+  const showExpanded = isExpanded || isHovered;
+
   return (
     <div className="flex h-screen overflow-hidden w-full antialiased bg-surface text-on-surface font-body-md">
       {/* SideNavBar */}
-      <nav className={`flex-shrink-0 h-screen flex flex-col justify-between items-center py-panel-padding border-r border-outline-variant bg-slate-900 z-50 transition-all duration-300 ease-in-out relative ${isExpanded ? 'w-64' : 'w-20'}`}>
+      <nav 
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className={`flex-shrink-0 h-screen flex flex-col justify-between items-center py-panel-padding border-r border-outline-variant bg-slate-900 z-50 transition-all duration-300 ease-in-out relative ${showExpanded ? 'w-64' : 'w-20'}`}
+      >
         
         {/* Toggle Button */}
         <button 
@@ -56,7 +63,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <span className="material-symbols-outlined text-[32px] flex-shrink-0">
               local_hospital
             </span>
-            <span className={`font-display text-xl font-bold whitespace-nowrap transition-all duration-300 ${isExpanded ? 'opacity-100 w-auto' : 'opacity-0 w-0 hidden'}`}>
+            <span className={`font-display text-xl font-bold whitespace-nowrap transition-all duration-300 ${showExpanded ? 'opacity-100 w-auto' : 'opacity-0 w-0 hidden'}`}>
               Aerin Coder
             </span>
           </div>
@@ -68,8 +75,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 isActive("/patient-list")
                   ? "bg-primary text-on-primary border-l-4 border-primary-fixed rounded-r-xl shadow-sm"
                   : "text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-xl"
-              } ${isExpanded ? 'justify-start' : 'justify-center'}`}
-              title={!isExpanded ? "Daftar Pasien" : ""}
+              } ${showExpanded ? 'justify-start' : 'justify-center'}`}
+              title={!showExpanded ? "Daftar Pasien" : ""}
             >
               <span
                 className={`material-symbols-outlined flex-shrink-0 transition-colors duration-200 ${isActive("/patient-list") ? "text-on-primary" : ""}`}
@@ -77,7 +84,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               >
                 clinical_notes
               </span>
-              <span className={`whitespace-nowrap font-semibold transition-all duration-300 overflow-hidden ${isExpanded ? 'ml-3 opacity-100 w-full' : 'opacity-0 w-0'}`}>
+              <span className={`whitespace-nowrap font-semibold transition-all duration-300 overflow-hidden ${showExpanded ? 'ml-3 opacity-100 w-full' : 'opacity-0 w-0'}`}>
                 Daftar Pasien
               </span>
             </Link>
@@ -91,8 +98,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 pathname === "/regulation-settings"
                   ? "bg-primary text-on-primary border-l-4 border-primary-fixed rounded-r-xl shadow-sm"
                   : "text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-xl"
-              } ${isExpanded ? 'justify-start' : 'justify-center'}`}
-              title={!isExpanded ? "Pengaturan Regulasi" : ""}
+              } ${showExpanded ? 'justify-start' : 'justify-center'}`}
+              title={!showExpanded ? "Pengaturan Regulasi" : ""}
             >
               <span
                 className={`material-symbols-outlined flex-shrink-0 transition-colors duration-200 ${pathname === "/regulation-settings" ? "text-on-primary" : ""}`}
@@ -100,7 +107,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               >
                 settings
               </span>
-              <span className={`whitespace-wrap font-semibold transition-all duration-300 overflow-hidden ${isExpanded ? 'ml-3 opacity-100 w-full' : 'opacity-0 w-0'}`}>
+              <span className={`whitespace-wrap font-semibold transition-all duration-300 overflow-hidden ${showExpanded ? 'ml-3 opacity-100 w-full' : 'opacity-0 w-0'}`}>
                 Pengaturan Regulasi
               </span>
             </Link>
@@ -111,8 +118,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 pathname === "/audit-logs"
                   ? "bg-primary text-on-primary border-l-4 border-primary-fixed rounded-r-xl shadow-sm"
                   : "text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-xl"
-              } ${isExpanded ? 'justify-start' : 'justify-center'}`}
-              title={!isExpanded ? "Log Audit Internal" : ""}
+              } ${showExpanded ? 'justify-start' : 'justify-center'}`}
+              title={!showExpanded ? "Log Audit Internal" : ""}
             >
               <span
                 className={`material-symbols-outlined flex-shrink-0 transition-colors duration-200 ${pathname === "/audit-logs" ? "text-on-primary" : ""}`}
@@ -120,7 +127,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               >
                 fact_check
               </span>
-              <span className={`whitespace-wrap font-semibold transition-all duration-300 overflow-hidden ${isExpanded ? 'ml-3 opacity-100 w-full' : 'opacity-0 w-0'}`}>
+              <span className={`whitespace-wrap font-semibold transition-all duration-300 overflow-hidden ${showExpanded ? 'ml-3 opacity-100 w-full' : 'opacity-0 w-0'}`}>
                 Log Audit Internal
               </span>
             </Link>
@@ -131,8 +138,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 pathname.startsWith("/settings/policies/simulator")
                   ? "bg-primary text-on-primary border-l-4 border-primary-fixed rounded-r-xl shadow-sm"
                   : "text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-xl"
-              } ${isExpanded ? 'justify-start' : 'justify-center'}`}
-              title={!isExpanded ? "Validasi Kebijakan Internal" : ""}
+              } ${showExpanded ? 'justify-start' : 'justify-center'}`}
+              title={!showExpanded ? "Validasi Kebijakan Internal" : ""}
             >
               <span
                 className={`material-symbols-outlined flex-shrink-0 transition-colors duration-200 ${pathname.startsWith("/settings/policies/simulator") ? "text-on-primary" : ""}`}
@@ -140,7 +147,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               >
                 science
               </span>
-              <span className={`whitespace-wrap font-semibold transition-all duration-300 overflow-hidden ${isExpanded ? 'ml-3 opacity-100 w-full' : 'opacity-0 w-0'}`}>
+              <span className={`whitespace-wrap font-semibold transition-all duration-300 overflow-hidden ${showExpanded ? 'ml-3 opacity-100 w-full' : 'opacity-0 w-0'}`}>
                 Validator Kebijakan Internal
               </span>
             </Link>
@@ -149,32 +156,23 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
         <div className="flex flex-col items-center w-full px-3">
           <button
-            className={`bg-primary text-on-primary hover:bg-primary/90 transition-colors rounded-full h-12 flex items-center justify-center mb-4 ${isExpanded ? 'w-full px-4 justify-start gap-2 rounded-xl' : 'w-12'}`}
-            title={!isExpanded ? "Tugas Baru" : ""}
-          >
-            <span className="material-symbols-outlined flex-shrink-0">add</span>
-            <span className={`font-semibold whitespace-nowrap overflow-hidden transition-all duration-300 ${isExpanded ? 'opacity-100 w-auto' : 'opacity-0 w-0'}`}>
-              Tugas Baru
-            </span>
-          </button>
-          <button
             onClick={() => startTour()}
-            className={`flex items-center px-3 py-3 transition-all duration-200 rounded-xl w-full text-slate-400 hover:text-slate-200 hover:bg-slate-800 ${isExpanded ? 'justify-start' : 'justify-center'}`}
-            title={!isExpanded ? "Bantuan Tur AI" : ""}
+            className={`flex items-center px-3 py-3 transition-all duration-200 rounded-xl w-full text-slate-400 hover:text-slate-200 hover:bg-slate-800 ${showExpanded ? 'justify-start' : 'justify-center'}`}
+            title={!showExpanded ? "Bantuan Tur AI" : ""}
           >
             <span className="material-symbols-outlined flex-shrink-0">help</span>
-            <span className={`whitespace-nowrap font-medium transition-all duration-300 overflow-hidden ${isExpanded ? 'ml-3 opacity-100 w-full text-left' : 'opacity-0 w-0'}`}>
+            <span className={`whitespace-nowrap font-medium transition-all duration-300 overflow-hidden ${showExpanded ? 'ml-3 opacity-100 w-full text-left' : 'opacity-0 w-0'}`}>
               Bantuan Tur AI
             </span>
           </button>
 
-          <div className={`flex items-center w-full mt-4 p-2 rounded-xl border border-slate-700 bg-slate-800/50 ${isExpanded ? 'justify-start gap-3' : 'justify-center border-transparent bg-transparent'}`}>
+          <div className={`flex items-center w-full mt-4 p-2 rounded-xl border border-slate-700 bg-slate-800/50 ${showExpanded ? 'justify-start gap-3' : 'justify-center border-transparent bg-transparent'}`}>
             <img
               alt="Medical Coder Profile"
               className="w-10 h-10 rounded-full border border-slate-600 object-cover flex-shrink-0"
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2ms3aJCaZQ1W8QqZ1oRccglKOIqbFp9ynk5xMfXyB0JghoJn6gMgiMzQn8NwD89UKKyx6-1T0V1QjiKf8VV3_z2vjWBnbx-_WisUwZuOyTst-dE8hLDrAWXtybV4lJgq738dqoEl22yMumeIKKkL99AUs-38zrn6-1SsG3It8tAq21xqS_1LChI9isIw5KOgehHBFwLFnAI1m-7BUB3ROR8LLOnmaKZOR1ROOPlKwfmE_jlALQ8DjGLtaD-zVkMwiegDhBbkDyqI"
             />
-            <div className={`flex flex-col overflow-hidden transition-all duration-300 ${isExpanded ? 'opacity-100 w-auto' : 'opacity-0 w-0 hidden'}`}>
+            <div className={`flex flex-col overflow-hidden transition-all duration-300 ${showExpanded ? 'opacity-100 w-auto' : 'opacity-0 w-0 hidden'}`}>
               <span className="text-sm font-bold text-slate-200 whitespace-nowrap">Dr. Andi</span>
               <span className="text-xs text-slate-400 whitespace-nowrap">Clinical Coder</span>
             </div>
