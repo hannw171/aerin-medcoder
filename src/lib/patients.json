@@ -45,26 +45,34 @@
     },
     "codingResult": {
       "primaryDiagnosis": {
-        "code": "I21.9",
-        "description": "Acute myocardial infarction, unspecified",
-        "id": "d95f3006-3295-4e8f-b5fd-1e5653721065"
+        "code": "O14.1",
+        "description": "Severe pre-eclampsia",
+        "id": "4f5d0d1d-f3c4-4003-b224-afa66d40ad45"
       },
       "secondaryDiagnoses": [
         {
           "code": "I10",
           "description": "Essential (primary) hypertension",
-          "id": "45e51c7e-e169-4df2-8f16-c45394822875"
+          "id": "3d2bc4cd-e8b6-4f02-ad2d-c6d97de67539"
         }
       ],
       "procedures": [
         {
-          "code": "88.72",
-          "description": "Diagnostic ultrasound of heart",
-          "id": "e69ec0cc-9a72-4277-a235-c6154da9d939"
+          "code": "99.18",
+          "description": "Injection or infusion of other therapeutic or prophylactic substance",
+          "id": "615cf333-818c-4782-8f49-69ee7e4582ee"
         }
       ],
       "potentialFindings": [],
-      "complianceAlerts": []
+      "complianceAlerts": [
+        {
+          "type": "Restriksi Gender",
+          "targetCode": "O14.1",
+          "isViolated": true,
+          "message": "Preeklamsia hanya terjadi pada kehamilan (pasien wanita).",
+          "clarificationText": "Mohon konfirmasi DPJP..."
+        }
+      ]
     }
   },
   {
@@ -886,7 +894,7 @@
     "dischargeDate": "2023-10-22",
     "bpjsClass": "Kelas 2",
     "dpjp": "Dr. Sarah, Sp.A",
-    "status": "Belum Coding",
+    "status": "Draft AI",
     "medicalRecord": {
       "anamnesa": "Anak usia 2 tahun demam mendadak sejak 2 hari lalu. Anak gelisah, sering menangis sambil memegang telinga kanan. Keluar cairan warna kekuningan dari telinga.",
       "ttv": {
@@ -913,6 +921,37 @@
       ],
       "diagnosisKlinisUtama": "Otitis Media Supuratif Akut (OMSA)",
       "diagnosisKlinisSekunder": ""
+    },
+    "codingResult": {
+      "primaryDiagnosis": {
+        "code": "H66.0",
+        "description": "Acute suppurative otitis media",
+        "id": "efc968d8-494e-459c-9056-d3f6707d6b09"
+      },
+      "secondaryDiagnoses": [
+        {
+          "code": "I10",
+          "description": "Essential (primary) hypertension",
+          "id": "103cf7c7-9b39-4c3f-8c36-e2e6bc192729"
+        }
+      ],
+      "procedures": [
+        {
+          "code": "99.18",
+          "description": "Injection or infusion of other therapeutic or prophylactic substance",
+          "id": "19b8dae1-f4b8-48b4-ad3f-86f2d542f75d"
+        }
+      ],
+      "potentialFindings": [],
+      "complianceAlerts": [
+        {
+          "type": "Batasan Usia",
+          "targetCode": "O80.9",
+          "isViolated": false,
+          "message": "Persalinan normal hanya dapat diklaim untuk pasien usia produktif reproduksi. Pastikan usia pasien sesuai.",
+          "clarificationText": "Mohon konfirmasi DPJP..."
+        }
+      ]
     }
   },
   {
@@ -968,7 +1007,7 @@
     "dischargeDate": "2026-05-15",
     "bpjsClass": "Kelas 2",
     "dpjp": "Dr. Andi, Sp.PD",
-    "status": "Draft AI",
+    "status": "Belum Coding",
     "medicalRecord": {
       "anamnesa": "Pasien datang ke Poliklinik Penyakit Dalam untuk kontrol rutin bulanan dengan keluhan lemas yang sudah jauh berkurang. Riwayat Diabetes Mellitus Tipe 2 sejak 3 tahun lalu, rutin mengonsumsi obat batuan dari RS.",
       "ttv": {
@@ -998,20 +1037,20 @@
       "primaryDiagnosis": {
         "code": "Z09.0",
         "description": "Follow-up examination after surgery",
-        "id": "90b6e8f5-d6e8-4ced-9a34-d46f64561400"
+        "id": "38b40795-bf46-41f5-8730-6633b16a2d66"
       },
       "secondaryDiagnoses": [
         {
           "code": "I10",
           "description": "Essential (primary) hypertension",
-          "id": "ac18a5e4-3c86-458a-acf8-bac19a1f94eb"
+          "id": "da2e8297-a059-4604-9fcb-52e79348fe35"
         }
       ],
       "procedures": [
         {
           "code": "99.18",
           "description": "Injection or infusion of other therapeutic or prophylactic substance",
-          "id": "548bfd22-6a5f-4849-a104-2cf85f320f54"
+          "id": "3463e252-4ea9-41fc-8fdb-9eac049026d2"
         }
       ],
       "potentialFindings": [],
