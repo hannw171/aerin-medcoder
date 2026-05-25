@@ -1030,28 +1030,32 @@ const initialPatients: Patient[] =
       "dpjp": "Dr. Andi, Sp.PD",
       "status": "Belum Coding",
       "medicalRecord": {
-        "anamnesa": "Pasien datang untuk kontrol rutin Hipertensi. Keluhan pusing, kaku kuduk, atau pandangan kabur disangkal oleh pasien. Pasien menyatakan patuh minum obat di rumah.",
+        "anamnesa": "Pasien kontrol rutin ke Poliklinik Penyakit Dalam dengan keluhan badan terasa lemas sejak 1 minggu terakhir, disertai mual-mual di pagi hari terutama saat makan, serta bengkak di kedua kaki. Riwayat Hipertensi 10 tahun dan Gagal Ginjal Kronis.",
         "ttv": {
-          "td": "125/80",
-          "nadi": "84",
-          "rr": "16",
-          "suhu": "36.6",
-          "spo2": "98",
-          "nyeri": "0"
+          "td": "165/95",
+          "nadi": "88",
+          "rr": "20",
+          "suhu": "36.5",
+          "spo2": "96",
+          "nyeri": "1"
         },
-        "physicalExam": "Compos mentis, tanda vital stabil. Jantung: S1 S2 tunggal reguler, murmur tidak ada. Paru: Vesikuler kanan kiri seimbang. Tidak ada tanda-tanda HMOD.",
-        "labResult": "Fungsi ginjal dalam batas normal (Ureum: 24, Kreatinin: 0.8). Profil lipid terkontrol.",
-        "radiologyResult": "",
+        "physicalExam": "Compos mentis. Tekanan darah tinggi. Jantung: S1 S2 tunggal reguler, murmur (-). Paru: Vesikuler normal bilateral. Ekstremitas: Edema pitting bilateral (+/+) pada kedua pretibial.",
+        "labResult": "Kreatinin Darah: 6.2 mg/dL, Ureum Darah: 145 mg/dL, eGFR: 7 mL/min/1.73m² (CKD Stage 5). Profil elektrolit: Kalium 5.1 mEq/L (meningkat).",
+        "radiologyResult": "USG Ginjal: Tampak kedua ginjal mengecil dengan peningkatan ekogenisitas korteks bilateral, sesuai Chronic Kidney Disease.",
         "procedures": [
-          "Pemeriksaan tensi berkala"
+          "Tindakan Hemodialisis (HD) Rutin",
+          "Pemasangan akses AV Fistula (Cimino)"
         ],
         "inpatientMeds": [],
         "dischargeMeds": [
-          "Amlodipine 1x10mg PO (Malam)",
-          "Candesartan 1x8mg PO"
+          "Candesartan 1x16mg PO",
+          "Furosemide 1x40mg PO",
+          "Calcium Carbonate (CaCO3) 3x500mg PO",
+          "Asam Folat 1x1mg PO",
+          "Eritropoietin (EPO) injeksi 2000 IU (subkutan, pasca HD)"
         ],
-        "diagnosisKlinisUtama": "Hipertensi Esensial Primer",
-        "diagnosisKlinisSekunder": ""
+        "diagnosisKlinisUtama": "Penyakit Jantung Hipertensi dengan Gagal Ginjal Kronik Stage 5",
+        "diagnosisKlinisSekunder": "Hipertensi Renal, CKD Stage 5"
       }
     },
     {
@@ -1068,28 +1072,31 @@ const initialPatients: Patient[] =
       "dpjp": "Dr. Dewi, Sp.P",
       "status": "Belum Coding",
       "medicalRecord": {
-        "anamnesa": "Kontrol rutin Poliklinik Paru dengan riwayat Asma Bronkial kronis sejak remaja. Pasien menyatakan tidak pernah mengalami serangan sesak napas dalam 3 bulan terakhir. Terbangun malam hari karena sesak disangkal.",
+        "anamnesa": "Pasien datang ke UGD (kemudian dilayani rawat jalan darurat) dengan keluhan sesak napas berat sejak 2 jam SMRS setelah terpapar debu pembersih gudang yang tebal. Pasien kesulitan berbicara lengkap, kalimat terputus-putus. Riwayat Asma Bronkial sejak kecil.",
         "ttv": {
-          "td": "120/70",
-          "nadi": "78",
-          "rr": "18",
-          "suhu": "36.2",
-          "spo2": "99",
-          "nyeri": "0"
+          "td": "138/88",
+          "nadi": "122",
+          "rr": "32",
+          "suhu": "37.0",
+          "spo2": "87",
+          "nyeri": "2"
         },
-        "physicalExam": "Kesadaran penuh. Auskultasi paru: Vesikuler normal bilateral, wheezing SAMA SEKALI TIDAK TERDENGAR pada kedua lapang paru, ronkhi (-).",
-        "labResult": "Asthma Control Test (ACT) Score: 25 (Asma Terkontrol Sempurna).",
-        "radiologyResult": "",
+        "physicalExam": "Tampak sesak napas berat, sianosis sekitar bibir (+), menggunakan otot bantu napas (sternokleidomastoideus). Auskultasi paru: Wheezing nyaring pada fase inspirasi dan ekspirasi di kedua lapang paru.",
+        "labResult": "Analisa Gas Darah (AGD) on Room Air: pH: 7.31, pCO2: 52 mmHg, pO2: 58 mmHg, HCO3: 25 mEq/L, BE: -1.5 (Gagal Napas Akut Tipe I/Hipoksemik dengan Asidosis Respiratorik Ringan).",
+        "radiologyResult": "Rontgen Thorax: Hiperinflasi paru bilateral, diafragma letak rendah/mendatar, corakan bronkovaskular normal.",
         "procedures": [
-          "Edukasi penggunaan inhaler rutin"
+          "Terapi Nebulisasi Ventolin & Pulmicort 3x berturut-turut",
+          "Terapi Oksigen High-Flow Non-Rebreathing Mask (NRM) 12 Lpm",
+          "Pemasangan IV line dan pengambilan sampel darah arteri"
         ],
         "inpatientMeds": [],
         "dischargeMeds": [
-          "Fluticasone propionate Inhaler 2x1 puff (Maintenance)",
-          "Salbutamol tablet 2mg PO (k/p sesak)"
+          "Methylprednisolone 3x4mg PO (Tapering off)",
+          "Symbicort inhaler (Budesonide/Formoterol) 2x2 puff",
+          "Salbutamol inhaler 100mcg (k/p sesak)"
         ],
-        "diagnosisKlinisUtama": "Asma Bronkial Terkontrol",
-        "diagnosisKlinisSekunder": ""
+        "diagnosisKlinisUtama": "Status Asmatikus / Asma Eksaserbasi Akut Derajat Berat",
+        "diagnosisKlinisSekunder": "Gagal Napas Akut (Acute Respiratory Failure) Tipe 1"
       }
     },
     {
@@ -1106,29 +1113,32 @@ const initialPatients: Patient[] =
       "dpjp": "Dr. Hendra, Sp.JP",
       "status": "Belum Coding",
       "medicalRecord": {
-        "anamnesa": "Pasien dengan riwayat Gagal Jantung Kronis datang untuk kontrol bulanan ke poli jantung. Mengeluh lelah hanya jika melakukan aktivitas fisik yang berat. Sesak napas saat tidur telentang (orthopnea) atau bengkak kaki tidak ada.",
+        "anamnesa": "Pasien dengan riwayat Gagal Jantung Kronis (CHF) kontrol rutin dengan keluhan sesak napas yang memberat sejak 3 hari lalu. Sesak dirasakan bahkan saat berjalan dekat (NYHA Class III). Tidur harus diganjal 3 bantal (orthopnea), terbangun malam karena sesak (+). Kedua kaki membengkak.",
         "ttv": {
-          "td": "115/75",
-          "nadi": "72",
-          "rr": "17",
+          "td": "145/90",
+          "nadi": "94",
+          "rr": "26",
           "suhu": "36.4",
-          "spo2": "97",
-          "nyeri": "0"
+          "spo2": "93",
+          "nyeri": "1"
         },
-        "physicalExam": "Hemodinamik terpantau stabil, status volume cairan seimbang (euvolemia). Edema pitting pada kedua kaki (-). JVP tidak meningkat.",
-        "labResult": "Elektrolit normal (Kalium: 4.1, Natrium: 138).",
-        "radiologyResult": "",
+        "physicalExam": "Jantung: Iktus kordis bergeser ke lateral kiri, terdengar bunyi jantung tambahan Gallop S3. Paru: Suara napas meredup pada basal paru dekstra, ronkhi basah halus pada basal paru kiri. Ekstremitas: Edema tungkai bawah bilateral (+/+).",
+        "labResult": "Peningkatan kadar NT-proBNP: 3800 pg/mL. Elektrolit: Kalium 3.8 mEq/L, Natrium 136 mEq/L. Fungsi ginjal stabil.",
+        "radiologyResult": "Rontgen Thorax AP: Kardiomegali (CTR 63%), edema pulmonal ringan, disertai efusi pleura dekstra yang menutupi sudut kostofrenikus kanan.",
         "procedures": [
-          "Pemeriksaan EKG berkala (Irama Sinus, HR 72 bpm)"
+          "EKG 12 Leads berkala (Sinus Tachycardia, HR 94 bpm)",
+          "Torakosentesis (Punksi Pleura) Terapeutik & Diagnostik Basal Dekstra (cairan kuning jernih 400 cc)"
         ],
         "inpatientMeds": [],
         "dischargeMeds": [
-          "Bisoprolol 1x2.5mg PO",
+          "Bisoprolol 1x5mg PO",
           "Ramipril 1x5mg PO",
-          "Furosemide 1x40mg PO (Pagi)"
+          "Spironolactone 1x25mg PO",
+          "Furosemide 1x80mg PO (Pagi)",
+          "Aspilets 1x80mg PO"
         ],
-        "diagnosisKlinisUtama": "Chronic Heart Failure NYHA Class II Stable",
-        "diagnosisKlinisSekunder": ""
+        "diagnosisKlinisUtama": "Acute Decompensated Heart Failure (ADHF) / CHF NYHA III",
+        "diagnosisKlinisSekunder": "Efusi Pleura Dekstra Sekunder Kardiogenik, Kardiomegali"
       }
     },
     {
@@ -1145,25 +1155,29 @@ const initialPatients: Patient[] =
       "dpjp": "Dr. Budi, Sp.S",
       "status": "Belum Coding",
       "medicalRecord": {
-        "anamnesa": "Kontrol rutin ke Poliklinik Saraf dengan riwayat Epilepsi sejak 2 tahun lalu. Pasien mengonfirmasi sudah bebas serangan kejang (seizure-free) selama lebih dari 12 bulan terakhir. Obat dikonsumsi sangat patuh.",
+        "anamnesa": "Pasien wanita usia 27 tahun kontrol rutin epilepsi. Mengeluh kejang masih sering kambuh 1-2 kali seminggu berupa kelojotan seluruh tubuh disertai tidak sadar selama 2 menit. Pasien saat ini hamil anak pertama usia kehamilan 10 minggu (Trimester I). Minum Asam Valproat rutin.",
         "ttv": {
-          "td": "110/70",
-          "nadi": "80",
-          "rr": "16",
+          "td": "115/75",
+          "nadi": "82",
+          "rr": "18",
           "suhu": "36.7",
-          "spo2": "99",
+          "spo2": "98",
           "nyeri": "0"
         },
-        "physicalExam": "Kesadaran compos mentis. Pemeriksaan neurologis tanda rangsang meningeal (-), nervus kranialis dalam batas normal, motorik 5/5 di seluruh ekstremitas, tidak ada defisit neurologis akut.",
-        "labResult": "DbN.",
-        "radiologyResult": "",
-        "procedures": [],
+        "physicalExam": "Compos mentis, status neurologis saat ini dalam batas normal. Status obstetri: Uterus teraba sesuai usia kehamilan 10 minggu.",
+        "labResult": "Kadar obat dalam darah (Valproate level): 45 ug/mL (subterapeutik). Tes kehamilan/PP test (+).",
+        "radiologyResult": "USG Kandungan: Janin tunggal hidup, sesuai usia gestasi 10 minggu.",
+        "procedures": [
+          "Konseling risiko teratogenik obat anti-epilepsi",
+          "Pemeriksaan EEG (Electroencephalography) berkala"
+        ],
         "inpatientMeds": [],
         "dischargeMeds": [
-          "Asam Valproat 2x500mg PO (Maintenance)"
+          "Asam Valproat 2x500mg PO",
+          "Asam Folat dosis tinggi 1x5mg PO (Pencegahan neural tube defect)"
         ],
-        "diagnosisKlinisUtama": "Epilepsi Terkontrol Bebas Kejang",
-        "diagnosisKlinisSekunder": ""
+        "diagnosisKlinisUtama": "Epilepsi Umum Tonik-Klonik Tidak Terkontrol",
+        "diagnosisKlinisSekunder": "Gravida Trimester I, Penggunaan Asam Valproat Dalam Kehamilan (Risiko Teratogenik)"
       }
     },
     {
@@ -1180,26 +1194,31 @@ const initialPatients: Patient[] =
       "dpjp": "Dr. Dewi, Sp.P",
       "status": "Belum Coding",
       "medicalRecord": {
-        "anamnesa": "Kontrol rutin kasus Penyakit Paru Obstruktif Kronik (PPOK) stabil. Keluhan sesak napas berat disangkal, batuk sesekali minimal dengan dahak jernih encer. Tidak ada tanda eksaserbasi akut.",
+        "anamnesa": "Pasien PPOK lama datang dengan keluhan sesak napas yang memberat sejak 3 hari lalu, disertai batuk berdahak kuning kental yang banyak, demam tinggi, dan nyeri dada kanan saat menarik napas dalam. Riwayat merokok berat aktif.",
         "ttv": {
-          "td": "130/80",
-          "nadi": "85",
-          "rr": "19",
-          "suhu": "36.4",
-          "spo2": "96",
-          "nyeri": "1"
+          "td": "125/80",
+          "nadi": "104",
+          "rr": "24",
+          "suhu": "38.8",
+          "spo2": "90",
+          "nyeri": "3"
         },
-        "physicalExam": "Keadaan umum tenang, tidak tampak sesak atau sianosis. Retraksi dinding dada (-). Auskultasi: suara napas vesikuler mengalami sedikit pemanjangan ekspirasi, wheezing minimal (-), ronkhi (-).",
-        "labResult": "DbN.",
-        "radiologyResult": "",
-        "procedures": [],
+        "physicalExam": "Keadaan umum tampak sesak. Auskultasi paru: Terdengar suara napas vesikuler melemah pada paru kanan bawah disertai ronkhi basah kasar nyaring. Pemanjangan fase ekspirasi bilateral dengan wheezing minimal.",
+        "labResult": "Leukosit Darah: 17.200/uL (leukositosis meningkat tajam), CRP: 48 mg/L (meningkat). Analisa sputum: Gram positif coccus (+).",
+        "radiologyResult": "Rontgen Thorax PA: Tampak infiltrat homogen padat pada lobus kanan bawah paru (sesuai gambaran pneumonia) dan emfisema pulmonum bilateral (sesuai PPOK).",
+        "procedures": [
+          "Terapi inhalasi Combivent (Salbutamol/Ipratropium) nebulizer",
+          "Terapi Oksigen Nasal Cannula 3-4 Lpm"
+        ],
         "inpatientMeds": [],
         "dischargeMeds": [
-          "Tiotropium bromide Inhaler 1x1 puff (24 jam)",
-          "Ambroxol 3x30mg PO"
+          "Cefixime 2x200mg PO",
+          "Azithromycin 1x500mg PO",
+          "Ambroxol 3x30mg PO",
+          "Tiotropium Inhaler 1x1 puff"
         ],
-        "diagnosisKlinisUtama": "PPOK Eksaserbasi Akut Negatif / Kondisi Stabil",
-        "diagnosisKlinisSekunder": ""
+        "diagnosisKlinisUtama": "PPOK Eksaserbasi Akut (COPD with Acute Exacerbation)",
+        "diagnosisKlinisSekunder": "Pneumonia Komunitas (Community-Acquired Pneumonia) Lobus Dekstra Bawah"
       }
     },
     {
@@ -1216,29 +1235,31 @@ const initialPatients: Patient[] =
       "dpjp": "Dr. Budi, Sp.S",
       "status": "Belum Coding",
       "medicalRecord": {
-        "anamnesa": "Pasien kontrol rutin pasca Stroke Iskemik (Infark Serebri) kronis 1.5 tahun lalu. Keluhan kelemahan baru atau bicara pelo mendadak disangkal. Pasien rutin menjalani terapi pemeliharaan di rumah.",
+        "anamnesa": "Pasien kontrol ke Poliklinik Saraf pasca dirawat karena Stroke Iskemik (Infark Serebri) 6 bulan lalu. Pasien mengeluh masih sulit berbicara lancar (tidak bisa menyusun kalimat panjang/afasia motorik) serta anggota gerak sebelah kanan masih terasa lemah untuk beraktivitas harian.",
         "ttv": {
-          "td": "130/85",
-          "nadi": "76",
+          "td": "135/80",
+          "nadi": "78",
           "rr": "18",
-          "suhu": "36.5",
+          "suhu": "36.6",
           "spo2": "98",
           "nyeri": "0"
         },
-        "physicalExam": "Compos mentis. Defisit neurologis lama berupa hemiparese ringan dextra sisa (kekuatan motorik atas 4/5, bawah 4/5), tidak ada perburukan klinis baru dibandingkan bulan lalu.",
-        "labResult": "Profil koagulasi dan fungsi ginjal terpantau stabil.",
-        "radiologyResult": "",
+        "physicalExam": "Compos mentis. Defisit neurologis fokal: Afasia motorik (ekspresif) (+). Hemiparese dekstra sisa dengan kekuatan otot ekstremitas kanan atas 3/5, kanan bawah 3/5, ekstremitas kiri 5/5.",
+        "labResult": "Profil lipid: Kolesterol Total 210 mg/dL, LDL 135 mg/dL. Profil koagulasi normal.",
+        "radiologyResult": "MRI Kepala (arsip 6 bulan lalu): Infark serebri luas di lobus temporoparietal sinistra, mencakup area Broca.",
         "procedures": [
-          "Edukasi pencegahan stroke sekunder"
+          "Rujukan Program Rehabilitasi Medis (Fisioterapi motorik ekstremitas)",
+          "Terapi Wicara (Speech Therapy) untuk afasia motorik"
         ],
         "inpatientMeds": [],
         "dischargeMeds": [
-          "Aspilets 1x80mg PO (Antiplatelet)",
-          "Atorvastatin 1x20mg PO (Lipid lowering)",
+          "Clopidogrel 1x75mg PO",
+          "Atorvastatin 1x20mg PO",
+          "Citicolin 2x500mg PO",
           "Amlodipine 1x5mg PO"
         ],
-        "diagnosisKlinisUtama": "Sekuele Infark Serebri / Pasca Stroke Stabil",
-        "diagnosisKlinisSekunder": "Hipertensi Terkontrol"
+        "diagnosisKlinisUtama": "Sekuele Stroke Infark Serebri / Efek Sisa Stroke Iskemik",
+        "diagnosisKlinisSekunder": "Hemiparese Dextra Sisa Pasca Stroke, Afasia Motorik Pasca Stroke, Hipertensi"
       }
     },
     {
@@ -1255,28 +1276,29 @@ const initialPatients: Patient[] =
       "dpjp": "Dr. Utami, Sp.KJ",
       "status": "Belum Coding",
       "medicalRecord": {
-        "anamnesa": "Pasien dengan riwayat Skizofrenia Paranoid datang didampingi keluarga untuk kontrol rutin bulanan dan mengambil obat. Keluarga menyatakan pasien tenang di rumah, rajin membantu aktivitas domestik, halusinasi pendengaran atau amuk negatif.",
+        "anamnesa": "Pasien kontrol rutin ke Poli Jiwa didampingi keluarga dengan riwayat Skizofrenia Paranoid. Pasien mengeluh badannya terasa lemas, sering haus (polidipsi), sering buang air kecil (poliuri), serta nafsu makan meningkat drastis. Berat badan naik 12 kg dalam 6 bulan sejak minum obat rutin.",
         "ttv": {
-          "td": "120/80",
-          "nadi": "82",
-          "rr": "18",
-          "suhu": "36.6",
+          "td": "122/82",
+          "nadi": "80",
+          "rr": "17",
+          "suhu": "36.5",
           "spo2": "99",
           "nyeri": "0"
         },
-        "physicalExam": "Status Mental: Penampilan rapi, kontak mata adekuat, afek sesuai, proses pikir koheren, waham atau halusinasi tidak aktif saat pemeriksaan. Pasien kooperatif.",
-        "labResult": "",
+        "physicalExam": "Status Mental: Penampilan cukup rapi, kontak mata adekuat, waham atau halusinasi tidak aktif (terkontrol). Fisik: BB 88 kg, TB 168 cm (Obese Grade 1). Tanda neuropati distal negatif.",
+        "labResult": "Gula Darah Sewaktu (GDS): 285 mg/dL (Hiperglikemia), HbA1c: 8.4% (Baru terdeteksi Diabetes Mellitus).",
         "radiologyResult": "",
         "procedures": [
-          "Psikoterapi suportif rawat jalan"
+          "Psikoterapi suportif rawat jalan",
+          "Edukasi modifikasi gaya hidup dan efek metabolik obat antipsikotik"
         ],
         "inpatientMeds": [],
         "dischargeMeds": [
-          "Risperidone 2x2mg PO (Maintenance)",
-          "Clozapine 1x25mg PO (Malam)"
+          "Olanzapine 1x10mg PO (Malam)",
+          "Metformin 2x500mg PO (Memulai terapi diabetes baru)"
         ],
-        "diagnosisKlinisUtama": "Skizofrenia Paranoid Kontrol Rutin Terkontrol",
-        "diagnosisKlinisSekunder": ""
+        "diagnosisKlinisUtama": "Skizofrenia Paranoid Terkontrol",
+        "diagnosisKlinisSekunder": "Diabetes Mellitus Tipe 2 Baru Terdeteksi (Drug-Induced / Atypical Antipsychotic Side Effect), Obesitas"
       }
     },
     {
@@ -1293,30 +1315,32 @@ const initialPatients: Patient[] =
       "dpjp": "Dr. Hendra, Sp.JP",
       "status": "Belum Coding",
       "medicalRecord": {
-        "anamnesa": "Kontrol rutin bulanan Poliklinik Jantung pasca intervensi PCI (Pemasangan Stent Jantung) 1 tahun lalu akibat CAD. Keluhan nyeri dada kiri menembus punggung (angina pectoris) disangkal. Sesak napas saat beraktivitas ringan tidak ada.",
+        "anamnesa": "Pasien kontrol rutin Poli Jantung dengan riwayat CAD pasca PCI 1 stent setahun lalu. Mengeluh akhir-akhir ini kembali merasakan nyeri dada kiri seperti ditindih beban berat (angina pectoris) yang menjalar ke bahu kiri dan punggung, dipicu aktivitas sedang dan membaik dengan istirahat.",
         "ttv": {
-          "td": "120/75",
-          "nadi": "68",
-          "rr": "16",
-          "suhu": "36.3",
-          "spo2": "98",
-          "nyeri": "0"
+          "td": "130/80",
+          "nadi": "74",
+          "rr": "20",
+          "suhu": "36.4",
+          "spo2": "97",
+          "nyeri": "4"
         },
-        "physicalExam": "Compos mentis, status klinis tenang. Auskultasi jantung: Bunyi jantung I dan II normal, bising jantung (-). Paru: Ronkhi (-), wheezing (-).",
-        "labResult": "EKG harian: Irama Sinus, HR 68 bpm, tidak tampak ST elevasi maupun ST depresi baru.",
-        "radiologyResult": "",
+        "physicalExam": "Compos mentis. Auskultasi Jantung: Bunyi S1 S2 normal, murmur (-), gallop (-). Paru: Vesikuler normal bilateral, ronkhi (-).",
+        "labResult": "Treadmill Test: Positif Iskemik Myocard pada beban rendah. EKG: Sinus rhythm, T-Inverted di lead V4-V6.",
+        "radiologyResult": "Coronary Angiography (Kateterisasi Jantung) terbaru: Penyakit Jantung Koroner 3-Vessel Disease (Stenosis LAD 90%, LCx 85%, RCA 80%), direkomendasikan untuk tindakan CABG.",
         "procedures": [
-          "Pemeriksaan EKG 12 Leads berkala"
+          "Tindakan Coronary Angiography (Kateterisasi Jantung Diagnostik)",
+          "Pemeriksaan EKG 12 Leads"
         ],
         "inpatientMeds": [],
         "dischargeMeds": [
           "Clopidogrel 1x75mg PO",
           "Aspilets 1x80mg PO",
+          "Isosorbide Dinitrate (ISDN) 3x5mg PO (k/p nyeri dada)",
           "Atorvastatin 1x40mg PO",
-          "Concor 1x2.5mg PO"
+          "Bisoprolol 1x5mg PO"
         ],
-        "diagnosisKlinisUtama": "Penyakit Jantung Iskemik Kronis / Post PCI Stabil",
-        "diagnosisKlinisSekunder": ""
+        "diagnosisKlinisUtama": "Penyakit Jantung Iskemik Kronis / CAD 3-Vessel Disease (3VD)",
+        "diagnosisKlinisSekunder": "Angina Pectoris Stabil CCS Class II, Post PCI 1 Tahun"
       }
     },
     {
@@ -1333,25 +1357,31 @@ const initialPatients: Patient[] =
       "dpjp": "Dr. Andi, Sp.PD",
       "status": "Belum Coding",
       "medicalRecord": {
-        "anamnesa": "Kontrol rutin bulanan kasus Diabetes Mellitus Tipe 2. Keluhan sering haus (polidipsi), lapar (polifagi), atau penurunan BB drastis disangkal. Pasien patuh menjalani diet rendah gula.",
+        "anamnesa": "Pasien DM tipe 2 kontrol rutin dengan keluhan terdapat luka robek yang basah dan kotor di telapak kaki kiri (plantar pedis sinistra) sejak 2 minggu lalu karena menginjak kerikil tajam. Luka tidak kunjung sembuh. Pasien juga mengeluh kedua kakinya sering terasa kebas/kesemutan.",
         "ttv": {
-          "td": "120/80",
-          "nadi": "76",
+          "td": "125/80",
+          "nadi": "78",
           "rr": "18",
-          "suhu": "36.5",
-          "spo2": "99",
-          "nyeri": "0"
+          "suhu": "37.2",
+          "spo2": "98",
+          "nyeri": "2"
         },
-        "physicalExam": "Keadaan umum baik, gizi adekuat. Ekstremitas: akral hangat, CRT < 2 detik, pulsasi arteri dorsalis pedis kuat, tidak ada tanda komplikasi neuropati perifer.",
-        "labResult": "Gula Darah Puasa (GDP): 102 mg/dL (Normal), Gula Darah 2 Jam PP: 135 mg/dL (Terkontrol).",
-        "radiologyResult": "",
-        "procedures": [],
+        "physicalExam": "Status lokalis pedis sinistra: Terdapat ulkus dangkal ukuran 2 cm x 2.5 cm pada aspek plantar pedis sinistra, batas tegas, dasar jaringan granulasi bercampur slough, pus minimal (+), bau minimal. Sensibilitas monofilamen menurun bilateral (Neuropati Diabetik).",
+        "labResult": "GDP: 148 mg/dL, GD2PP: 210 mg/dL. Leukosit Darah: 9.800/uL.",
+        "radiologyResult": "Foto Polos Pedis Sinistri: Osteomyelitis (-), soft tissue swelling (+).",
+        "procedures": [
+          "Debridement luka minor di klinik rawat jalan",
+          "Perawatan luka (wound dressing) dengan kassa steril",
+          "Pemeriksaan sensorik monofilamen kaki"
+        ],
         "inpatientMeds": [],
         "dischargeMeds": [
-          "Metformin 3x500mg PO"
+          "Metformin 3x500mg PO",
+          "Ciprofloxacin 2x500mg PO (Antibiotik empiris luka)",
+          "Gabapentin 1x100mg PO (Malam, untuk neuropati)"
         ],
-        "diagnosisKlinisUtama": "Diabetes Mellitus Tipe 2 Tanpa Penyulit",
-        "diagnosisKlinisSekunder": ""
+        "diagnosisKlinisUtama": "Diabetes Mellitus Tipe 2 dengan Ulkus Kaki Kiri (Diabetic Foot Ulcer)",
+        "diagnosisKlinisSekunder": "Neuropati Diabetik Perifer, Luka Terinfeksi Plantar Pedis Sinistra"
       }
     }
   ];

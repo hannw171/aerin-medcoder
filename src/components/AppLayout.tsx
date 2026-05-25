@@ -59,12 +59,22 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </button>
 
         <div className="flex flex-col items-center w-full">
-          <div className="mb-8 flex items-center justify-center text-primary-container gap-3 px-4 w-full h-10 overflow-hidden">
-            <span className="material-symbols-outlined text-[32px] flex-shrink-0">
-              local_hospital
-            </span>
-            <span className={`font-display text-xl font-bold whitespace-nowrap transition-all duration-300 ${showExpanded ? 'opacity-100 w-auto' : 'opacity-0 w-0 hidden'}`}>
-              Aerin Coder
+          <div className="mb-8 flex items-center justify-center gap-3 px-4 w-full h-12 overflow-hidden">
+            {/* Miniature Splash Screen Emblem */}
+            <div className="relative shrink-0 flex items-center justify-center w-10 h-10">
+              
+              <div className="w-8 h-8 rounded-lg bg-slate-950 border border-[#004AC6]/80 flex items-center justify-center shadow-[0_0_15px_rgba(0,74,198,0.4)] z-10">
+                <span className="material-symbols-outlined text-[18px] text-white">
+                  local_hospital
+                </span>
+              </div>
+            </div>
+            <span 
+              className={`whitespace-nowrap transition-all duration-300 flex items-center gap-1.5 ${showExpanded ? 'opacity-100 w-auto' : 'opacity-0 w-0 hidden'}`}
+              style={{ fontFamily: "Helvetica, 'Helvetica Neue', Arial, sans-serif" }}
+            >
+              <span className="text-white font-black tracking-widest text-base">AERIN</span>
+              <span className="text-slate-400 font-medium tracking-wide text-sm">CODER</span>
             </span>
           </div>
 

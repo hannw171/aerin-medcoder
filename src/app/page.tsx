@@ -21,6 +21,36 @@ export default function DashboardPage() {
   const [patients, setPatients] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDiagnosis, setSelectedDiagnosis] = useState<MorbidityData | null>(null);
+  const [showSplash, setShowSplash] = useState(false);
+
+  useEffect(() => {
+    const splashSeen = localStorage.getItem("aerin_splash_seen");
+    if (!splashSeen) {
+      setShowSplash(true);
+    }
+  }, []);
+
+  const dismissSplash = () => {
+    setShowSplash(false);
+    localStorage.setItem("aerin_splash_seen", "true");
+  };
+
+  useEffect(() => {
+    if (!showSplash) return;
+
+    const handleDismiss = () => {
+      dismissSplash();
+    };
+
+    window.addEventListener("wheel", handleDismiss);
+    window.addEventListener("touchmove", handleDismiss);
+
+    return () => {
+      window.removeEventListener("wheel", handleDismiss);
+      window.removeEventListener("touchmove", handleDismiss);
+    };
+  }, [showSplash]);
+
 
   useEffect(() => {
     fetch('/api/patients')
@@ -424,6 +454,9 @@ export default function DashboardPage() {
       </div>
 
       <AnimatePresence>
+        {showSplash && (
+          <SplashScreen onDismiss={dismissSplash} />
+        )}
         {selectedDiagnosis && (
           <DeepDiveModal 
             diagnosis={selectedDiagnosis} 
@@ -526,6 +559,146 @@ function DeepDiveModal({ diagnosis, onClose }: { diagnosis: MorbidityData, onClo
             ))}
           </div>
         </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// Splash Screen Component
+interface SplashScreenProps {
+  onDismiss: () => void;
+}
+
+function SplashScreen({ onDismiss }: SplashScreenProps) {
+  const titleLetters = ["A", "E", "R", "I", "N"];
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.1,
+      }
+    }
+  };
+
+  const letterVariants = {
+    hidden: { opacity: 0, y: 50, scale: 0.8 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        type: "spring" as const,
+        damping: 12,
+        stiffness: 100
+      }
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ y: 0 }}
+      exit={{ y: "-100%", transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } }}
+      className="fixed inset-0 z-[9999] bg-[#030712] flex flex-col items-center justify-center overflow-hidden cursor-pointer"
+      style={{ fontFamily: "Helvetica, 'Helvetica Neue', Arial, sans-serif" }}
+      onClick={onDismiss}
+    >
+      {/* Dynamic Glowing background orbs */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[#004AC6]/15 blur-[120px] animate-pulse" 
+          style={{ animationDuration: '4s' }} 
+        />
+        <div 
+          className="absolute top-1/3 left-1/4 w-[400px] h-[400px] rounded-full bg-[#B3B828]/5 blur-[100px] animate-pulse" 
+          style={{ animationDuration: '6s', animationDelay: '1.5s' }} 
+        />
+      </div>
+
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="relative z-10 flex flex-col items-center text-center px-6 max-w-2xl select-none"
+      >
+        {/* Animated Hospital Hexagon Emblem */}
+        <motion.div
+          variants={letterVariants}
+          className="mb-8 relative flex items-center justify-center"
+        >
+          <div 
+            className="absolute w-24 h-24 rounded-full border border-dashed border-[#004AC6]/35 animate-spin" 
+            style={{ animationDuration: '25s' }} 
+          />
+          <div 
+            className="absolute w-20 h-20 rounded-full bg-[#004AC6]/10 animate-ping" 
+            style={{ animationDuration: '2s' }} 
+          />
+          <div className="w-16 h-16 rounded-2xl bg-slate-900 border border-[#004AC6]/80 flex items-center justify-center shadow-[0_0_30px_rgba(0,74,198,0.4)]">
+            <span className="material-symbols-outlined text-[36px] text-white">
+              local_hospital
+            </span>
+          </div>
+        </motion.div>
+
+        {/* Large Header Title AERIN */}
+        <div className="flex gap-1.5 justify-center mb-6">
+          {titleLetters.map((letter, idx) => (
+            <motion.span
+              key={idx}
+              variants={letterVariants}
+              className="text-6xl md:text-8xl font-black text-white tracking-wider drop-shadow-[0_0_30px_rgba(0,74,198,0.7)]"
+              style={{
+                color: letter === 'R' ? '#004AC6' : '#ffffff',
+                fontFamily: "Helvetica, 'Helvetica Neue', Arial, sans-serif"
+              }}
+            >
+              {letter}
+            </motion.span>
+          ))}
+        </div>
+
+        {/* Sub Header */}
+        <motion.h2
+          variants={letterVariants}
+          className="text-xl md:text-2xl font-semibold text-slate-200 tracking-wide mb-6"
+          style={{ fontFamily: "Helvetica, 'Helvetica Neue', Arial, sans-serif" }}
+        >
+          AI-Powered Casemix Guardrail System.
+        </motion.h2>
+
+        {/* Caption */}
+        <motion.div
+          variants={letterVariants}
+          className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-slate-900/80 border border-slate-800 shadow-[0_4px_20px_rgba(0,0,0,0.4)] backdrop-blur-md"
+        >
+          <span 
+            className="text-[11px] md:text-xs uppercase tracking-widest text-[#B3B828] font-bold text-center"
+            style={{ fontFamily: "Helvetica, 'Helvetica Neue', Arial, sans-serif" }}
+          >
+            with Google Antigravity, Google AI Studio, and Stitch
+          </span>
+        </motion.div>
+      </motion.div>
+
+      {/* Dismissal Hint at the Bottom */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: [0.4, 0.8, 0.4] }}
+        transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
+        className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+      >
+        <span className="material-symbols-outlined text-white text-[28px] animate-bounce">
+          keyboard_double_arrow_down
+        </span>
+        <span 
+          className="text-[11px] tracking-widest text-slate-400 uppercase font-semibold"
+          style={{ fontFamily: "Helvetica, 'Helvetica Neue', Arial, sans-serif" }}
+        >
+          Klik di mana saja atau scroll untuk lanjut
+        </span>
       </motion.div>
     </motion.div>
   );

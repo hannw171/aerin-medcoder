@@ -21,6 +21,7 @@ interface RegulationState {
   rules: ComplianceRule[];
   addRule: (rule: Omit<ComplianceRule, 'id'>) => void;
   deleteRule: (id: string) => void;
+  updateRule: (id: string, updatedRule: Omit<ComplianceRule, 'id'>) => void;
 }
 
 // Map seed data to ensure UUIDs if missing
@@ -41,6 +42,9 @@ export const useRegulationStore = create<RegulationState>()(
       })),
       deleteRule: (id) => set((state) => ({
         rules: state.rules.filter((r) => r.id !== id)
+      })),
+      updateRule: (id, updatedRule) => set((state) => ({
+        rules: state.rules.map((r) => r.id === id ? { ...r, ...updatedRule } : r)
       })),
     }),
     {
